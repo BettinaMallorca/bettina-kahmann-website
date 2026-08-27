@@ -68,14 +68,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <span class="ang-num">01</span>
         <h3>Präventionskurse Wedemark</h3>
         <p>Zertifizierte Präventionskurse §20 SGB V vor Ort im Sport- und Tanzhaus Elze. Deine Krankenkasse erstattet bis zu 100%.</p>
-        <a href="#kurse" class="ang-link">Kursplan ansehen</a>
+        <a href="/kurse" class="ang-link">Kursplan ansehen</a>
       </div>
       <div class="ang-card">
         <span class="ang-icon">💻</span>
         <span class="ang-num">02</span>
         <h3>Präventionskurse Online</h3>
         <p>Die gleichen zertifizierten Kurse live über Zoom, von zu Hause aus. Auch hier bis zu 100% Erstattung.</p>
-        <a href="#kurse" class="ang-link">Online-Kurse ansehen</a>
+        <a href="/kurse" class="ang-link">Online-Kurse ansehen</a>
       </div>
       <div class="ang-card">
         <span class="ang-icon">🌬️</span>
@@ -149,115 +149,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 </section>
 
 <!-- ══════════════════════════════════
-     KURSPLAN
+     KURSPLAN TEASER
 ══════════════════════════════════ -->
-<section id="kurse" class="section">
+<section id="kurse" class="section" style="text-align:center;">
   <div class="container">
-    <div class="eyebrow">Aktuelle Termine</div>
+    <div class="eyebrow" style="justify-content:center;">Aktuelle Termine</div>
     <h2 class="display">Komm einfach. <em>Kein Abo.</em></h2>
-    <div class="kursplan-grid fade">
-
-      <!-- Vor Ort Elze -->
-      <div class="kursplan-col">
-        <div class="col-header">
-          <div class="col-tag">Vor Ort</div>
-          <h3>Sport- und Tanzhaus Elze</h3>
-          <div class="col-sub">Blau-Gelb Elze</div>
-        </div>
-        <div class="kurs-item">
-          <div class="kurs-tag-day day-di">Di</div>
-          <div class="kurs-info">
-            <div class="kurs-time">18:00 – 19:15 Uhr</div>
-            <div class="kurs-name">Hatha Yoga meets Yin</div>
-            <div class="kurs-desc">Stärke &amp; Balance</div>
-          </div>
-        </div>
-        <div class="kurs-item">
-          <div class="kurs-tag-day day-di">Di</div>
-          <div class="kurs-info">
-            <div class="kurs-time">19:30 – 20:30 Uhr</div>
-            <div class="kurs-name">YIN Yoga</div>
-            <div class="kurs-desc">Stressabbau, Entspannung &amp; Flexibilität</div>
-          </div>
-        </div>
-        <div class="kurs-item">
-          <div class="kurs-tag-day day-do">Do</div>
-          <div class="kurs-info">
-            <div class="kurs-time">18:15 – 19:30 Uhr</div>
-            <div class="kurs-name">Yoga für Männer &amp; Frauen</div>
-            <div class="kurs-desc">Kraft, Beweglichkeit, Fokus</div>
-          </div>
-        </div>
-        <div class="col-cta">
-          <a href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank" class="btn-pink">Kurs buchen (Fyndery) →</a>
-        </div>
-      </div>
-
-      <!-- Vor Ort Höpershof -->
-      <div class="kursplan-col">
-        <div class="col-header">
-          <div class="col-tag">Vor Ort</div>
-          <h3>YAP – Your Active Place</h3>
-          <div class="col-sub">Höpershof</div>
-        </div>
-        <div class="kurs-item">
-          <div class="kurs-tag-day day-mi">Mi</div>
-          <div class="kurs-info">
-            <div class="kurs-time">18:00 – 18:50 Uhr</div>
-            <div class="kurs-name">AROHA</div>
-            <div class="kurs-desc">Ausdauertraining &amp; Stressabbau</div>
-          </div>
-        </div>
-        <div class="col-cta" style="margin-top:1rem;">
-          <a href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank" class="btn-pink">Kurs buchen (Fyndery) →</a>
-        </div>
-      </div>
-
-      <!-- LIVE Online -->
-      <div class="kursplan-col dark">
-        <div class="col-header">
-          <div class="col-tag">Live Online</div>
-          <h3>Zoom</h3>
-          <div class="col-sub">Von zu Hause aus</div>
-        </div>
-        <div class="kurs-item">
-          <div class="kurs-tag-day day-di">Di</div>
-          <div class="kurs-info">
-            <div class="kurs-time">9:00 – 9:50 Uhr</div>
-            <div class="kurs-name">FaszienFit Yoga</div>
-            <div class="kurs-desc">Mobilität, Stärke &amp; Balance</div>
-          </div>
-        </div>
-        <div class="kurs-item">
-          <div class="kurs-tag-day day-mi">Mi</div>
-          <div class="kurs-info">
-            <div class="kurs-time">19:30 – 20:30 Uhr</div>
-            <div class="kurs-name">YIN Yoga</div>
-            <div class="kurs-desc">Entspannung, Loslassen &amp; Flexibilität</div>
-          </div>
-        </div>
-        <div class="kurs-item">
-          <div class="kurs-tag-day day-so">So</div>
-          <div class="kurs-info">
-            <div class="kurs-time">9:00 – 10:00 Uhr</div>
-            <div class="kurs-name">Morning Energy Yoga</div>
-            <div class="kurs-desc">Power &amp; Energie, Aktivierung</div>
-          </div>
-        </div>
-        <div class="col-cta">
-          <a href="mailto:info@bettina-kahmann.com?subject=Live-Yoga-Club" class="btn-pink">Live-Studio beitreten →</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Hansefit -->
-    <div class="hansefit-box fade">
-      <div class="hansefit-icon">📋</div>
-      <div>
-        <strong>Hansefit-Mitglied?</strong>
-        <p>Dann sparst du sofort. Als Hansefit-Verbundpartnerin biete ich viele Kurse kostenlos oder vergünstigt an. Bei Kursen, Events und Workshops bekommst du zusätzlich 12 EUR Rabatt. Meine Live-Online-Kurse findest du unter <a href="#">Yoga by Bettina Kahmann</a>.</p>
-      </div>
-    </div>
+    <p class="lead" style="max-width:520px; margin:1rem auto 2rem;">Vor Ort in Elze &amp; Höpershof oder live online über Zoom. Drop-in jederzeit möglich – kein Abo, kein Vertrag.</p>
+    <a href="/kurse" class="btn-pink">Zum Kursplan →</a>
   </div>
 </section>
 

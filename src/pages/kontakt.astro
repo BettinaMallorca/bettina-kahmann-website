@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Kontakt | beVital InsideOut – Bettina Kahmann"
+  description="Schreib Bettina Kahmann direkt an – Fragen zu Yoga-Kursen, Präventionskursen, dem Online-Studio oder dem Retreat auf Mallorca. Yoga in der Wedemark & online."
+>
+
+<div class="page-header">
+  <div class="container">
+    <div class="eyebrow">Kontakt</div>
+    <h1 class="hero-h1" style="font-size:clamp(2.4rem,4.5vw,4rem);">Schreib mir –<br><em>ich antworte persönlich.</em></h1>
+    <p class="lead">Fragen zu Kursen, Präventionskursen, Personal Training oder dem Retreat auf Mallorca – ich bin direkt erreichbar.</p>
+  </div>
+</div>
+
+<section class="section" style="padding-top:1rem;">
+  <div class="container">
+    <div class="kontakt-grid fade">
+
+      <div>
+        <div class="eyebrow left" style="justify-content:flex-start;">Direkt erreichbar</div>
+        <div class="kontakt-info-item">
+          <span class="k-icon">✉️</span>
+          <div><strong>E-Mail</strong><a href="mailto:info@bettina-kahmann.com">info@bettina-kahmann.com</a></div>
+        </div>
+        <div class="kontakt-info-item">
+          <span class="k-icon">📍</span>
+          <div><strong>Vor Ort · Elze</strong><span class="val">Sport- und Tanzhaus · Kuckucksweg 90 · 30900 Wedemark-Elze</span></div>
+        </div>
+        <div class="kontakt-info-item">
+          <span class="k-icon">📸</span>
+          <div><strong>Instagram</strong><a href="https://instagram.com/be_vital_insideout" target="_blank">@be_vital_insideout</a></div>
+        </div>
+
+        <div class="eyebrow left" style="justify-content:flex-start; margin-top:2.5rem;">Schnell buchen</div>
+        <div class="kontakt-quick">
+          <a href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank" class="btn-outline" style="text-align:center;">Kurs buchen (Fyndery) →</a>
+          <a href="/mein-studio" class="btn-outline" style="text-align:center;">Online-Studio →</a>
+          <a href="/minikurs" class="btn-outline" style="text-align:center;">RESET Warteliste →</a>
+        </div>
+      </div>
+
+      <div>
+        <form class="k-form" id="kontaktform">
+          <label for="k-name">Name *</label>
+          <input type="text" id="k-name" name="name" required />
+
+          <label for="k-email">E-Mail *</label>
+          <input type="email" id="k-email" name="email" required />
+
+          <label for="k-interesse">Ich interessiere mich für</label>
+          <select id="k-interesse" name="interesse">
+            <option>Bitte wählen…</option>
+            <option>Offene Kurse (Präsenz)</option>
+            <option>Online-Studio / Mitgliedschaft</option>
+            <option>Präventionskurs §20 SGB V</option>
+            <option>Personal Training</option>
+            <option>Retreat Mallorca</option>
+            <option>Mini-Kurs (kostenlos)</option>
+            <option>Aromaberatung (dōTERRA)</option>
+            <option>Sonstiges</option>
+          </select>
+
+          <label for="k-nachricht">Nachricht *</label>
+          <textarea id="k-nachricht" name="nachricht" required></textarea>
+
+          <button type="submit" class="btn-pink">Nachricht senden →</button>
+          <p class="k-form-note">Dein E-Mail-Programm öffnet sich. Ich antworte persönlich.</p>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="container">
+    <div class="testi-head">
+      <div class="eyebrow">Das sagen meine Teilnehmerinnen</div>
+      <h2>Echte Worte. <em>Echte Wirkung.</em></h2>
+    </div>
+    <div class="testi-grid fade">
+      <div class="testi">
+        <p>Die regelmäßige Yoga-Praxis bei dir im Yoga-Club trägt erheblich zu meinem Wohlbefinden und zur körperlichen Fitness bei. Die Asanas in den Stunden sind so vielseitig von dir ausgewählt und sprechen wirklich alle Bereiche an. Ich bin glücklich, Yoga durch dich für mich entdeckt zu haben.</p>
+        <div class="testi-who"><strong>Monika</strong><span>LIVE Yoga Studio Online</span></div>
+      </div>
+      <div class="testi">
+        <p>Bettina ist eine Powerfrau und strahlt gleichzeitig eine wahnsinnige Wärme aus. In deinen Stunden schaffst du es mir einen Raum zu öffnen, wo ich ganz bei mir ankommen kann. Ich liebe deine Vielseitigkeit. Dein Wissen ist echt Wahnsinn.</p>
+        <div class="testi-who"><strong>Jeanette</strong><span>LIVE Yoga Studio Online</span></div>
+      </div>
+      <div class="testi">
+        <p>Du bist eine der motivierendsten Frauen, die ich kenne. Durch deine herzliche, offene und einfühlsame Art ist es eine Freude, mit dir die Yogapraxis zu erfahren und das eigene Leben zu bereichern. Jede Einheit ist ein Erlebnis für sich.</p>
+        <div class="testi-who"><strong>Heidi</strong><span>Yoga & Meditation</span></div>
+      </div>
+      <div class="testi">
+        <p>Die Yoga-Einheiten, die du mir und den Yoginis anbietest, sind sehr wertvoll für mich. Ich fühle mich jedes Mal danach wieder in meiner Kraft und gestärkt für den Alltag. Als Camperin ist das Online-Angebot maßgeschneidert – ich kann meine Matte überall ausrollen. Das Retreat kann ich ebenfalls sehr empfehlen. Vielen Dank für die letzten 5 Jahre mit dir.</p>
+        <div class="testi-who"><strong>Petra</strong><span>Online Yoga & Retreat</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  var form = document.getElementById('kontaktform');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('k-name').value;
+      var email = document.getElementById('k-email').value;
+      var interesse = document.getElementById('k-interesse').value;
+      var nachricht = document.getElementById('k-nachricht').value;
+      var subject = encodeURIComponent('Kontaktanfrage von ' + name + (interesse && interesse !== 'Bitte wählen…' ? ' – ' + interesse : ''));
+      var body = encodeURIComponent(nachricht + '\n\n---\nName: ' + name + '\nE-Mail: ' + email + '\nInteresse: ' + interesse);
+      window.location.href = 'mailto:info@bettina-kahmann.com?subject=' + subject + '&body=' + body;
+    });
+  }
+</script>
+
+</BaseLayout>
