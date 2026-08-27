@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+const title = "Datenschutz – beVital InsideOut | Bettina Kahmann";
+---
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --pink: #993a74; --terracotta: #C17B52; --cream: #FAF6F1; --cream-dark: #f0e8de; --dark: #2a1a10; --text: #3a2e24; --text-light: #7a6a5a; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+  nav.legal { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.1rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(250,246,241,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(153,58,116,0.08); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 500; color: var(--text); text-decoration: none; }
+  .nav-logo span { color: var(--pink); font-style: italic; }
+  main { padding: 9rem 6rem 6rem; max-width: 900px; }
+  .eyebrow { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.8rem; }
+  .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--terracotta); }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; color: var(--text); margin-bottom: 3rem; }
+  .lsection { margin-bottom: 2.5rem; }
+  .section-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.8rem; }
+  .lsection p { font-size: 0.9rem; font-weight: 300; line-height: 1.8; color: var(--text-light); margin-bottom: 0.5rem; }
+  .lsection a { color: var(--pink); }
+  footer.legal { background: var(--dark); padding: 2rem 6rem; color: rgba(255,255,255,0.4); }
+  footer.legal a { color: rgba(255,255,255,0.4); text-decoration: none; }
+  .footer-bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.75rem; }
+  @media (max-width: 900px) { nav.legal { padding: 1rem 1.5rem; } main { padding: 7rem 1.5rem 4rem; } footer.legal { padding: 2rem 1.5rem; } }
+</style>
+</head>
+<body>
+<nav class="legal"><a href="/" class="nav-logo">beVital <span>InsideOut</span></a></nav>
+<main>
+  <div class="eyebrow">Rechtliches</div>
+  <h1>Datenschutz</h1>
+  <div class="lsection">
+    <div class="section-title">Verantwortliche Stelle</div>
+    <p>Bettina Kahmann · Auf dem großen Kampe 29 · 30900 Wedemark</p>
+    <p>E-Mail: <a href="mailto:bettinakahmann@me.com">bettinakahmann@me.com</a></p>
+  </div>
+  <div class="lsection">
+    <div class="section-title">Erhebung und Verarbeitung personenbezogener Daten</div>
+    <p>Personenbezogene Daten werden ausschließlich zur Verwaltung der gebuchten Leistungen genutzt und ohne ausdrückliche Einwilligung nicht an Dritte weitergegeben. Bei Nutzung des Kontaktformulars werden die eingegebenen Daten ausschließlich zur Bearbeitung deiner Anfrage verwendet.</p>
+  </div>
+  <div class="lsection">
+    <div class="section-title">Newsletter & E-Mail-Marketing</div>
+    <p>Wenn du dich für unseren Newsletter oder einen Lead-Magneten anmeldest, verarbeiten wir deine E-Mail-Adresse über ActiveCampaign. Du kannst dich jederzeit abmelden. Weitere Informationen: <a href="https://www.activecampaign.com/privacy-policy/" target="_blank">ActiveCampaign Datenschutz</a></p>
+  </div>
+  <div class="lsection">
+    <div class="section-title">Cookies</div>
+    <p>Diese Website verwendet keine Marketing-Cookies. Technisch notwendige Cookies können für die Funktion der Website eingesetzt werden.</p>
+  </div>
+  <div class="lsection">
+    <div class="section-title">Deine Rechte</div>
+    <p>Du hast jederzeit das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung deiner personenbezogenen Daten. Wende dich dafür an: <a href="mailto:bettinakahmann@me.com">bettinakahmann@me.com</a></p>
+  </div>
+</main>
+<footer class="legal">
+  <div class="footer-bottom">
+    <p>© 2026 Bettina Kahmann · beVital InsideOut · Wedemark bei Hannover</p>
+    <p><a href="/impressum">Impressum</a> · <a href="/datenschutz">Datenschutz</a></p>
+  </div>
+</footer>
+</body>
+</html>
