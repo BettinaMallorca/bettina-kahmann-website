@@ -46,13 +46,13 @@ const { title, description } = Astro.props;
     <span class="brand-sub">beVital InsideOut</span>
   </a>
   <ul class="nav-links">
+    <li><a href="/kurse">Kurse</a></li>
+    <li><a href="/minikurs">Mini-Kurs</a></li>
     <li><a href="/angebote">Angebote</a></li>
     <li><a href="/ueber-mich">Über mich</a></li>
-    <li><a href="/kurse">Kurse</a></li>
-    <li><a href="/minikurs">RESET</a></li>
-    <li><a href="/retreat">Retreat</a></li>
     <li><a href="/kontakt">Kontakt</a></li>
-    <li><a href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank" class="btn-nav">Kurs buchen</a></li>
+    <li><a href="https://bettina-kahmann.coachy.net/lp/bettina-kahmann-1/" target="_blank">Mein Studio</a></li>
+    <li><a href="https://www.fyndery.de/yoga-by-bettina/" target="_blank" class="btn-nav">Kurs buchen</a></li>
   </ul>
   <button class="hamburger" onclick="toggleMob()" aria-label="Menü">
     <span></span><span></span><span></span>
@@ -61,13 +61,13 @@ const { title, description } = Astro.props;
 
 <!-- MOBILE MENU -->
 <div id="mob-menu">
+  <a href="/kurse">Kurse</a>
+  <a href="/minikurs">Mini-Kurs</a>
   <a href="/angebote">Angebote</a>
   <a href="/ueber-mich">Über mich</a>
-  <a href="/kurse">Kurse</a>
-  <a href="/minikurs">RESET</a>
-  <a href="/retreat">Retreat</a>
   <a href="/kontakt">Kontakt</a>
-  <a href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank" class="btn-nav">Kurs buchen</a>
+  <a href="https://bettina-kahmann.coachy.net/lp/bettina-kahmann-1/" target="_blank">Mein Studio</a>
+  <a href="https://www.fyndery.de/yoga-by-bettina/" target="_blank" class="btn-nav">Kurs buchen</a>
 </div>
 
 <slot />
@@ -105,11 +105,11 @@ const { title, description } = Astro.props;
       <h4>Angebote</h4>
       <ul>
         <li><a href="/angebote">Alle Angebote</a></li>
-        <li><a href="/mein-studio">LIVE Yoga Studio</a></li>
+        <li><a href="https://bettina-kahmann.coachy.net/lp/bettina-kahmann-1/" target="_blank">Mein Studio (online)</a></li>
         <li><a href="/kurse">Präventionskurse §20</a></li>
         <li><a href="/retreat">Retreat Mallorca</a></li>
         <li><a href="/minikurs">5-Tage RESET</a></li>
-        <li><a href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank">Kurs buchen</a></li>
+        <li><a href="https://www.fyndery.de/yoga-by-bettina/" target="_blank">Kurs buchen</a></li>
       </ul>
     </div>
     <div>

@@ -198,7 +198,7 @@ h2.display em { color: var(--pink); font-style: italic; }
 /* ── ANGEBOTE CARDS ── */
 #angebote { background: var(--cream); }
 .angebote-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem;
+  display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 1.5rem;
   margin-top: 3.5rem;
 }
 .ang-card {
@@ -561,7 +561,7 @@ footer a:hover { color: var(--cream); }
   .hero-img { height: 55vw; max-height: 420px; }
 
   .stats-strip { grid-template-columns: 1fr 1fr; }
-  .angebote-grid { grid-template-columns: 1fr 1fr; }
+  .angebote-grid { grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); }
   .warum-grid { grid-template-columns: 1fr; gap: 3rem; }
   .about-grid { grid-template-columns: 1fr; }
   .about-img img { height: 400px; }

@@ -2,55 +2,80 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout
-  title="Angebote: Online-Studio, Retreat & Präventionskurse | beVital InsideOut"
-  description="LIVE Yoga Studio online, Yoga-Retreat Mallorca, RESET-Programm und Präventionskurse §20 SGB V. Nervensystem regulieren mit Bettina Kahmann – flexibel von zu Hause oder vor Ort."
+  title="Meine Angebote – beVital InsideOut | Bettina Kahmann"
+  description="Präventionskurse §20 SGB V (Wedemark & online), Hatha Yoga, Yin Yoga, FaszienFit Yoga und AROHA – sowie LIVE Yoga Studio, Personal Training, RESET-Programm und Retreat Mallorca."
 >
 
 <div class="page-header">
   <div class="container">
-    <div class="eyebrow">Angebote</div>
-    <h1 class="hero-h1" style="font-size:clamp(2.4rem,4.5vw,4rem);">Alle Angebote –<br><em>finde deinen Weg.</em></h1>
-    <p class="lead">Von offenen Kursen bis zum intensiven Retreat. Alles ist darauf ausgelegt, deinen Alltag zu entlasten – nicht zu erweitern.</p>
+    <div class="eyebrow">beVital InsideOut</div>
+    <h1 class="hero-h1" style="font-size:clamp(2.4rem,4.5vw,4rem);">Meine Angebote –<br><em>finde deinen Einstieg.</em></h1>
+    <p class="lead">Wähle direkt den Bereich, den du suchst.</p>
   </div>
 </div>
 
 <section class="section" style="padding-top:1rem;">
   <div class="container">
+    <div class="angebote-grid fade">
+      <div class="ang-card featured">
+        <span class="ang-icon">🏥</span>
+        <span class="ang-num">01</span>
+        <h3>Präventionskurse Wedemark</h3>
+        <p>Zertifizierte Präventionskurse in Wedemark-Elze. Deine Krankenkasse erstattet bis zu 100% der Kursgebühr.</p>
+        <a href="/praeventionskurse-wedemark" class="ang-link">Kurse ansehen</a>
+      </div>
+      <div class="ang-card">
+        <span class="ang-icon">💻</span>
+        <span class="ang-num">02</span>
+        <h3>Präventionskurse Online</h3>
+        <p>Zertifizierte Präventionskurse live über Zoom, von zu Hause aus. Auch hier bis zu 100% Erstattung.</p>
+        <a href="/praeventionskurse-online" class="ang-link">Kurse ansehen</a>
+      </div>
+      <div class="ang-card">
+        <span class="ang-icon">📅</span>
+        <span class="ang-num">03</span>
+        <h3>Alle Kurse</h3>
+        <p>Alle offenen und zertifizierten Kurse auf einen Blick – vor Ort und live online.</p>
+        <a href="/kurse" class="ang-link">Alle Kurse ansehen</a>
+      </div>
+      <div class="ang-card">
+        <span class="ang-icon">🧘</span>
+        <span class="ang-num">04</span>
+        <h3>Hatha Yoga</h3>
+        <p>Kraft, Beweglichkeit, Atem und Entspannung.</p>
+        <a href="/hatha-yoga" class="ang-link">Mehr erfahren</a>
+      </div>
+      <div class="ang-card">
+        <span class="ang-icon">🌙</span>
+        <span class="ang-num">05</span>
+        <h3>Yin Yoga</h3>
+        <p>Ruhige Praxis, längeres Halten und bewusstes Nachspüren.</p>
+        <a href="/yin-yoga" class="ang-link">Mehr erfahren</a>
+      </div>
+      <div class="ang-card">
+        <span class="ang-icon">〰️</span>
+        <span class="ang-num">06</span>
+        <h3>FaszienFit Yoga</h3>
+        <p>Yoga, Mobilisation und fasziale Bewegung.</p>
+        <a href="/faszienfit-yoga" class="ang-link">Mehr erfahren</a>
+      </div>
+      <div class="ang-card">
+        <span class="ang-icon">🔥</span>
+        <span class="ang-num">07</span>
+        <h3>AROHA</h3>
+        <p>Fließendes Ganzkörpertraining.</p>
+        <a href="/aroha" class="ang-link">Mehr erfahren</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--cream-dark);">
+  <div class="container">
+    <div class="eyebrow">Weitere Angebote</div>
+    <h2 class="display">Mehr als <em>Yoga-Kurse.</em></h2>
+    <p class="lead" style="max-width:600px; margin:0.6rem 0 1rem;">Für alle, die tiefer einsteigen wollen: Online-Mitgliedschaft, 1:1-Begleitung, ein strukturiertes 8-Wochen-Programm und ein Retreat auf Mallorca.</p>
     <div class="off-grid fade">
-
-      <div class="off-card">
-        <div class="off-top">
-          <span class="off-icon">🧘</span>
-          <span class="off-badge">Einzelstunde buchbar</span>
-        </div>
-        <h3>Offene Kurse</h3>
-        <div class="off-sub">Drop-in jederzeit</div>
-        <p class="off-desc">Offene Kurse ohne Verpflichtung. Komm, wenn du kannst – wöchentlich oder unregelmäßig. Einstieg jederzeit möglich.</p>
-        <ul class="off-features">
-          <li>Hatha Yoga, Yin Yoga, AROHA, FaszienFit</li>
-          <li>Vor Ort in Elze &amp; Höpershof</li>
-          <li>Live Online über Zoom</li>
-          <li>Kein Abo, kein Vertrag</li>
-        </ul>
-        <a href="/kurse" class="off-link">Kursplan ansehen</a>
-      </div>
-
-      <div class="off-card dark">
-        <div class="off-top">
-          <span class="off-icon">🏥</span>
-          <span class="off-badge">Bis 100% Erstattung</span>
-        </div>
-        <h3>Präventionskurse §20</h3>
-        <div class="off-sub">Krankenkasse zahlt</div>
-        <p class="off-desc">Zertifizierte Präventionskurse – deine Krankenkasse erstattet bis zu 100% der Kursgebühr. Hatha Yoga und Yin Yoga.</p>
-        <ul class="off-features">
-          <li>8 Wochen strukturierter Kurs</li>
-          <li>ZPP-zertifiziert nach §20 SGB V</li>
-          <li>Präsenz Wedemark + Live Online</li>
-          <li>Kleine Gruppen, klare Struktur</li>
-        </ul>
-        <a href="/kurse" class="off-link">Zu den Präventionskursen</a>
-      </div>
 
       <div class="off-card">
         <div class="off-top">
@@ -66,10 +91,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <li>Yoga, Faszien, Pilates, Atemarbeit</li>
           <li>Flexible Nutzung von zu Hause</li>
         </ul>
-        <a href="/mein-studio" class="off-link">Zum Online-Studio</a>
+        <a href="https://bettina-kahmann.coachy.net/lp/bettina-kahmann-1/" target="_blank" class="off-link">Zum Online-Studio</a>
       </div>
 
-      <div class="off-card">
+      <div class="off-card dark">
         <div class="off-top">
           <span class="off-icon">💪</span>
           <span class="off-badge">Kostenloses Erstgespräch</span>
@@ -86,14 +111,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <a href="mailto:info@bettina-kahmann.com?subject=Personal Training – Erstgespräch" class="off-link">Erstgespräch buchen</a>
       </div>
 
-      <div class="off-card dark">
+      <div class="off-card">
         <div class="off-top">
           <span class="off-icon">🔄</span>
           <span class="off-badge">Warteliste offen</span>
         </div>
         <h3>RESET – 8 Wochen</h3>
         <div class="off-sub">Strukturiertes Programm</div>
-        <p class="off-desc">Das RESET-Programm kombiniert Yoga, Atemarbeit und Nervensystem-Regulation zu einem strukturierten 8-Wochen-Weg.</p>
+        <p class="off-desc">Das RESET-Programm kombiniert Yoga, Atemarbeit und Nervensystem-Regulation zu einem strukturierten 8-Wochen-Weg. Der kostenlose <a href="/minikurs" style="color:inherit; text-decoration:underline;">5-Tage-Minikurs</a> ist dein Einstieg.</p>
         <ul class="off-features">
           <li>8 Wochen intensives Programm</li>
           <li>Yoga + Atem + Nervensystem</li>
@@ -103,7 +128,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <a href="mailto:info@bettina-kahmann.com?subject=RESET 8 Wochen Warteliste" class="off-link">Auf Warteliste</a>
       </div>
 
-      <div class="off-card">
+      <div class="off-card dark">
         <div class="off-top">
           <span class="off-icon">🌴</span>
           <span class="off-badge">Auf Anfrage</span>
@@ -118,23 +143,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <li>Begrenzte Teilnehmerinnenzahl</li>
         </ul>
         <a href="/retreat" class="off-link">Anfragen</a>
-      </div>
-
-      <div class="off-card dark" style="grid-column: span 1;">
-        <div class="off-top">
-          <span class="off-icon">⚖️</span>
-          <span class="off-badge">Auf Anfrage</span>
-        </div>
-        <h3>Blissful Balance – 21 Tage</h3>
-        <div class="off-sub">Kurzprogramm</div>
-        <p class="off-desc">21 Tage – täglich ein klarer Impuls. Kein Aufwand, kein Druck. Nur ein kleiner Schritt pro Tag, der sich summiert.</p>
-        <ul class="off-features">
-          <li>21 Tage strukturiertes Programm</li>
-          <li>Täglich umsetzbare Impulse</li>
-          <li>Körper, Geist &amp; Ernährung</li>
-          <li>Für Einsteiger geeignet</li>
-        </ul>
-        <a href="mailto:info@bettina-kahmann.com?subject=Blissful Balance – 21 Tage" class="off-link">Zum Kurs</a>
       </div>
 
     </div>

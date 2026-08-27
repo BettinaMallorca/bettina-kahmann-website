@@ -27,26 +27,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <h2 style="font-family:var(--fd); font-size:clamp(1.8rem,3.5vw,2.6rem); font-weight:400; margin-bottom:0.6rem;">Starte deinen 5 Tage RESET</h2>
     <p style="font-size:0.9rem; color:rgba(255,255,255,0.7); margin-bottom:2rem;">5 Videos. 5 Tage. Kostenlos – und du merkst sofort, ob es wirkt.</p>
 
-    <form action="https://bettinakahmann43364.activehosted.com/proc.php" method="post" style="text-align:left;">
-      <input type="hidden" name="u" value="69EF2172DB767" />
-      <input type="hidden" name="f" value="33" />
-      <input type="hidden" name="s" value="" />
-      <input type="hidden" name="c" value="0" />
-      <input type="hidden" name="m" value="0" />
-      <input type="hidden" name="act" value="sub" />
-      <input type="hidden" name="v" value="2" />
-
-      <label for="m-firstname" style="display:block; font-size:0.78rem; color:rgba(255,255,255,0.7); margin-bottom:0.4rem;">Vorname *</label>
-      <input type="text" id="m-firstname" name="firstname" required style="width:100%; padding:0.85rem 1rem; border:none; border-radius:8px; margin-bottom:1rem; font-family:var(--fb); font-size:0.95rem;" />
-
-      <label for="m-email" style="display:block; font-size:0.78rem; color:rgba(255,255,255,0.7); margin-bottom:0.4rem;">E-Mail *</label>
-      <input type="email" id="m-email" name="email" required style="width:100%; padding:0.85rem 1rem; border:none; border-radius:8px; margin-bottom:1.2rem; font-family:var(--fb); font-size:0.95rem;" />
-
-      <p style="font-size:0.76rem; color:rgba(255,255,255,0.55); margin-bottom:1.2rem; line-height:1.6;">Ich stimme zu, dass meine E-Mail-Adresse gespeichert und genutzt wird, um mir den kostenlosen Mini-Kurs und weitere Informationen von Bettina Kahmann (beVital InsideOut) zuzusenden. Ich kann mich jederzeit abmelden. <a href="/datenschutz" style="color:white;">Datenschutzerklärung</a></p>
-
-      <button type="submit" class="btn-pink" style="width:100%; text-align:center; border:none;">Jetzt starten</button>
-      <p style="font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:1rem; text-align:center;">Marketing von ActiveCampaign · Kein Spam. Kein Risiko. Jederzeit abmeldbar.</p>
-    </form>
+    <div class="ac-form-wrapper" style="text-align:left;">
+      <div class="_form_33"></div>
+      <script src="https://bettinakahmann43364.activehosted.com/f/embed.php?id=33" charset="utf-8"></script>
+    </div>
+    <p style="font-size:0.72rem; color:rgba(255,255,255,0.4); margin-top:1rem; text-align:center;">Kein Spam. Kein Risiko. Jederzeit abmeldbar.</p>
   </div>
 </section>
 
@@ -54,50 +39,88 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="container">
     <div class="eyebrow">Der Kurs · 5 Videos</div>
     <h2 class="display">Was dich <em>erwartet.</em></h2>
-    <div class="day-timeline fade">
-      <div class="day-row">
-        <span class="d-num">01</span>
-        <div>
-          <h4>„Dein erster Reset: Atmen und ankommen"</h4>
+    <div class="video-grid fade">
+
+      <div class="video-card">
+        <div class="video-embed">
+          <iframe src="https://player.vimeo.com/video/1184115243?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" title="Dein erster RESET: Atmen und ankommen"></iframe>
+        </div>
+        <div class="video-info">
+          <div class="video-tag">Tag 01</div>
+          <div class="video-title">„Dein erster Reset: Atmen und ankommen"</div>
           <p>Kurze Erklärung – dann sofort Praxis. Du spürst nach 10 Minuten den Unterschied. Kein Vorwissen nötig, keine Matte.</p>
-          <span class="d-meta">⏱ ca. 10 Min · 🧘 Erklärung + Praxis</span>
+          <span class="video-meta">⏱ ca. 10 Min · 🧘 Erklärung + Praxis</span>
         </div>
       </div>
-      <div class="day-row day-locked">
-        <span class="d-num">02</span>
-        <div>
-          <h4>„Warum du müde bist, obwohl du geschlafen hast"</h4>
+
+      <div class="video-card locked">
+        <div class="video-embed">
+          <div class="locked-overlay"><span class="locked-icon">🔒</span><span class="locked-label">Folgt per E-Mail · Tag 2</span></div>
+        </div>
+        <div class="video-info">
+          <div class="video-tag">Tag 02</div>
+          <div class="video-title">„Warum du müde bist, obwohl du geschlafen hast"</div>
           <p>Was in deinem Nervensystem gerade wirklich passiert – und warum Ausruhen, Urlaub und Schlafen allein nicht mehr reichen.</p>
-          <span class="d-meta">⏱ ca. 6 Min · 🔒 Folgt per E-Mail · Tag 02</span>
+          <span class="video-meta">⏱ ca. 6 Min · 🎧 Ton an</span>
         </div>
       </div>
-      <div class="day-row day-locked">
-        <span class="d-num">03</span>
-        <div>
-          <h4>„Eine Übung. Auf der Couch. Heute Abend."</h4>
+
+      <div class="video-card locked">
+        <div class="video-embed">
+          <div class="locked-overlay"><span class="locked-icon">🔒</span><span class="locked-label">Folgt per E-Mail · Tag 3</span></div>
+        </div>
+        <div class="video-info">
+          <div class="video-tag">Tag 03</div>
+          <div class="video-title">„Eine Übung. Auf der Couch. Heute Abend."</div>
           <p>Yin-Position im Liegen + verlängerte Ausatmung. Vagusnerv-Aktivierung ohne Equipment. Du spürst: das ist mehr als Entspannung.</p>
-          <span class="d-meta">⏱ ca. 10 Min · 🔒 Folgt per E-Mail · Tag 03</span>
+          <span class="video-meta">⏱ ca. 10 Min · 🧘 Geführte Praxis</span>
         </div>
       </div>
-      <div class="day-row day-locked">
-        <span class="d-num">04</span>
-        <div>
-          <h4>„Was sich verändert, wenn du aufhörst zu funktionieren"</h4>
+
+      <div class="video-card locked">
+        <div class="video-embed">
+          <div class="locked-overlay"><span class="locked-icon">🔒</span><span class="locked-label">Folgt per E-Mail · Tag 4</span></div>
+        </div>
+        <div class="video-info">
+          <div class="video-tag">Tag 04</div>
+          <div class="video-title">„Was sich verändert, wenn du aufhörst zu funktionieren"</div>
           <p>Echte Erfahrungen aus meinen Kursen. Was sich nach 4 und 8 Wochen zeigt – Schlaf, Schmerzen, Gedankenkarussell, Energie.</p>
-          <span class="d-meta">⏱ ca. 5 Min · 🔒 Folgt per E-Mail · Tag 04</span>
+          <span class="video-meta">⏱ ca. 5 Min</span>
         </div>
       </div>
-      <div class="day-row day-locked">
-        <span class="d-num">05</span>
-        <div>
-          <h4>„Was jetzt? – Und warum RESET dein nächster Schritt ist"</h4>
+
+      <div class="video-card locked">
+        <div class="video-embed">
+          <div class="locked-overlay"><span class="locked-icon">🔒</span><span class="locked-label">Folgt per E-Mail · Tag 5</span></div>
+        </div>
+        <div class="video-info">
+          <div class="video-tag">Tag 05</div>
+          <div class="video-title">„Was jetzt? – Und warum RESET dein nächster Schritt ist"</div>
           <p>Du weißt jetzt, was möglich ist. Ich erkläre, was 8 Wochen RESET daraus machen – und ob es zu dir passt.</p>
-          <span class="d-meta">⏱ ca. 5 Min</span>
+          <span class="video-meta">⏱ ca. 5 Min</span>
         </div>
       </div>
+
     </div>
   </div>
 </section>
+
+<style>
+  .video-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 3rem; }
+  .video-card { background: white; border: 1px solid var(--cream-deep); overflow: hidden; }
+  .video-card.locked { opacity: 0.85; }
+  .video-embed { position: relative; width: 100%; padding-bottom: 56.25%; background: var(--terra-dark); }
+  .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+  .locked-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; background: linear-gradient(135deg, var(--terra-dark) 0%, #3d2e2a 100%); }
+  .locked-icon { font-size: 1.8rem; }
+  .locked-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(250,246,241,0.65); }
+  .video-info { padding: 1.4rem; }
+  .video-tag { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terra); margin-bottom: 0.4rem; }
+  .video-title { font-family: var(--fd); font-size: 1.05rem; font-weight: 500; color: var(--text); margin-bottom: 0.5rem; line-height: 1.3; }
+  .video-info p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; font-weight: 300; margin-bottom: 0.7rem; }
+  .video-meta { font-size: 0.68rem; color: var(--muted); }
+  @media (max-width: 900px) { .video-grid { grid-template-columns: 1fr; } }
+</style>
 
 <section class="section" style="background:var(--cream-dark); text-align:center;">
   <div class="container">
