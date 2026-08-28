@@ -1,13 +1,14 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title><em>AROHA.</em> – beVital InsideOut</title>
-<meta name="description" content="AROHA ist ein fließendes Ganzkörpertraining mit kraftvollen und entspannenden Bewegungsfolgen.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta content="AROHA ist ein fließendes Ganzkörpertraining mit kraftvollen und entspannenden Bewegungsfolgen." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&amp;family=DM+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
 <style>
 :root{--pink:#993A74;--terra:#C17B52;--terra-dark:#8C492E;--sage:#7A9E7E;--cream:#FAF6F1;--text:#3d2b22;--muted:#8a6e62}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--text);font-family:'DM Sans',sans-serif}
@@ -23,11 +24,209 @@ h1,h2{font-family:'Cormorant Garamond',serif;font-weight:300}h1{font-size:clamp(
 .btn{display:inline-block;margin-top:.8rem;padding:.9rem 1.35rem;border-radius:999px;background:var(--pink);color:white;text-decoration:none;font-size:.88rem}
 @media(max-width:800px){.links{display:none}.hero{padding-top:5rem}}
 </style>
+<style id="canonical-start-header">#nav{position:fixed!important;top:3px!important;left:0!important;right:0!important;z-index:1000!important;height:72px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 3.5rem!important;background:rgba(250,246,241,.93)!important;backdrop-filter:blur(14px)!important;border-bottom:1px solid #e2d5c8!important;box-sizing:border-box!important}#nav .brand{text-decoration:none!important;line-height:1.25!important}#nav .brand-top{font-family:'Cormorant Garamond',Georgia,serif!important;font-size:1.05rem!important;color:#3d2b22!important;display:block!important;font-weight:400!important}#nav .brand-sub{font-family:'Cormorant Garamond',Georgia,serif!important;font-size:.9rem!important;color:#993A74!important;display:block!important;font-style:italic!important}#nav .nav-links{display:flex!important;align-items:center!important;gap:1.6rem!important;list-style:none!important;margin:0!important;padding:0!important}#nav .nav-links a{font-family:'DM Sans',Arial,sans-serif!important;font-size:.65rem!important;font-weight:600!important;letter-spacing:.18em!important;text-transform:uppercase!important;color:#8a6e62!important;text-decoration:none!important}#nav .nav-links a:hover{color:#993A74!important}#nav .btn-nav,#mob-menu .btn-nav{background:#993A74!important;color:#fff!important;padding:.52rem 1.3rem!important;border-radius:999px!important;white-space:nowrap!important}#nav .hamburger{display:none!important;flex-direction:column!important;gap:5px!important;cursor:pointer!important;background:none!important;border:0!important;padding:4px!important}#nav .hamburger span{width:22px!important;height:1.5px!important;background:#3d2b22!important;display:block!important}#mob-menu{display:none;position:fixed;top:75px;left:0;right:0;z-index:999;flex-direction:column;background:#FAF6F1;border-bottom:1px solid #e2d5c8;box-shadow:0 8px 30px rgba(140,73,46,.14)}#mob-menu.open{display:flex!important}#mob-menu a{padding:1rem 1.5rem;font-family:'DM Sans',Arial,sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#3d2b22;text-decoration:none;border-bottom:1px solid rgba(226,213,200,.5)}@media(max-width:900px){#nav{padding:0 1.25rem!important}#nav .nav-links{display:none!important}#nav .hamburger{display:flex!important}}</style>
+<style id="angebote-dropdown-css">
+.nav-dropdown { position: relative; }
+.nav-dropdown > a { display:flex; align-items:center; gap:.35rem; }
+.nav-dropdown > a::after { content:"▾"; font-size:.72em; line-height:1; }
+.nav-dropdown-menu {
+  position:absolute;
+  top:calc(100% + 12px);
+  left:0;
+  min-width:270px;
+  padding:10px;
+  background:#fffaf7;
+  border:1px solid rgba(61,43,34,.12);
+  border-radius:16px;
+  box-shadow:0 14px 35px rgba(61,43,34,.14);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-6px);
+  transition:.18s ease;
+  z-index:9999;
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+.nav-dropdown-menu a {
+  display:block !important;
+  padding:10px 12px !important;
+  border-radius:10px;
+  white-space:nowrap;
+  color:#3d2b22 !important;
+  text-decoration:none;
+}
+.nav-dropdown-menu a:hover,
+.nav-dropdown-menu a:focus { background:#f3e7df; }
+
+@media (max-width: 900px) {
+  .nav-dropdown { width:100%; }
+  .nav-dropdown > a { justify-content:space-between; }
+  .nav-dropdown-menu {
+    position:static;
+    min-width:0;
+    width:100%;
+    margin-top:8px;
+    padding:6px 0 0 14px;
+    border:0;
+    box-shadow:none;
+    background:transparent;
+    opacity:1;
+    visibility:visible;
+    transform:none;
+  }
+  .nav-dropdown-menu a {
+    padding:8px 0 !important;
+    white-space:normal;
+  }
+}
+</style>
+
+
+<style id="nav-disabled-style">
+.nav-disabled{
+  font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;
+  color:inherit;opacity:.55;cursor:default;white-space:nowrap;
+}
+#mob-menu .nav-disabled{display:block;padding:1rem 1.5rem;}
+</style>
+
+
+<style id="detail-page-design">
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{
+  --pink:#993A74;
+  --terra:#C17B52;
+  --terra-dark:#8C492E;
+  --sage:#7A9E7E;
+  --cream:#FAF6F1;
+  --cream-2:#F0E8DE;
+  --text:#3D2B22;
+  --muted:#8A6E62;
+  --white:#FFFDFC;
+}
+.detail-main{background:var(--cream);color:var(--text);font-family:"DM Sans",sans-serif;}
+.detail-hero{
+  padding:145px 7vw 90px;
+  background:linear-gradient(135deg,var(--cream) 0%,#fff 100%);
+  border-bottom:1px solid rgba(61,43,34,.09);
+}
+.detail-hero-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.12fr .88fr;gap:64px;align-items:center;}
+.detail-eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--pink);margin-bottom:16px;}
+.detail-hero h1,.detail-section h2,.detail-card h3{
+  font-family:"Cormorant Garamond",serif;
+  font-weight:500;
+  margin:0;
+  color:var(--text);
+}
+.detail-hero h1{font-size:clamp(3rem,6vw,5.4rem);line-height:.94;letter-spacing:-.025em;}
+.detail-hero h1 em{display:block;color:var(--pink);font-weight:500;}
+.detail-lead{font-size:1.1rem;line-height:1.75;color:var(--muted);max-width:720px;margin:26px 0 0;}
+.detail-hero-card{
+  background:var(--white);border-radius:26px;padding:34px;
+  box-shadow:0 18px 50px rgba(61,43,34,.09);
+  border:1px solid rgba(61,43,34,.08);
+}
+.detail-hero-card h3{font-size:2rem;margin-bottom:16px;}
+.detail-checks{list-style:none;padding:0;margin:0;display:grid;gap:12px;}
+.detail-checks li{display:flex;gap:12px;align-items:flex-start;line-height:1.55;}
+.detail-checks li:before{content:"✓";color:var(--pink);font-weight:700;}
+.detail-section{padding:90px 7vw;}
+.detail-section.alt{background:var(--white);}
+.detail-wrap{max-width:1180px;margin:0 auto;}
+.detail-section h2{font-size:clamp(2.4rem,4.5vw,4rem);line-height:1.04;max-width:850px;}
+.detail-section h2 em{color:var(--pink);font-weight:500;}
+.detail-copy{margin-top:26px;max-width:860px;color:var(--muted);font-size:1.04rem;line-height:1.85;}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px;}
+.detail-card{background:var(--white);border:1px solid rgba(61,43,34,.08);border-radius:22px;padding:28px;}
+.detail-card h3{font-size:1.7rem;margin-bottom:10px;}
+.detail-card p{margin:0;color:var(--muted);line-height:1.7;}
+.detail-card .num{font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);font-weight:600;margin-bottom:14px;}
+.detail-split{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start;margin-top:42px;}
+.detail-list{display:grid;gap:16px;}
+.detail-list-item{padding:18px 0;border-bottom:1px solid rgba(61,43,34,.1);}
+.detail-list-item strong{display:block;font-family:"Cormorant Garamond",serif;font-size:1.5rem;font-weight:500;margin-bottom:5px;}
+.detail-list-item span{color:var(--muted);line-height:1.65;}
+.detail-quote{
+  padding:34px 38px;border-radius:22px;background:var(--cream-2);
+  font-family:"Cormorant Garamond",serif;font-size:2rem;line-height:1.25;
+}
+.detail-cta{padding:90px 7vw;background:var(--terra-dark);color:white;text-align:center;}
+.detail-cta h2{font-family:"Cormorant Garamond",serif;font-size:clamp(2.7rem,5vw,4.4rem);font-weight:500;margin:0 0 18px;}
+.detail-cta p{max-width:700px;margin:0 auto 28px;color:rgba(255,255,255,.82);line-height:1.7;}
+.detail-btn{display:inline-block;padding:14px 24px;border-radius:999px;background:var(--pink);color:white!important;text-decoration:none;font-weight:600;}
+.detail-btn.secondary{background:transparent;border:1px solid rgba(255,255,255,.55);}
+.detail-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.detail-online .detail-eyebrow,.detail-online h1 em,.detail-online h2 em,.detail-online .num{color:var(--sage);}
+.detail-online .detail-checks li:before{color:var(--sage);}
+.detail-online .detail-btn{background:var(--sage);}
+.detail-online .detail-card{border-top:3px solid var(--sage);}
+.detail-badge{display:inline-block;padding:7px 11px;border-radius:999px;background:rgba(153,58,116,.08);color:var(--pink);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+.detail-online .detail-badge{background:rgba(122,158,126,.12);color:var(--sage);}
+@media(max-width:900px){
+  .detail-hero{padding:120px 22px 62px;}
+  .detail-section{padding:68px 22px;}
+  .detail-hero-inner,.detail-split{grid-template-columns:1fr;gap:34px;}
+  .detail-grid{grid-template-columns:1fr;}
+  .detail-hero h1{font-size:3.4rem;}
+  .detail-hero-card{padding:26px;}
+  .detail-cta{padding:70px 22px;}
+}
+</style>
+
+<link rel="icon" type="image/png" href="/LOGO.png">
+<link rel="shortcut icon" type="image/png" href="/LOGO.png">
+<link rel="apple-touch-icon" href="/LOGO.png">
 </head>
 <body>
-<nav><a class="logo" href="index.html">beVital <span>InsideOut</span></a>
-<div class="links"><a href="index.html">Start</a><a href="angebote.html">Angebote</a><a href="ueber-mich.html">Über mich</a><a href="kontakt.html">Kontakt</a></div></nav>
+<nav id="nav"><a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a><ul class="nav-links"><li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu"><a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a><a href="praeventionskurse-online.html">Präventionskurse Online</a><a href="/kurse/">Alle Kurse</a><a href="hatha-yoga.html">Hatha Yoga</a><a href="yin-yoga.html">Yin Yoga</a><a href="faszienfit-yoga.html">FaszienFit Yoga</a><a href="aroha.html">AROHA</a></div></li><li><a href="ueber-mich.html">Über mich</a></li><li><a href="/kurse/">Kurse</a></li><li><span class="nav-disabled">RESET</span></li><li><a href="retreat-mallorca.html">Mallorca</a></li><li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li></ul><button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button></nav><div id="mob-menu"><a href="angebote.html" onclick="closeMob()">Angebote</a><a href="ueber-mich.html" onclick="closeMob()">Über mich</a><a href="/kurse/" onclick="closeMob()">Kurse</a><span class="nav-disabled">RESET</span><a href="retreat-mallorca.html" onclick="closeMob()">Mallorca</a><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a></div>
 <header class="hero"><div class="eyebrow">Ausdauer · Kraft · Entspannung</div><h1><em>AROHA.</em></h1><p>AROHA ist ein fließendes Ganzkörpertraining mit kraftvollen und entspannenden Bewegungsfolgen.</p></header>
-<main class="grid"><article class="card"><div class="tag">Präsenz</div><h2>AROHA</h2><p>Dynamische Bewegung mit klaren, gut nachvollziehbaren Abläufen.</p><ul class="facts"><li>Mittwoch 18:00–18:50 Uhr</li><li>Höpershof</li></ul><a class="btn" href="https://www.fyndery.de/yoga-by-bettina/">Kurs buchen →</a></article></main>
+<main class="detail-main">
+
+<section class="detail-hero">
+  <div class="detail-hero-inner">
+    <div>
+      <div class="detail-eyebrow">AROHA</div>
+      <h1>Kraftvoll bewegen.<em>Im eigenen Rhythmus.</em></h1>
+      <p class="detail-lead">AROHA ist ein ausdauerorientiertes Ganzkörpertraining mit klaren, leicht nachvollziehbaren Bewegungen. Die Stunde verbindet kräftige und weichere Bewegungssequenzen und wird zu speziell abgestimmter Musik durchgeführt.</p>
+    </div>
+    <aside class="detail-hero-card">
+      <h3>Das erwartet dich</h3>
+      <ul class="detail-checks"><li>Ausdauer und Ganzkörperkräftigung</li><li>Einfache, gut nachvollziehbare Bewegungen</li><li>Wechsel aus kraftvoll und fließend</li><li>Training ohne komplizierte Choreografien</li></ul>
+    </aside>
+  </div>
+</section>
+
+<section class="detail-section ">
+  <div class="detail-wrap">
+    <h2>Was ist <em>AROHA?</em></h2>
+    <p class="detail-copy">AROHA wurde als Gruppenfitness-Konzept entwickelt. Charakteristisch sind große, kraftvolle Bewegungen und ein klarer Wechsel zwischen Anspannung und Entspannung. Die Bewegungsfolgen sind bewusst überschaubar gehalten. Dadurch kannst du dich auf deinen Körper, deine Atmung und die Intensität konzentrieren, statt Schritte auswendig lernen zu müssen.</p>
+    <div class="detail-grid"><article class="detail-card"><div class="num">01</div><h3>Ausdauer</h3><p>Die kontinuierliche Bewegung fordert Herz und Kreislauf in gut steuerbarer Intensität.</p></article><article class="detail-card"><div class="num">02</div><h3>Kraft</h3><p>Beine, Rumpf, Schultern und Arme arbeiten in großen Bewegungsmustern zusammen.</p></article><article class="detail-card"><div class="num">03</div><h3>Koordination</h3><p>Die Abläufe sind klar und wiederholbar. Du trainierst Koordination, ohne eine Tanzchoreografie lernen zu müssen.</p></article></div>
+  </div>
+</section>
+
+<section class="detail-section alt">
+  <div class="detail-wrap">
+    <h2>AROHA passt zu dir, <em>wenn …</em></h2>
+    <div class="detail-split">
+      <div class="detail-list"><div class="detail-list-item"><strong>du dich gern zur Musik bewegst</strong><span>Musik gibt der Stunde Struktur und Energie, ohne dass daraus ein Tanzkurs wird.</span></div><div class="detail-list-item"><strong>du ein unkompliziertes Ganzkörpertraining suchst</strong><span>Die Übungen sind leicht zugänglich und lassen sich in der Intensität anpassen.</span></div><div class="detail-list-item"><strong>du nach einem sitzenden Tag Bewegung brauchst</strong><span>Große Bewegungen bringen Kreislauf und Körper in Gang.</span></div><div class="detail-list-item"><strong>du keine komplizierten Schrittfolgen möchtest</strong><span>AROHA bleibt bewusst verständlich und wiederholbar.</span></div></div>
+      <div class="detail-quote">Du musst keine Choreografie können. Du bewegst dich kraftvoll, klar und so intensiv, wie es für dich an diesem Tag passt.</div>
+    </div>
+  </div>
+</section>
+
+<section class="detail-cta">
+  <h2>AROHA ausprobieren</h2>
+  <p>Die aktuellen AROHA-Termine findest du bei den Kursen.</p>
+  <div class="detail-actions">
+    <a class="detail-btn" href="/kurse/">AROHA-Termine ansehen →</a>
+    
+  </div>
+</section>
+
+</main>
 <footer style="padding:2rem;text-align:center;"><div class="legal-links" style="margin-top:12px;"><a href="datenschutz.html">Datenschutz</a> · <a href="agb.html">AGB</a></div></footer>
-</body></html>
+<script id="canonical-start-header-js">function toggleMob(){document.getElementById('mob-menu')?.classList.toggle('open')}function closeMob(){document.getElementById('mob-menu')?.classList.remove('open')}</script></body></html>

@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Kontakt – beVital InsideOut | Bettina Kahmann</title>
+<title>Anmeldung gesendet – beVital InsideOut</title>
 <meta content="Kontakt zu Bettina Kahmann – Fragen zu Kursen, Präventionskursen, Personal Training oder dem Retreat auf Mallorca." name="description"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -170,118 +170,93 @@ a.online-btn, .btn-online {
 #mob-menu .nav-disabled{display:block;padding:1rem 1.5rem;}
 </style>
 
+<style id="detail-page-design">
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{
+  --pink:#993A74;
+  --terra:#C17B52;
+  --terra-dark:#8C492E;
+  --sage:#7A9E7E;
+  --cream:#FAF6F1;
+  --cream-2:#F0E8DE;
+  --text:#3D2B22;
+  --muted:#8A6E62;
+  --white:#FFFDFC;
+}
+.detail-main{background:var(--cream);color:var(--text);font-family:"DM Sans",sans-serif;}
+.detail-hero{
+  padding:145px 7vw 90px;
+  background:linear-gradient(135deg,var(--cream) 0%,#fff 100%);
+  border-bottom:1px solid rgba(61,43,34,.09);
+}
+.detail-hero-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.12fr .88fr;gap:64px;align-items:center;}
+.detail-eyebrow{font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--pink);margin-bottom:16px;}
+.detail-hero h1,.detail-section h2,.detail-card h3{
+  font-family:"Cormorant Garamond",serif;
+  font-weight:500;
+  margin:0;
+  color:var(--text);
+}
+.detail-hero h1{font-size:clamp(3rem,6vw,5.4rem);line-height:.94;letter-spacing:-.025em;}
+.detail-hero h1 em{display:block;color:var(--pink);font-weight:500;}
+.detail-lead{font-size:1.1rem;line-height:1.75;color:var(--muted);max-width:720px;margin:26px 0 0;}
+.detail-hero-card{
+  background:var(--white);border-radius:26px;padding:34px;
+  box-shadow:0 18px 50px rgba(61,43,34,.09);
+  border:1px solid rgba(61,43,34,.08);
+}
+.detail-hero-card h3{font-size:2rem;margin-bottom:16px;}
+.detail-checks{list-style:none;padding:0;margin:0;display:grid;gap:12px;}
+.detail-checks li{display:flex;gap:12px;align-items:flex-start;line-height:1.55;}
+.detail-checks li:before{content:"✓";color:var(--pink);font-weight:700;}
+.detail-section{padding:90px 7vw;}
+.detail-section.alt{background:var(--white);}
+.detail-wrap{max-width:1180px;margin:0 auto;}
+.detail-section h2{font-size:clamp(2.4rem,4.5vw,4rem);line-height:1.04;max-width:850px;}
+.detail-section h2 em{color:var(--pink);font-weight:500;}
+.detail-copy{margin-top:26px;max-width:860px;color:var(--muted);font-size:1.04rem;line-height:1.85;}
+.detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px;}
+.detail-card{background:var(--white);border:1px solid rgba(61,43,34,.08);border-radius:22px;padding:28px;}
+.detail-card h3{font-size:1.7rem;margin-bottom:10px;}
+.detail-card p{margin:0;color:var(--muted);line-height:1.7;}
+.detail-card .num{font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);font-weight:600;margin-bottom:14px;}
+.detail-split{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:start;margin-top:42px;}
+.detail-list{display:grid;gap:16px;}
+.detail-list-item{padding:18px 0;border-bottom:1px solid rgba(61,43,34,.1);}
+.detail-list-item strong{display:block;font-family:"Cormorant Garamond",serif;font-size:1.5rem;font-weight:500;margin-bottom:5px;}
+.detail-list-item span{color:var(--muted);line-height:1.65;}
+.detail-quote{
+  padding:34px 38px;border-radius:22px;background:var(--cream-2);
+  font-family:"Cormorant Garamond",serif;font-size:2rem;line-height:1.25;
+}
+.detail-cta{padding:90px 7vw;background:var(--terra-dark);color:white;text-align:center;}
+.detail-cta h2{font-family:"Cormorant Garamond",serif;font-size:clamp(2.7rem,5vw,4.4rem);font-weight:500;margin:0 0 18px;}
+.detail-cta p{max-width:700px;margin:0 auto 28px;color:rgba(255,255,255,.82);line-height:1.7;}
+.detail-btn{display:inline-block;padding:14px 24px;border-radius:999px;background:var(--pink);color:white!important;text-decoration:none;font-weight:600;}
+.detail-btn.secondary{background:transparent;border:1px solid rgba(255,255,255,.55);}
+.detail-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.detail-online .detail-eyebrow,.detail-online h1 em,.detail-online h2 em,.detail-online .num{color:var(--sage);}
+.detail-online .detail-checks li:before{color:var(--sage);}
+.detail-online .detail-btn{background:var(--sage);}
+.detail-online .detail-card{border-top:3px solid var(--sage);}
+.detail-badge{display:inline-block;padding:7px 11px;border-radius:999px;background:rgba(153,58,116,.08);color:var(--pink);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;}
+.detail-online .detail-badge{background:rgba(122,158,126,.12);color:var(--sage);}
+@media(max-width:900px){
+  .detail-hero{padding:120px 22px 62px;}
+  .detail-section{padding:68px 22px;}
+  .detail-hero-inner,.detail-split{grid-template-columns:1fr;gap:34px;}
+  .detail-grid{grid-template-columns:1fr;}
+  .detail-hero h1{font-size:3.4rem;}
+  .detail-hero-card{padding:26px;}
+  .detail-cta{padding:70px 22px;}
+}
+</style>
 <link rel="icon" type="image/png" href="/LOGO.png">
 <link rel="shortcut icon" type="image/png" href="/LOGO.png">
 <link rel="apple-touch-icon" href="/LOGO.png">
 </head>
 <body>
-<nav id="nav"><a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a><ul class="nav-links"><li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu"><a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a><a href="praeventionskurse-online.html">Präventionskurse Online</a><a href="/kurse/">Alle Kurse</a><a href="hatha-yoga.html">Hatha Yoga</a><a href="yin-yoga.html">Yin Yoga</a><a href="faszienfit-yoga.html">FaszienFit Yoga</a><a href="aroha.html">AROHA</a></div></li><li><a href="ueber-mich.html">Über mich</a></li><li><a href="/kurse/">Kurse</a></li><li><span class="nav-disabled">RESET</span></li><li><a href="retreat-mallorca.html">Mallorca</a></li><li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li></ul><button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button></nav><div id="mob-menu"><a href="angebote.html" onclick="closeMob()">Angebote</a><a href="ueber-mich.html" onclick="closeMob()">Über mich</a><a href="/kurse/" onclick="closeMob()">Kurse</a><span class="nav-disabled">RESET</span><a href="retreat-mallorca.html" onclick="closeMob()">Mallorca</a><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a></div>
-<div class="page-hero">
-<div class="hero-eyebrow">Kontakt</div>
-<h1>Schreib mir –<br/><em>ich antworte persönlich.</em></h1>
-<p>Fragen zu Kursen, Präventionskursen, Personal Training oder dem Retreat auf Mallorca – ich bin direkt erreichbar.</p>
-</div>
-<section class="kontakt-section">
-<div class="kontakt-grid">
-<div class="reveal">
-<div class="eyebrow">Direkt erreichbar</div>
-<div class="kontakt-item">
-<div class="kontakt-icon">✉️</div>
-<div>
-<div class="kontakt-label">E-Mail</div>
-<a href="mailto:info@bettina-kahmann.com" class="kontakt-value">info@bettina-kahmann.com</a>
-</div>
-</div>
-<div class="kontakt-item">
-<div class="kontakt-icon">📍</div>
-<div>
-<div class="kontakt-label">Vor Ort · Elze</div>
-<a class="kontakt-value-text" href="https://maps.google.com/?q=Kuckucksweg+90,+30900+Wedemark" target="_blank">Sport- und Tanzhaus · Kuckucksweg 90 · 30900 Wedemark-Elze</a>
-</div>
-</div>
-<div class="kontakt-item">
-<div class="kontakt-icon">📸</div>
-<div>
-<div class="kontakt-label">Instagram</div>
-<a class="kontakt-value" href="https://instagram.com/be_vital_insideout" target="_blank">@be_vital_insideout</a>
-</div>
-</div>
-<div class="kontakt-item">
-<div class="kontakt-icon">💬</div>
-<div>
-<div class="kontakt-label">WhatsApp</div>
-<a class="kontakt-value" href="https://wa.me/message/QNJNZJTTJGKAC1" target="_blank">Direkt schreiben</a>
-</div>
-</div>
-<div class="schnell-links">
-<div class="eyebrow">Schnell buchen</div>
-<a class="schnell-btn" href="https://www.fyndery.de/yoga-by-bettina/" style="background: var(--pink);" target="_blank">Kurs buchen (Fyndery) →</a>
-<a class="schnell-btn" href="https://bettina-kahmann.coachy.net/lp/bettina-kahmann-1/" style="background: var(--sage);" target="_blank">Online-Studio →</a>
-<span class="schnell-btn" style="background: var(--terra-deep);" target="_blank">RESET Warteliste →</span>
-</div>
-</div>
-<div class="form-box reveal">
-<div class="eyebrow">Nachricht schreiben</div>
-<form id="kontaktform">
-<div class="form-row">
-<div class="form-group">
-<label class="form-label">Name *</label>
-<input class="form-input" id="f-name" placeholder="Dein Name" required="" type="text"/>
-</div>
-<div class="form-group">
-<label class="form-label">E-Mail *</label>
-<input class="form-input" id="f-email" placeholder="deine@email.de" required="" type="email"/>
-</div>
-</div>
-<div class="form-group">
-<label class="form-label">Thema</label>
-<select class="form-input" id="f-thema">
-<option value="">Worum geht es?</option>
-<option>Offene Kurse</option>
-<option>Präventionskurs §20 SGB V</option>
-<option>Personal Training</option>
-
-<option>Retreat Mallorca</option>
-<option>Online-Studio</option>
-<option>Sonstiges</option>
-</select>
-</div>
-<div class="form-group">
-<label class="form-label">Nachricht *</label>
-<textarea class="form-input" id="f-nachricht" placeholder="Was möchtest du wissen oder anfragen?" required="" rows="5"></textarea>
-</div>
-<button class="btn-submit" type="submit">Nachricht senden →</button>
-<p class="form-note">Dein E-Mail-Programm öffnet sich. Ich antworte persönlich.</p>
-</form>
-</div>
-</div>
-</section>
-<section class="testi-section">
-<div class="section-eyebrow-center reveal">Das sagen meine Teilnehmerinnen</div>
-<div class="testi-grid">
-<div class="testi-card reveal">
-<div class="testi-stars">★★★★★</div>
-<p>„Die regelmäßige Yoga-Praxis bei dir im Yoga-Club trägt erheblich zu meinem Wohlbefinden und zur körperlichen Fitness bei. Ich bin glücklich, Yoga durch dich für mich entdeckt zu haben."</p>
-<div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Monika</div><div class="testi-role">LIVE Yoga Studio Online</div></div></div>
-</div>
-<div class="testi-card reveal">
-<div class="testi-stars">★★★★★</div>
-<p>„Bettina ist eine Powerfrau und strahlt gleichzeitig eine wahnsinnige Wärme aus. In deinen Stunden schaffst du es mir einen Raum zu öffnen, wo ich ganz bei mir ankommen kann."</p>
-<div class="testi-author"><div class="testi-avatar">J</div><div><div class="testi-name">Jeanette</div><div class="testi-role">LIVE Yoga Studio Online</div></div></div>
-</div>
-<div class="testi-card reveal">
-<div class="testi-stars">★★★★★</div>
-<p>„Du bist eine der motivierendsten Frauen, die ich kenne. Durch deine herzliche, offene und einfühlsame Art ist es eine Freude, mit dir die Yogapraxis zu erfahren."</p>
-<div class="testi-author"><div class="testi-avatar">H</div><div><div class="testi-name">Heidi</div><div class="testi-role">Yoga &amp; Meditation</div></div></div>
-</div>
-<div class="testi-card reveal">
-<div class="testi-stars">★★★★★</div>
-<p>„Die Yoga-Einheiten sind sehr wertvoll für mich. Ich fühle mich jedes Mal danach wieder in meiner Kraft. Als Camperin ist das Online-Angebot maßgeschneidert. Vielen Dank für die letzten 5 Jahre!"</p>
-<div class="testi-author"><div class="testi-avatar">P</div><div><div class="testi-name">Petra</div><div class="testi-role">Online Yoga &amp; Retreat</div></div></div>
-</div>
-</div>
-</section>
-<footer>
+<nav id="nav"><a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a><ul class="nav-links"><li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu"><a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a><a href="praeventionskurse-online.html">Präventionskurse Online</a><a href="/kurse/">Alle Kurse</a><a href="hatha-yoga.html">Hatha Yoga</a><a href="yin-yoga.html">Yin Yoga</a><a href="faszienfit-yoga.html">FaszienFit Yoga</a><a href="aroha.html">AROHA</a></div></li><li><a href="ueber-mich.html">Über mich</a></li><li><a href="/kurse/">Kurse</a></li><li><span class="nav-disabled">RESET</span></li><li><a href="retreat-mallorca.html">Mallorca</a></li><li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li></ul><button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button></nav><main class="detail-main"><section class="detail-hero"><div class="detail-hero-inner"><div><div class="detail-eyebrow">Anmeldung gesendet</div><h1>Danke für deine <em>Anmeldung.</em></h1><p class="detail-lead">Deine Angaben wurden übermittelt. Ich melde mich persönlich bei dir mit den weiteren Informationen zum Präventionskurs.</p><p style="margin-top:28px"><a class="detail-btn" href="index.html">Zur Startseite →</a></p></div><aside class="detail-hero-card"><h3>Wie geht es weiter?</h3><ul class="detail-checks"><li>Ich prüfe deine Anmeldung.</li><li>Du erhältst die Kursinformationen per E-Mail.</li><li>Bei Fragen erreichst du mich unter info@bettina-kahmann.com.</li></ul></aside></div></section></main><footer>
 <div class="footer-top">
 <div class="footer-brand">
 <div class="footer-logo">beVital <span>InsideOut</span></div>
