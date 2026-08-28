@@ -247,9 +247,79 @@ a.online-btn, .btn-online {
 <link rel="icon" type="image/png" href="/LOGO.png">
 <link rel="shortcut icon" type="image/png" href="/LOGO.png">
 <link rel="apple-touch-icon" href="/LOGO.png">
+
+<style id="prevention-faq-style">
+.prevention-faq{padding:80px 24px;background:#FAF6F1;color:#4a3028}
+.faq-wrap{max-width:980px;margin:0 auto}
+.faq-eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:700;color:#C17B52;margin-bottom:12px}
+.prevention-faq h2{font-family:"Cormorant Garamond",serif;font-size:clamp(36px,5vw,54px);font-weight:500;line-height:1.05;margin:0 0 18px}
+.faq-intro{max-width:760px;line-height:1.75;margin:0 0 34px;color:#80675e}
+.faq-list{border-top:1px solid rgba(140,73,46,.22)}
+.faq-item{border-bottom:1px solid rgba(140,73,46,.22)}
+.faq-item summary{list-style:none;cursor:pointer;padding:21px 4px;display:flex;align-items:center;justify-content:space-between;gap:24px;font-weight:600;font-size:17px}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-plus{font-size:27px;font-weight:300;color:#993A74;transition:transform .2s ease}
+.faq-item[open] .faq-plus{transform:rotate(45deg)}
+.faq-answer{padding:0 42px 22px 4px;color:#715b52;line-height:1.75}
+.faq-answer p{margin:0}
+.faq-cta{text-align:center;margin-top:52px;padding:38px 24px;background:#F0E8DE;border-radius:18px}
+.faq-cta h3{font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:500;margin:0 0 8px}
+.faq-cta p{margin:0 0 22px;color:#80675e}
+@media(max-width:700px){.prevention-faq{padding:56px 20px}.faq-item summary{font-size:16px}.faq-answer{padding-right:8px}.faq-cta{margin-top:38px}}
+</style>
+
+<style>
+/* Canonical beVital footer */
+footer{background:#8C492E!important;color:rgba(250,246,241,.62)!important;padding:4rem 3.5rem 2rem!important}
+footer .footer-grid{display:grid!important;grid-template-columns:1.5fr 1fr 1fr 1fr!important;gap:3rem!important;padding-bottom:3rem!important;border-bottom:1px solid rgba(255,255,255,.10)!important}
+footer .f-brand{font-family:"Cormorant Garamond",serif!important;font-size:1.3rem!important;color:#FAF6F1!important;font-weight:400!important;margin-bottom:.8rem!important}
+footer h4{color:#C17B52!important;text-transform:uppercase!important;letter-spacing:.16em!important;font-size:.72rem!important;margin:0 0 1.25rem!important}
+footer p,footer li,footer a{color:rgba(250,246,241,.58)!important}
+footer a{text-decoration:none!important}
+footer ul{list-style:none!important;padding:0!important;margin:0!important}
+footer li{margin:.55rem 0!important}
+footer .footer-bot{display:flex!important;justify-content:space-between!important;align-items:center!important;padding-top:1.5rem!important;flex-wrap:wrap!important;gap:1rem!important}
+footer .footer-bot p{font-size:.73rem!important}
+footer .legal-links{font-size:.78rem!important}
+@media(max-width:900px){footer .footer-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:620px){footer{padding:3rem 1.5rem 2rem!important}footer .footer-grid{grid-template-columns:1fr!important;gap:2rem!important}}
+</style>
 </head>
 <body>
-<nav id="nav"><a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a><ul class="nav-links"><li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu"><a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a><a href="praeventionskurse-online.html">Präventionskurse Online</a><a href="/kurse/">Alle Kurse</a><a href="hatha-yoga.html">Hatha Yoga</a><a href="yin-yoga.html">Yin Yoga</a><a href="faszienfit-yoga.html">FaszienFit Yoga</a><a href="aroha.html">AROHA</a></div></li><li><a href="ueber-mich.html">Über mich</a></li><li><a href="/kurse/">Kurse</a></li><li><span class="nav-disabled">RESET</span></li><li><a href="retreat-mallorca.html">Mallorca</a></li><li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li></ul><button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button></nav><div id="mob-menu"><a href="angebote.html" onclick="closeMob()">Angebote</a><a href="ueber-mich.html" onclick="closeMob()">Über mich</a><a href="/kurse/" onclick="closeMob()">Kurse</a><span class="nav-disabled">RESET</span><a href="retreat-mallorca.html" onclick="closeMob()">Mallorca</a><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a></div>
+<nav id="nav">
+<a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a>
+<ul class="nav-links">
+<li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu">
+<a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a>
+<a href="praeventionskurse-online.html">Präventionskurse Online</a>
+<a href="/kurse">Alle Kurse</a>
+<a href="hatha-yoga.html">Hatha Yoga</a>
+<a href="yin-yoga.html">Yin Yoga</a>
+<a href="faszienfit-yoga.html">FaszienFit Yoga</a>
+<a href="aroha.html">AROHA</a>
+</div></li>
+<li><a href="ueber-mich.html">Über mich</a></li>
+<li><a href="/kurse">Kurse</a></li>
+<li><a href="/reset">RESET</a></li>
+<li><a href="/yoga-studio-online">Yoga Studio Online</a></li>
+<li><a href="retreat-mallorca.html">Mallorca</a></li>
+
+<li><a href="kontakt.html">Kontakt</a></li>
+<li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li>
+</ul>
+<button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button>
+</nav>
+<div id="mob-menu">
+<a href="angebote.html" onclick="closeMob()">Angebote</a>
+<a href="ueber-mich.html" onclick="closeMob()">Über mich</a>
+<a href="/kurse" onclick="closeMob()">Kurse</a>
+<a href="/reset" onclick="closeMob()">RESET</a>
+<a href="/yoga-studio-online" onclick="closeMob()">Yoga Studio Online</a>
+<a href="retreat-mallorca.html" onclick="closeMob()">Mallorca</a>
+
+<a href="kontakt.html" onclick="closeMob()">Kontakt</a>
+<a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a>
+</div>
 <header class="hero"><div class="eyebrow">§20 SGB V · Live Online</div><h1>Präventionskurse <em>Online.</em></h1><p>Zertifizierte Präventionskurse live über Zoom. Nach regelmäßiger Teilnahme erhältst du eine Teilnahmebestätigung für deine Krankenkasse.</p></header>
 <main class="detail-main detail-online">
 
@@ -298,7 +368,7 @@ a.online-btn, .btn-online {
       <p hidden><label>Nicht ausfüllen: <input name="bot-field"></label></p>
       <div class="registration-grid">
         <div class="form-group"><label for="po-name">Name *</label><input id="po-name" name="Name" type="text" autocomplete="name" required></div>
-        <div class="form-group"><label for="po-email">E-Mail *</label><input id="po-email" name="email" type="email" autocomplete="email" required></div>
+        <div class="form-group"><label for="po-email">E-Mail *</label><input id="po-email" name="E-Mail" type="email" autocomplete="email" required></div>
         <div class="form-group"><label for="po-phone">Telefon *</label><input id="po-phone" name="Telefon" type="tel" autocomplete="tel" required></div>
         <div class="form-group"><label for="po-kasse">Krankenkasse *</label><input id="po-kasse" name="Krankenkasse" type="text" required></div>
         <div class="form-group full"><label for="po-kurs">Gewünschter Kurs *</label><select id="po-kurs" name="Kurs" required><option value="" selected disabled>Bitte auswählen</option><option>Hatha Yoga: Stressbewältigung und Entspannung – LIVE Onlineseminar · So. 09:00–10:00 · 11.10.2026–13.12.2026 · KU-ST-TXYSPZ</option><option>Yin Yoga – Achtsamkeit durch sanftes Hatha Yoga (Onlineseminar) · Mi. 19:30–20:30 · 28.10.2026–16.12.2026 · KU-ST-JJ2WDS</option></select></div>
@@ -348,9 +418,153 @@ a.online-btn, .btn-online {
     <p class="detail-copy">
       Fülle das Formular aus. Deine Angaben werden mit deiner Kursauswahl übermittelt.
     </p>
+
+    <form name="praeventionskurs-online-anmeldung"
+          method="POST"
+          data-netlify="true"
+          action="danke-anmeldung.html"
+          style="max-width:760px;margin-top:38px;background:var(--white);padding:32px;border-radius:24px;border:1px solid rgba(61,43,34,.08);box-shadow:0 16px 40px rgba(61,43,34,.06);">
+      <input type="hidden" name="form-name" value="praeventionskurs-online-anmeldung">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <label style="display:grid;gap:7px;">
+          <span>Name *</span>
+          <input required name="name" type="text" autocomplete="name"
+                 style="padding:14px 16px;border:1px solid rgba(61,43,34,.18);border-radius:12px;font:inherit;background:white;">
+        </label>
+
+        <label style="display:grid;gap:7px;">
+          <span>E-Mail *</span>
+          <input required name="email" type="email" autocomplete="email"
+                 style="padding:14px 16px;border:1px solid rgba(61,43,34,.18);border-radius:12px;font:inherit;background:white;">
+        </label>
+
+        <label style="display:grid;gap:7px;">
+          <span>Telefon</span>
+          <input name="telefon" type="tel" autocomplete="tel"
+                 style="padding:14px 16px;border:1px solid rgba(61,43,34,.18);border-radius:12px;font:inherit;background:white;">
+        </label>
+
+        <label style="display:grid;gap:7px;">
+          <span>Krankenkasse</span>
+          <input name="krankenkasse" type="text"
+                 style="padding:14px 16px;border:1px solid rgba(61,43,34,.18);border-radius:12px;font:inherit;background:white;">
+        </label>
+      </div>
+
+      <label style="display:grid;gap:7px;margin-top:18px;">
+        <span>Online-Präventionskurs *</span>
+        <select required name="kurs"
+                style="padding:14px 16px;border:1px solid rgba(61,43,34,.18);border-radius:12px;font:inherit;background:white;">
+          <option value="">Bitte auswählen</option>
+          <option>Hatha Yoga: Stressbewältigung und Entspannung – LIVE Onlineseminar · So. 09:00–10:00 · 11.10.2026–13.12.2026 · KU-ST-TXYSPZ</option>
+          <option>Yin Yoga – Achtsamkeit durch sanftes Hatha Yoga (Onlineseminar) · Mi. 19:30–20:30 · 28.10.2026–16.12.2026 · KU-ST-JJ2WDS</option>
+        </select>
+      </label>
+
+      <label style="display:grid;gap:7px;margin-top:18px;">
+        <span>Nachricht</span>
+        <textarea name="nachricht" rows="5"
+                  style="padding:14px 16px;border:1px solid rgba(61,43,34,.18);border-radius:12px;font:inherit;background:white;resize:vertical;"></textarea>
+      </label>
+
+      <label style="display:flex;gap:10px;align-items:flex-start;margin-top:18px;line-height:1.5;">
+        <input required type="checkbox" name="datenschutz" value="akzeptiert" style="margin-top:4px;">
+        <span>Ich habe die <a href="datenschutz.html">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Angaben zur Kursanmeldung zu. *</span>
+      </label>
+
+      <button type="submit"
+              class="detail-btn"
+              style="border:0;cursor:pointer;margin-top:24px;">
+        Online-Präventionskurs anmelden →
+      </button>
+    </form>
   </div>
 </section>
 
 </main>
+
+<section class="prevention-faq" id="faq-online">
+  <div class="faq-wrap">
+    <div class="faq-eyebrow">Häufige Fragen</div>
+    <h2>Fragen zu deinem Präventionskurs</h2>
+    <p class="faq-intro">Du überlegst, ob ein Präventionskurs zu dir passt? Hier findest du Antworten auf häufige Fragen – von Beweglichkeit und Vorerfahrung bis zur Anmeldung und Krankenkassenerstattung.</p>
+    <div class="faq-list">
+      <details class="faq-item">
+  <summary>Ich bin total unbeweglich. Kann ich trotzdem Yoga machen?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Ja. Du musst weder beweglich noch sportlich sein. Die Übungen werden so angeleitet, dass du sie an deinen Körper anpassen kannst. Es geht nicht darum, möglichst weit in eine Haltung zu kommen, sondern um achtsame Bewegung, Atmung und Körperwahrnehmung.</p></div>
+</details><details class="faq-item">
+  <summary>Ich habe noch nie Yoga gemacht. Ist der Kurs für Anfänger geeignet?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Ja. Die Präventionskurse sind auch für Anfänger und Wiedereinsteiger geeignet. Die Übungen werden Schritt für Schritt erklärt und es gibt unterschiedliche Varianten.</p></div>
+</details><details class="faq-item">
+  <summary>Bin ich zu alt für Yoga?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Nein. Yoga ist keine Frage des Alters. Entscheidend ist, dass du in deinem eigenen Tempo übst und die Übungen an deinen Körper und deine Tagesform anpasst.</p></div>
+</details><details class="faq-item">
+  <summary>Muss ich sportlich sein?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Nein. Der Präventionskurs ist kein Fitness-Wettbewerb. Du arbeitest mit deinem eigenen Körper und deinen persönlichen Möglichkeiten.</p></div>
+</details><details class="faq-item">
+  <summary>Was ist ein Präventionskurs?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Ein Präventionskurs ist ein zertifizierter Gesundheitskurs nach §20 SGB V. Die Kursreihe verbindet Yoga, Körperwahrnehmung, Atmung und Entspannung mit dem Ziel, einen gesundheitsfördernden Umgang mit Stress zu unterstützen.</p></div>
+</details><details class="faq-item">
+  <summary>Übernimmt meine Krankenkasse die Kursgebühr?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Viele gesetzliche Krankenkassen bezuschussen zertifizierte Präventionskurse. Die Höhe der Erstattung legt deine Krankenkasse fest. Mit der auf der Kursseite angegebenen Kurs-ID kannst du vor der Anmeldung direkt bei deiner Krankenkasse nachfragen.</p></div>
+</details><details class="faq-item">
+  <summary>Wie funktioniert die Erstattung durch die Krankenkasse?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Du meldest dich zunächst verbindlich zum Kurs an und bezahlst die Kursgebühr. Nach erfolgreicher Teilnahme erhältst du eine Teilnahmebescheinigung, die du bei deiner Krankenkasse einreichen kannst. Die Erstattung erfolgt anschließend nach den Bedingungen deiner Krankenkasse.</p></div>
+</details><details class="faq-item">
+  <summary>Wie oft muss ich teilnehmen?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Für die Bezuschussung ist eine regelmäßige Teilnahme erforderlich. Maßgeblich sind die Bedingungen deiner Krankenkasse und des zertifizierten Kursangebots. Plane deshalb möglichst alle Termine der Kursreihe ein.</p></div>
+</details><details class="faq-item">
+  <summary>Was passiert, wenn ich einen Termin verpasse?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Ein verpasster Termin kann Auswirkungen auf die erforderliche Teilnahmequote haben. Wenn du mehrere Termine nicht wahrnehmen kannst, kann die Voraussetzung für eine Erstattung durch deine Krankenkasse entfallen.</p></div>
+</details><details class="faq-item">
+  <summary>Wie melde ich mich an?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Wähle auf dieser Seite deinen gewünschten Kurs bzw. Termin aus und fülle das Anmeldeformular aus. Nach dem Absenden erhältst du die weiteren Informationen zur Teilnahme und Bezahlung.</p></div>
+</details><details class="faq-item">
+  <summary>Ist meine Anmeldung verbindlich?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Ja. Mit dem Absenden des Anmeldeformulars meldest du dich verbindlich für die ausgewählte Kursreihe an.</p></div>
+</details><details class="faq-item">
+  <summary>Brauche ich eine Überweisung oder ein Rezept vom Arzt?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Für die Anmeldung zu einem Präventionskurs benötigst du grundsätzlich keine ärztliche Überweisung und kein Rezept.</p></div>
+</details><details class="faq-item">
+  <summary>Ich habe körperliche Beschwerden. Kann ich teilnehmen?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Bei akuten Beschwerden, frischen Verletzungen, starken Schmerzen oder ungeklärten gesundheitlichen Problemen solltest du vor der Teilnahme ärztlich klären lassen, ob Yoga aktuell für dich geeignet ist. Informiere mich bitte vor Kursbeginn über relevante körperliche Einschränkungen.</p></div>
+</details><details class="faq-item">
+  <summary>Ich kann nicht auf den Knien oder im Schneidersitz sitzen. Ist das ein Problem?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Nein. Viele Positionen lassen sich anpassen. Du kannst Hilfsmittel oder eine andere Position nutzen. Dein Körper muss nicht in eine vorgegebene Form passen.</p></div>
+</details><details class="faq-item">
+  <summary>Muss ich alle Übungen mitmachen?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Nein. Wenn sich eine Bewegung nicht gut anfühlt, kannst du eine andere Variante wählen, pausieren oder eine Übung auslassen.</p></div>
+</details><details class="faq-item">
+  <summary>Was ist der Unterschied zwischen Hatha Yoga und Yin Yoga?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Im Hatha Yoga verbinden wir bewusste Bewegung, Körperhaltungen, Atmung und Entspannung. Yin Yoga ist ruhiger; viele Positionen werden überwiegend am Boden ausgeführt und länger gehalten. Beide Kursformen legen Wert auf Körperwahrnehmung und einen bewussten Umgang mit Anspannung und Entspannung.</p></div>
+</details><details class="faq-item">
+  <summary>Was passiert nach dem letzten Kurstermin?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Wenn du die erforderlichen Teilnahmebedingungen erfüllt hast, erhältst du deine Teilnahmebescheinigung. Diese kannst du anschließend bei deiner Krankenkasse zur Erstattung einreichen.</p></div>
+</details><details class="faq-item">
+  <summary>Bekomme ich automatisch 100 % der Kursgebühr zurück?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Nein. Die Höhe der Erstattung wird von deiner Krankenkasse festgelegt. Die Zertifizierung bedeutet nicht, dass jede Krankenkasse automatisch die vollständige Kursgebühr übernimmt.</p></div>
+</details><details class="faq-item">
+  <summary>Was brauche ich für den Online-Präventionskurs?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Du brauchst eine stabile Internetverbindung, einen Laptop, ein Tablet oder einen Computer, ausreichend Platz für deine Yogamatte und bequeme Kleidung. Je nach Stunde sind außerdem Decke, Kissen oder Yogablöcke hilfreich.</p></div>
+</details><details class="faq-item">
+  <summary>Muss meine Kamera beim Onlinekurs eingeschaltet sein?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Der Kurs findet live online statt. Für die konkrete technische Durchführung und die Anforderungen an die Teilnahme erhältst du vor Kursbeginn alle Informationen.</p></div>
+</details><details class="faq-item">
+  <summary>Wird der Onlinekurs aufgezeichnet?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Der zertifizierte Präventionskurs ist als LIVE-Kurs zu festen Terminen vorgesehen. Eine Aufzeichnung ersetzt nicht automatisch die persönliche Teilnahme an einer Kurseinheit.</p></div>
+</details><details class="faq-item">
+  <summary>Kann ich von einem anderen Ort am Onlinekurs teilnehmen?<span class="faq-plus" aria-hidden="true">+</span></summary>
+  <div class="faq-answer"><p>Ja, wenn du zum Kurstermin eine ruhige Umgebung, eine stabile Internetverbindung und ausreichend Platz zum Üben hast. Für die Bescheinigung zählt deine tatsächliche Teilnahme an den Kurseinheiten.</p></div>
+</details>
+    </div>
+    <div class="faq-cta">
+      <h3>Du möchtest dabei sein?</h3>
+      <p>Wähle oben deinen passenden Termin und melde dich direkt über das Anmeldeformular an.</p>
+      <a class="detail-btn" href="#anmeldung-online">Jetzt zum Präventionskurs anmelden →</a>
+    </div>
+  </div>
+</section>
+
 <footer style="padding:2rem;text-align:center;"><div class="legal-links" style="margin-top:12px;"><a href="datenschutz.html">Datenschutz</a> · <a href="agb.html">AGB</a></div></footer>
 <script id="canonical-start-header-js">function toggleMob(){document.getElementById('mob-menu')?.classList.toggle('open')}function closeMob(){document.getElementById('mob-menu')?.classList.remove('open')}</script></body></html>

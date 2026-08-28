@@ -117,9 +117,58 @@ a.online-btn, .btn-online {
 <link rel="icon" type="image/png" href="/LOGO.png">
 <link rel="shortcut icon" type="image/png" href="/LOGO.png">
 <link rel="apple-touch-icon" href="/LOGO.png">
+<style>
+/* Canonical beVital footer */
+footer{background:#8C492E!important;color:rgba(250,246,241,.62)!important;padding:4rem 3.5rem 2rem!important}
+footer .footer-grid{display:grid!important;grid-template-columns:1.5fr 1fr 1fr 1fr!important;gap:3rem!important;padding-bottom:3rem!important;border-bottom:1px solid rgba(255,255,255,.10)!important}
+footer .f-brand{font-family:"Cormorant Garamond",serif!important;font-size:1.3rem!important;color:#FAF6F1!important;font-weight:400!important;margin-bottom:.8rem!important}
+footer h4{color:#C17B52!important;text-transform:uppercase!important;letter-spacing:.16em!important;font-size:.72rem!important;margin:0 0 1.25rem!important}
+footer p,footer li,footer a{color:rgba(250,246,241,.58)!important}
+footer a{text-decoration:none!important}
+footer ul{list-style:none!important;padding:0!important;margin:0!important}
+footer li{margin:.55rem 0!important}
+footer .footer-bot{display:flex!important;justify-content:space-between!important;align-items:center!important;padding-top:1.5rem!important;flex-wrap:wrap!important;gap:1rem!important}
+footer .footer-bot p{font-size:.73rem!important}
+footer .legal-links{font-size:.78rem!important}
+@media(max-width:900px){footer .footer-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:620px){footer{padding:3rem 1.5rem 2rem!important}footer .footer-grid{grid-template-columns:1fr!important;gap:2rem!important}}
+</style>
 </head>
 <body>
-<nav id="nav"><a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a><ul class="nav-links"><li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu"><a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a><a href="praeventionskurse-online.html">Präventionskurse Online</a><a href="/kurse/">Alle Kurse</a><a href="hatha-yoga.html">Hatha Yoga</a><a href="yin-yoga.html">Yin Yoga</a><a href="faszienfit-yoga.html">FaszienFit Yoga</a><a href="aroha.html">AROHA</a></div></li><li><a href="ueber-mich.html">Über mich</a></li><li><a href="/kurse/">Kurse</a></li><li><span class="nav-disabled">RESET</span></li><li><a href="retreat-mallorca.html">Mallorca</a></li><li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li></ul><button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button></nav><div id="mob-menu"><a href="angebote.html" onclick="closeMob()">Angebote</a><a href="ueber-mich.html" onclick="closeMob()">Über mich</a><a href="/kurse/" onclick="closeMob()">Kurse</a><span class="nav-disabled">RESET</span><a href="retreat-mallorca.html" onclick="closeMob()">Mallorca</a><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a></div>
+<nav id="nav">
+<a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a>
+<ul class="nav-links">
+<li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu">
+<a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a>
+<a href="praeventionskurse-online.html">Präventionskurse Online</a>
+<a href="/kurse">Alle Kurse</a>
+<a href="hatha-yoga.html">Hatha Yoga</a>
+<a href="yin-yoga.html">Yin Yoga</a>
+<a href="faszienfit-yoga.html">FaszienFit Yoga</a>
+<a href="aroha.html">AROHA</a>
+</div></li>
+<li><a href="ueber-mich.html">Über mich</a></li>
+<li><a href="/kurse">Kurse</a></li>
+<li><a href="/reset">RESET</a></li>
+<li><a href="/yoga-studio-online">Yoga Studio Online</a></li>
+<li><a href="retreat-mallorca.html">Mallorca</a></li>
+
+<li><a href="kontakt.html">Kontakt</a></li>
+<li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li>
+</ul>
+<button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button>
+</nav>
+<div id="mob-menu">
+<a href="angebote.html" onclick="closeMob()">Angebote</a>
+<a href="ueber-mich.html" onclick="closeMob()">Über mich</a>
+<a href="/kurse" onclick="closeMob()">Kurse</a>
+<a href="/reset" onclick="closeMob()">RESET</a>
+<a href="/yoga-studio-online" onclick="closeMob()">Yoga Studio Online</a>
+<a href="retreat-mallorca.html" onclick="closeMob()">Mallorca</a>
+
+<a href="kontakt.html" onclick="closeMob()">Kontakt</a>
+<a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a>
+</div>
 <main>
 <div class="eyebrow">Rechtliches</div>
 <h1>Datenschutz</h1>
@@ -146,47 +195,45 @@ a.online-btn, .btn-online {
 </div>
 </main>
 <footer>
-<div class="footer-top">
-<div class="footer-brand">
-<div class="footer-logo">beVital <span>InsideOut</span></div>
-<p>Yoga, Atemarbeit und Nervensystem-Regulation. Vor Ort in der Wedemark und online.</p>
-<a class="footer-instagram" href="https://instagram.com/be_vital_insideout" target="_blank">IG @BE_VITAL_INSIDEOUT</a>
+<div class="footer-grid">
+<div>
+<div class="f-brand">beVital <em>InsideOut</em></div>
+<p>Yoga, Atemarbeit und Nervensystem-Regulation.<br/>Vor Ort in der Wedemark und online.</p>
+<br/>
+<a href="https://instagram.com/be_vital_insideout" target="_blank">IG @be_vital_insideout</a>
 </div>
-<div class="footer-col">
+<div>
 <h4>Vor Ort</h4>
-<div class="footer-address-label">Elze</div>
-<a class="footer-address" href="https://maps.google.com/?q=Sport-+und+Tanzhaus,+Kuckucksweg+90,+30900+Wedemark" target="_blank">
-        Sport- und Tanzhaus<br/>
-        Kuckucksweg 90<br/>
-        30900 Wedemark-Elze
-      </a>
-</div>
-<div class="footer-col">
-<h4>Seiten</h4>
 <ul>
-<li><a href="index.html">Start</a></li>
-<li><a href="/kurse/">Kurse</a></li>
-<li><a href="angebote.html">Angebote</a></li>
-<li><a href="ueber-mich.html">Über mich</a></li>
-<li><a href="kontakt.html">Kontakt</a></li>
-<li><a href="https://bettina-kahmann.coachy.net/lp/bettina-kahmann-1/" target="_blank">Mein Studio</a></li>
+<li><a href="https://maps.google.com/?q=Kuckucksweg+90,+30900+Wedemark" target="_blank">Sport- und Tanzhaus, Elze<br/>Kuckucksweg 90 · Wedemark</a></li>
+<li style="margin-top:0.8rem;"><a href="mailto:info@bettina-kahmann.com">info@bettina-kahmann.com</a></li>
+<li><a href="https://wa.me/message/QNJNZJTTJGKAC1" target="_blank">WhatsApp</a></li>
 </ul>
 </div>
-<div class="footer-col">
-<h4>Kontakt &amp; Rechtliches</h4>
+<div>
+<h4>Angebote</h4>
 <ul>
-<li><a href="https://www.fyndery.de/yoga-by-bettina/" target="_blank">Kurse buchen</a></li>
-<li><a href="https://bettina-kahmann.coachy.net/lp/bettina-kahmann-1/" target="_blank">Online-Studio</a></li>
+<li><a href="#angebote">LIVE Yoga Studio</a></li>
+<li><a href="praeventionskurse-wedemark.html">Präventionskurse §20</a></li>
+<li><a href="retreat-mallorca.html">Retreat Mallorca</a></li>
+<li><a href="/reset">5-Tage RESET</a></li>
+<li><a href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank">Kurs buchen</a></li>
+</ul>
+</div>
+<div>
+<h4>Rechtliches</h4>
+<ul>
+<li><a href="mailto:info@bettina-kahmann.com">Kontakt</a></li>
 <li><a href="https://instagram.com/be_vital_insideout" target="_blank">Instagram</a></li>
 <li><a href="impressum.html">Impressum</a></li>
 <li><a href="datenschutz.html">Datenschutz</a></li>
+<li><a href="agb.html">AGB</a></li>
+<li><button onclick="localStorage.removeItem('bvconsent'); location.reload();" onmouseout="this.style.color='rgba(250,246,241,0.38)'" onmouseover="this.style.color='#FAF6F1'" style="background:none;border:none;padding:0;color:rgba(250,246,241,0.38);cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:300;transition:color 0.2s;">Cookie-Einstellungen</button></li>
 </ul>
 </div>
 </div>
-<hr class="footer-divider"/>
-<div class="footer-bottom">
+<div class="footer-bot">
 <p>© 2026 Bettina Kahmann · beVital InsideOut · Wedemark bei Hannover</p>
-<p><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a> · <a href="agb.html">AGB</a></p>
 </div>
 <div class="legal-links" style="margin-top:12px;"><a href="datenschutz.html">Datenschutz</a> · <a href="agb.html">AGB</a></div>
 </footer>

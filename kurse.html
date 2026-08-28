@@ -197,9 +197,58 @@ a.online-btn, .btn-online {
 <link rel="icon" type="image/png" href="/LOGO.png">
 <link rel="shortcut icon" type="image/png" href="/LOGO.png">
 <link rel="apple-touch-icon" href="/LOGO.png">
+<style>
+/* Canonical beVital footer */
+footer{background:#8C492E!important;color:rgba(250,246,241,.62)!important;padding:4rem 3.5rem 2rem!important}
+footer .footer-grid{display:grid!important;grid-template-columns:1.5fr 1fr 1fr 1fr!important;gap:3rem!important;padding-bottom:3rem!important;border-bottom:1px solid rgba(255,255,255,.10)!important}
+footer .f-brand{font-family:"Cormorant Garamond",serif!important;font-size:1.3rem!important;color:#FAF6F1!important;font-weight:400!important;margin-bottom:.8rem!important}
+footer h4{color:#C17B52!important;text-transform:uppercase!important;letter-spacing:.16em!important;font-size:.72rem!important;margin:0 0 1.25rem!important}
+footer p,footer li,footer a{color:rgba(250,246,241,.58)!important}
+footer a{text-decoration:none!important}
+footer ul{list-style:none!important;padding:0!important;margin:0!important}
+footer li{margin:.55rem 0!important}
+footer .footer-bot{display:flex!important;justify-content:space-between!important;align-items:center!important;padding-top:1.5rem!important;flex-wrap:wrap!important;gap:1rem!important}
+footer .footer-bot p{font-size:.73rem!important}
+footer .legal-links{font-size:.78rem!important}
+@media(max-width:900px){footer .footer-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:620px){footer{padding:3rem 1.5rem 2rem!important}footer .footer-grid{grid-template-columns:1fr!important;gap:2rem!important}}
+</style>
 </head>
 <body>
-<nav id="nav"><a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a><ul class="nav-links"><li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu"><a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a><a href="praeventionskurse-online.html">Präventionskurse Online</a><a href="/kurse/">Alle Kurse</a><a href="hatha-yoga.html">Hatha Yoga</a><a href="yin-yoga.html">Yin Yoga</a><a href="faszienfit-yoga.html">FaszienFit Yoga</a><a href="aroha.html">AROHA</a></div></li><li><a href="ueber-mich.html">Über mich</a></li><li><a href="/kurse/">Kurse</a></li><li><span class="nav-disabled">RESET</span></li><li><a href="retreat-mallorca.html">Mallorca</a></li><li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li></ul><button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button></nav><div id="mob-menu"><a href="angebote.html" onclick="closeMob()">Angebote</a><a href="ueber-mich.html" onclick="closeMob()">Über mich</a><a href="/kurse/" onclick="closeMob()">Kurse</a><span class="nav-disabled">RESET</span><a href="retreat-mallorca.html" onclick="closeMob()">Mallorca</a><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a></div>
+<nav id="nav">
+<a class="brand" href="index.html"><span class="brand-top">Bettina Kahmann</span><span class="brand-sub">beVital InsideOut</span></a>
+<ul class="nav-links">
+<li class="nav-dropdown"><a href="angebote.html">Angebote</a><div class="nav-dropdown-menu">
+<a href="praeventionskurse-wedemark.html">Präventionskurse Wedemark</a>
+<a href="praeventionskurse-online.html">Präventionskurse Online</a>
+<a href="/kurse">Alle Kurse</a>
+<a href="hatha-yoga.html">Hatha Yoga</a>
+<a href="yin-yoga.html">Yin Yoga</a>
+<a href="faszienfit-yoga.html">FaszienFit Yoga</a>
+<a href="aroha.html">AROHA</a>
+</div></li>
+<li><a href="ueber-mich.html">Über mich</a></li>
+<li><a href="/kurse">Kurse</a></li>
+<li><a href="/reset">RESET</a></li>
+<li><a href="/yoga-studio-online">Yoga Studio Online</a></li>
+<li><a href="retreat-mallorca.html">Mallorca</a></li>
+
+<li><a href="kontakt.html">Kontakt</a></li>
+<li><a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" rel="noopener" target="_blank">Kurs buchen</a></li>
+</ul>
+<button aria-label="Menü" class="hamburger" onclick="toggleMob()"><span></span><span></span><span></span></button>
+</nav>
+<div id="mob-menu">
+<a href="angebote.html" onclick="closeMob()">Angebote</a>
+<a href="ueber-mich.html" onclick="closeMob()">Über mich</a>
+<a href="/kurse" onclick="closeMob()">Kurse</a>
+<a href="/reset" onclick="closeMob()">RESET</a>
+<a href="/yoga-studio-online" onclick="closeMob()">Yoga Studio Online</a>
+<a href="retreat-mallorca.html" onclick="closeMob()">Mallorca</a>
+
+<a href="kontakt.html" onclick="closeMob()">Kontakt</a>
+<a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a>
+</div>
 <header class="hero"><div class="eyebrow">Yoga · Kraft · Atem · Ruhe</div><h1>Hatha <em>Yoga.</em></h1><p>Hatha Yoga verbindet Körperhaltungen, bewusste Atmung und Entspannung.</p></header>
 
 <main class="detail-main">
