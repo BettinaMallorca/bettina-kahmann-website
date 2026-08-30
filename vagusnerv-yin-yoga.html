@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hüften öffnen in 5 Minuten – beVital InsideOut</title>
+  <title>Vagusnerv aktivieren mit Yin Yoga – beVital InsideOut</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -30,8 +30,9 @@
       min-height: 100vh;
     }
 
+    /* HEADER */
     .header {
-      background-color: var(--terracotta-dark);
+      background-color: var(--plum);
       padding: 48px 32px 40px;
       text-align: center;
       position: relative;
@@ -42,18 +43,18 @@
       content: '';
       position: absolute;
       top: -60px; right: -60px;
-      width: 200px; height: 200px;
+      width: 220px; height: 220px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.05);
     }
 
     .header::after {
       content: '';
       position: absolute;
-      bottom: -40px; left: -40px;
-      width: 140px; height: 140px;
+      bottom: -50px; left: -50px;
+      width: 160px; height: 160px;
       border-radius: 50%;
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.04);
     }
 
     .brand-label {
@@ -61,7 +62,7 @@
       font-weight: 500;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(250,246,241,0.6);
+      color: rgba(250,246,241,0.55);
       margin-bottom: 20px;
     }
 
@@ -71,7 +72,7 @@
       font-weight: 300;
       line-height: 1.15;
       color: var(--cream);
-      max-width: 560px;
+      max-width: 580px;
       margin: 0 auto 20px;
     }
 
@@ -101,12 +102,14 @@
       background: #E8B090;
     }
 
+    /* MAIN */
     .main {
       max-width: 620px;
       margin: 0 auto;
       padding: 48px 24px 80px;
     }
 
+    /* INTRO */
     .intro {
       padding: 32px 0 40px;
       border-bottom: 1px solid var(--cream-dark);
@@ -116,6 +119,36 @@
     .intro p + p { margin-top: 16px; }
     .intro strong { color: var(--text); font-weight: 500; }
 
+    /* ANATOMY BLOCK */
+    .anatomy {
+      background: var(--cream-dark);
+      border-radius: 12px;
+      padding: 28px 32px;
+      margin: 40px 0;
+      border-left: 4px solid var(--sage);
+    }
+
+    .anatomy-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .anatomy h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .anatomy p { font-size: 14px; color: var(--text-light); line-height: 1.75; }
+    .anatomy p + p { margin-top: 10px; }
+
+    /* STEPS */
     .steps { padding: 40px 0; }
 
     .steps-label {
@@ -138,7 +171,7 @@
       width: 52px; height: 52px;
       border-radius: 50%;
       background: var(--cream-dark);
-      border: 1.5px solid var(--terracotta);
+      border: 1.5px solid var(--plum);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -150,7 +183,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 22px;
       font-weight: 400;
-      color: var(--terracotta-dark);
+      color: var(--plum);
     }
 
     .step-header {
@@ -193,6 +226,45 @@
 
     .hint-box strong { color: var(--text); font-weight: 500; }
 
+    .breath-box {
+      background: var(--cream-dark);
+      border-left: 3px solid var(--plum);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px 16px 24px;
+      margin: 14px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .breath-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+    }
+
+    .breath-row + .breath-row { border-top: 1px solid rgba(153,58,116,0.15); }
+
+    .b-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--plum);
+      font-weight: 500;
+      min-width: 60px;
+    }
+
+    .b-count {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--plum);
+      min-width: 32px;
+      line-height: 1;
+    }
+
+    .b-desc { font-size: 13px; color: var(--text-light); }
+
     .insight {
       background: var(--terracotta-dark);
       color: var(--cream);
@@ -211,12 +283,70 @@
 
     .insight p { font-size: 14px; color: rgba(250,246,241,0.9); line-height: 1.7; }
 
+    /* WHAT HAPPENS */
+    .what-happens {
+      background: var(--plum);
+      border-radius: 12px;
+      padding: 32px 28px;
+      margin: 40px 0;
+      color: var(--cream);
+    }
+
+    .wh-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(250,246,241,0.5);
+      margin-bottom: 14px;
+    }
+
+    .wh-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .wh-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .wh-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      color: rgba(250,246,241,0.85);
+      line-height: 1.6;
+    }
+
+    .wh-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #E8B090;
+      flex-shrink: 0;
+      margin-top: 7px;
+    }
+
+    .wh-note {
+      margin-top: 16px;
+      font-size: 13px;
+      color: rgba(250,246,241,0.6);
+      font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
     .section-divider {
       border: none;
       border-top: 1px solid var(--cream-dark);
       margin: 40px 0;
     }
 
+    /* CTA */
     .cta-section {
       background: var(--cream-dark);
       border-radius: 16px;
@@ -242,7 +372,7 @@
       margin-bottom: 16px;
     }
 
-    .cta-title em { font-style: italic; color: var(--terracotta-dark); }
+    .cta-title em { font-style: italic; color: var(--plum); }
 
     .cta-body {
       font-size: 14px;
@@ -254,7 +384,7 @@
       margin-right: auto;
     }
 
-    .club-badge {
+    .cert-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -286,6 +416,7 @@
       color: var(--text-light);
     }
 
+    /* FOOTER */
     .footer {
       text-align: center;
       padding: 32px 24px;
@@ -308,6 +439,8 @@
       .step { grid-template-columns: 44px 1fr; gap: 0 18px; }
       .step-number { width: 44px; height: 44px; }
       .cta-section { padding: 28px 20px; }
+      .anatomy { padding: 20px; }
+      .what-happens { padding: 24px 20px; }
     }
   </style>
 <style>body{padding-top:75px}</style>
@@ -368,21 +501,31 @@ footer .legal-links{font-size:.78rem!important}
 
   <header class="header">
     <p class="brand-label">beVital InsideOut · Bettina Kahmann</p>
-    <h1>Hüften öffnen — <em>in 5 Minuten</em></h1>
-    <p class="header-sub">Drei Positionen. Direkt auf dem Boden. Keine Vorkenntnisse nötig. — Wenn du nur 5 Minuten hast: Schritt 1 und Schritt 3, je eine Seite.</p>
+    <h1>Dein Körper hat einen Notausgang. <em>Hier ist er.</em></h1>
+    <p class="header-sub">3 Yin Yoga-Positionen, die deinen Vagusnerv aktivieren. — Nur 10 Minuten? Schritt 1 und Schritt 3.</p>
     <div class="time-badge">
       <span class="dot"></span>
-      8–10 Minuten · Jederzeit · Überall
+      10–15 Minuten · Heute Abend · Kein Equipment
     </div>
   </header>
 
   <main class="main">
 
     <section class="intro">
-      <p>Enge Hüften sind kein Zeichen von zu wenig Sport. Sie sind ein Zeichen von zu viel Sitzen, zu viel Stress und zu wenig gezielter Bewegung in genau diesem Bereich.</p>
-      <p>In den Hüften speichert der Körper chronische Anspannung — weil der Hüftbeuger direkt mit dem Stressreaktionssystem verbunden ist. Wer viel sitzt oder unter Dauerstress steht, spürt das als Ziehen, Schwere oder eingeschränkte Beweglichkeit.</p>
-      <p><strong>Diese drei Positionen sind ein Ausschnitt aus einer meiner Yogastunden im LIVE Yoga Studio.</strong></p>
+      <p>Anne ist in meinem Präventionskurs. Als sie anfing, konnte sie sich kaum darauf einlassen. Zu viele Gedanken, zu viel innere Unruhe. Das Loslassen wollte nicht funktionieren.</p>
+      <p>Es war ihr allererster Yoga-Kurs überhaupt. Und sie ist geblieben. Woche für Woche hat ihr Nervensystem durch Wiederholung gelernt, was es alleine nicht mehr wusste: dass es sicher ist, loszulassen.</p>
+      <p>Inzwischen ist sie im fortgeschrittenen Kurs. Neulich kam sie rein — Ende 40, Kopf voll, langer Tag. Vor der Stunde sagte sie mir: "Bettina, ich kann heute Abend auf gar keinen Fall abschalten."</p>
+      <p>60 Minuten später — am Ende der Stunde, vor allen — hat sie mich lächelnd angeschaut und gesagt: "Bettina, DU hast es geschafft."</p>
+      <p>Sie hat nichts Besonderes getan. Ihr Körper wusste inzwischen, wie es geht. Er hatte es oft genug geübt.</p>
+      <p><strong>Das ist kein Glück. Das ist, wie Yoga wirkt, wenn es aufs Nervensystem ausgerichtet ist.</strong></p>
     </section>
+
+    <div class="anatomy">
+      <p class="anatomy-label">Der Vagusnerv</p>
+      <h2>Dein direkter Draht aus dem Alarm-Modus</h2>
+      <p>Der Vagusnerv läuft vom Hirnstamm durch Kiefer, Hals, Brust bis in den Bauch. Er ist der direkte Schalter zwischen Alarm und Erholung. Er reagiert nicht auf Gedanken — er reagiert auf körperliche Signale.</p>
+      <p>Langes Ausatmen. Kieferentspannung. Lange gehaltene Positionen. Genau das, was Yin Yoga tut.</p>
+    </div>
 
     <section class="steps">
       <p class="steps-label">Die Sequenz</p>
@@ -392,18 +535,30 @@ footer .legal-links{font-size:.78rem!important}
         <div class="step-number"><span>1</span></div>
         <div>
           <div class="step-header">
-            <h2 class="step-title">Niedrige Ausfallstellung</h2>
-            <span class="step-duration">90 Sek. pro Seite</span>
+            <h2 class="step-title">Schmetterling</h2>
+            <span class="step-duration">3–5 Min.</span>
           </div>
           <div class="step-body">
-            <p>Komm in einen Ausfallschritt, das hintere Knie auf dem Boden. Vorderes Knie direkt über dem Knöchel. Hüfte sinkt nach unten und vorne — nicht nach hinten ausweichen.</p>
-            <p>Hände auf dem vorderen Oberschenkel oder auf Blöcken neben dem Fuß. Aufrechter Oberkörper, Blick nach vorne.</p>
+            <p>Setz dich aufrecht hin, Fußsohlen berühren sich, Knie fallen nach außen. Oberkörper leicht nach vorne neigen — so weit, wie es sich ohne Druck anfühlt.</p>
+            <p>Unterkiefer bewusst lockern. Zunge vom Gaumen lösen.</p>
+            <div class="breath-box">
+              <div class="breath-row">
+                <span class="b-label">Einatmen</span>
+                <span class="b-count">4</span>
+                <span class="b-desc">durch die Nase</span>
+              </div>
+              <div class="breath-row">
+                <span class="b-label">Ausatmen</span>
+                <span class="b-count">8</span>
+                <span class="b-desc">durch den Mund, hörbar, kontrolliert</span>
+              </div>
+            </div>
             <div class="hint-box">
-              <strong>Wichtig:</strong> Lass die Hüfte wirklich sinken. Das Gefühl der Dehnung kommt im vorderen Hüftbeuger — genau dort, wo Sitzen den meisten Druck aufbaut. Atme in die Enge hinein, nicht dagegen.
+              <strong>Wenn 8 Zählzeiten zu viel sind:</strong> Starte mit 4 ein, 6 aus. Das Verhältnis zählt.
             </div>
             <div class="insight">
-              <p class="insight-label">Was passiert</p>
-              <p>Der Musculus iliopsoas — der tiefste Hüftbeuger — wird direkt gedehnt. Er ist bei den meisten Frauen chronisch verkürzt und zieht die Lendenwirbelsäule nach vorne. Diese Position gibt ihm gezielt Raum.</p>
+              <p class="insight-label">Warum Kiefer und Zunge</p>
+              <p>Der Vagusnerv verläuft direkt durch den Kiefer- und Halsbereich. Wenn du den Unterkiefer locker lässt und die Zunge vom Gaumen löst, gibst du ihm ein direktes Entspannungssignal — bevor der Geist überhaupt mitbekommt, was passiert.</p>
             </div>
           </div>
         </div>
@@ -414,18 +569,18 @@ footer .legal-links{font-size:.78rem!important}
         <div class="step-number"><span>2</span></div>
         <div>
           <div class="step-header">
-            <h2 class="step-title">Liegende Taube</h2>
-            <span class="step-duration">2 Min. pro Seite</span>
+            <h2 class="step-title">Melting Heart</h2>
+            <span class="step-duration">3 Min.</span>
           </div>
           <div class="step-body">
-            <p>Leg dich auf den Rücken. Stell beide Beine auf, Füße flach auf dem Boden. Leg den rechten Knöchel auf den linken Oberschenkel, kurz unterhalb des Knies. Lass das rechte Knie entspannt nach außen fallen.</p>
-            <p>Wenn du mehr Dehnung willst: Hebe das linke Bein an und verschränke die Hände hinter dem linken Oberschenkel. Dann Seite wechseln.</p>
+            <p>Auf allen Vieren, Unterarme auf den Boden, Ellbogen schulterbreit. Hände nach vorne schieben, Brust sinkt Richtung Boden. Gesäß bleibt über den Knien. Stirn auf den Unterarmen.</p>
+            <p>Kein Druck in den Schultern. Die Schwerkraft macht die Arbeit.</p>
             <div class="hint-box">
-              <strong>Knieprobleme:</strong> Diese Variante schützt das Knie — das Gewicht liegt nicht auf dem Gelenk. Wenn es trotzdem zieht, lass das rechte Knie etwas weiter nach oben.
+              <strong>Wenn du mehr Tiefe willst:</strong> Hände flach auf dem Boden, Arme gestreckt. Nur wenn die Schultern das ohne Druck mitmachen.
             </div>
             <div class="insight">
               <p class="insight-label">Was passiert</p>
-              <p>Diese liegende Variante öffnet den Piriformis — einen kleinen Muskel tief in der Gesäßregion, der bei Verspannung den Ischiasnerv reizt und Schmerzen weit ins Bein ziehen lässt. Genauso wirksam wie die klassische Taube, aber für jeden Körper zugänglich.</p>
+              <p>Der Brustbereich öffnet sich — dort, wo chronischer Stress am meisten hält. Der Vagusnerv läuft durch genau diesen Bereich. Die Kombination aus Öffnung und langem Ausatmen sendet das Signal: Alarm vorbei.</p>
             </div>
           </div>
         </div>
@@ -436,15 +591,18 @@ footer .legal-links{font-size:.78rem!important}
         <div class="step-number"><span>3</span></div>
         <div>
           <div class="step-header">
-            <h2 class="step-title">Schmetterling</h2>
-            <span class="step-duration">90 Sek.</span>
+            <h2 class="step-title">Liegende Drehung</h2>
+            <span class="step-duration">2 Min. pro Seite</span>
           </div>
           <div class="step-body">
-            <p>Setz dich aufrecht hin, Fußsohlen berühren sich, Knie fallen nach außen. Halte die Füße mit beiden Händen. Aufrechte Wirbelsäule — nicht einrollen.</p>
-            <p>Atme ein, richte dich auf. Atme aus, lass die Knie etwas weiter nach unten sinken. Kein Drücken mit den Ellbogen.</p>
+            <p>Leg dich auf den Rücken. Zieh das rechte Knie zur Brust, lass es nach links fallen. Arme ausgestreckt, Schultern bleiben am Boden. Kopf dreht sich nach rechts.</p>
+            <p>Kiefer locker. Ausatmen verlängern.</p>
+            <div class="hint-box">
+              <strong>Wenn die Schulter abhebt:</strong> Kissen unter das Knie legen. So bleibt die Drehung sanft und kommt aus der Hüfte, nicht aus der Wirbelsäule.
+            </div>
             <div class="insight">
-              <p class="insight-label">Zum Abschluss</p>
-              <p>Der Schmetterling schließt die Sequenz, weil er beide Hüften gleichzeitig anspricht und den Körper in eine symmetrische, ruhige Position bringt. Nach den einseitigen Positionen davor gibt das Gleichgewicht und Stabilität.</p>
+              <p class="insight-label">Der Abschluss</p>
+              <p>Die Drehung schließt die Sequenz, weil sie beide Körperhälften symmetrisch anspricht und das Nervensystem in einen stabilen Ruhezustand bringt. Nach den ersten beiden Positionen ist das Ausatmen an diesem Punkt meistens schon tiefer geworden.</p>
             </div>
           </div>
         </div>
@@ -452,19 +610,43 @@ footer .legal-links{font-size:.78rem!important}
 
     </section>
 
+    <div class="what-happens">
+      <p class="wh-label">Was in deinem Körper passiert</p>
+      <h3 class="wh-title">Physiologie, kein Versprechen</h3>
+      <div class="wh-items">
+        <div class="wh-item">
+          <span class="wh-dot"></span>
+          Deine Cortisolausschüttung beginnt zu sinken, sobald dein Körper aus dem Alarm kommt. Das passiert nicht in einer Sekunde, aber hier fängt es an.
+        </div>
+        <div class="wh-item">
+          <span class="wh-dot"></span>
+          Deine Herzfrequenz verlangsamt sich, oft schon innerhalb weniger Minuten
+        </div>
+        <div class="wh-item">
+          <span class="wh-dot"></span>
+          Das parasympathische Nervensystem übernimmt die Steuerung
+        </div>
+        <div class="wh-item">
+          <span class="wh-dot"></span>
+          30 Sekunden in einer Position reichen dafür nicht. Yin hält lange genug, dass dein Nervensystem umschalten kann.
+        </div>
+      </div>
+      <p class="wh-note">"Ich glaube, ich habe seit Jahren nicht mehr so geatmet." — Teilnehmerin, 54</p>
+    </div>
+
     <hr class="section-divider">
 
     <section class="cta-section">
-      <p class="cta-eyebrow">Mehr davon</p>
-      <h3 class="cta-title">Diese Sequenz ist ein Ausschnitt aus dem <em>LIVE Yoga Studio</em></h3>
-      <p class="cta-body">Vollständige Yogastunden mit Struktur, Atmung und Entspannung. 9 Live-Sessions pro Monat — dazu über 400 Aufzeichnungen, die du jederzeit abrufen kannst.</p>
+      <p class="cta-eyebrow">Wenn du mehr davon willst</p>
+      <h3 class="cta-title">Im Präventionskurs machen wir das <em>acht Wochen lang zusammen</em></h3>
+      <p class="cta-body">Ruhig. Mit Struktur. Yin Yoga, Atmung und Werkzeuge für dein Nervensystem — in deinen Alltag integrierbar. Zertifiziert nach §20 SGB V, deine Krankenkasse zahlt mit.</p>
       <div>
-        <span class="club-badge">
-          ✓ Bereits im 6. Jahr · 400+ On-Demand-Videos
+        <span class="cert-badge">
+          ✓ Zertifiziert nach §20 SGB V · Krankenkasse zahlt mit
         </span>
       </div>
-      <a href="/yoga-studio-online" class="cta-button">LIVE Yoga Studio entdecken</a>
-      <p class="cta-note">Online · Jederzeit abrufbar · Monatlich kündbar</p>
+      <a href="/kurse" class="cta-button">Meinen Kurs finden</a>
+      <p class="cta-note">Online &amp; Präsenz · Nächster Kurs August 2026</p>
     </section>
 
   </main>
