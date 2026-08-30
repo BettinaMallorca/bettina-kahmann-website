@@ -21,3 +21,17 @@
 /courses/* /kurse 301
 /courses /kurse 301
 /kurse-buchen /kurse 301
+/alle-kurse /kurse 301
+
+# Legacy-Redirects: alte Wix-URLs, Runde 2 (bereinigt am 31.08.2026)
+/retreat /retreat-mallorca 301
+/live-yoga-studio-online /yoga-studio-online 301
+/onlinekurse /yoga-studio-online 301
+/faszien-yoga /faszienfit-yoga 301
+/praevention-yoga-wedemark /praeventionskurse-wedemark 301
+/yoga-wedemark /kurse 301
+/hatha-yoga-praevention /hatha-yoga 301
+/yin-yoga-praevention /yin-yoga 301
+/nervensystem-guide /gratis 301
+/nervensystem-stabil-check /nervensystem-3-minuten 301
+/krankenkassen-kompass /praeventionskurse-wedemark 301
