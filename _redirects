@@ -16,3 +16,8 @@
 /yoga-huefte /yoga-huefte.html 200
 /besser-schlafen /besser-schlafen.html 200
 /danke-nervensystem-reset /danke-nervensystem-reset.html 200
+
+# Legacy-Redirects: alte Wix-URLs (bereinigt am 30.08.2026)
+/courses/* /kurse 301
+/courses /kurse 301
+/kurse-buchen /kurse 301
