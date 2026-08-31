@@ -232,6 +232,15 @@ a.online-btn, .btn-online {
 .kursplan-col.dark .kurs-name{color:#fff;}
 .kurs-desc{font-size:.75rem;color:var(--muted);font-weight:300;}
 .kursplan-col.dark .kurs-desc{color:rgba(255,255,255,.7);}
+.kursplan-col .kurs-item{text-decoration:none!important;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .15s ease;}
+.kursplan-col .kurs-item:hover,.kursplan-col .kurs-item:focus-visible{background-color:rgba(140,73,46,.05);}
+.kursplan-col .kurs-item:hover .kurs-name,.kursplan-col .kurs-item:focus-visible .kurs-name{color:var(--pink);}
+.kursplan-col .kurs-item:active{background-color:rgba(140,73,46,.08);}
+.kursplan-col.dark .kurs-item:hover,.kursplan-col.dark .kurs-item:focus-visible{background-color:rgba(255,255,255,.08);}
+.kursplan-col.dark .kurs-item:hover .kurs-name,.kursplan-col.dark .kurs-item:focus-visible .kurs-name{color:#fff;}
+.kursplan-col.dark .kurs-item:active{background-color:rgba(255,255,255,.12);}
+.kursplan-col .kurs-item:focus-visible{outline:2px solid var(--pink);outline-offset:-2px;}
+
 .kursplan-col .col-cta{padding:1.2rem 1.5rem;margin-top:auto;}
 .kursplan-col .col-cta .detail-btn{display:block;text-align:center;width:100%;box-sizing:border-box;}
 @media(max-width:1100px){.kursplan-grid{grid-template-columns:1fr;}}
@@ -339,30 +348,30 @@ footer .legal-links a{color:rgba(250,246,241,.62)!important}
           <h3>Sport- und Tanzhaus Elze</h3>
           <div class="col-sub">Blau-Gelb Elze</div>
         </div>
-        <div class="kurs-item">
+        <a class="kurs-item" href="https://www.fyndery.de/_/kurs/6262/yoga-fuer-strahlende-ausrichtung-kraftvolle-sequenz-trifft-auf-achtsame-tiefe/?ref=7239" target="_blank" rel="noopener noreferrer">
           <div class="kurs-tag-day day-di">Di</div>
           <div class="kurs-info">
             <div class="kurs-time">18:00 – 19:15 Uhr</div>
-            <div class="kurs-name">Hatha Yoga</div>
+            <div class="kurs-name">Hatha Yoga meets Yin</div>
             <div class="kurs-desc">Kraft · Entspannung</div>
           </div>
-        </div>
-        <div class="kurs-item">
+        </a>
+        <a class="kurs-item" href="https://www.fyndery.de/wedemark/kurs/34173/finde-ruhe-kraft-und-balance-mit-yin-yoga-fuer-mehr-achtsamkeit-im-alltag/?ref=7239" target="_blank" rel="noopener noreferrer">
           <div class="kurs-tag-day day-di">Di</div>
           <div class="kurs-info">
             <div class="kurs-time">19:30 – 20:30 Uhr</div>
             <div class="kurs-name">YIN Yoga</div>
             <div class="kurs-desc">Ruhe · Loslassen</div>
           </div>
-        </div>
-        <div class="kurs-item">
+        </a>
+        <a class="kurs-item" href="https://www.fyndery.de/_/kurs/30709/staerke-aufbauen-und-entspannen/?ref=7239" target="_blank" rel="noopener noreferrer">
           <div class="kurs-tag-day day-do">Do</div>
           <div class="kurs-info">
             <div class="kurs-time">18:15 – 19:30 Uhr</div>
-            <div class="kurs-name">Hatha Yoga</div>
+            <div class="kurs-name">Yoga für Männer &amp; Frauen</div>
             <div class="kurs-desc">Kraft · Entspannung</div>
           </div>
-        </div>
+        </a>
         <div class="col-cta">
           <a class="detail-btn" href="/praeventionskurse-wedemark#anmeldung">Jetzt anmelden →</a>
         </div>
@@ -374,14 +383,14 @@ footer .legal-links a{color:rgba(250,246,241,.62)!important}
           <h3>YAP – YOUR Active Place</h3>
           <div class="col-sub">Hopershof</div>
         </div>
-        <div class="kurs-item">
+        <a class="kurs-item" href="https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239" target="_blank" rel="noopener noreferrer">
           <div class="kurs-tag-day day-mi">Mi</div>
           <div class="kurs-info">
             <div class="kurs-time">18:00 – 18:50 Uhr</div>
             <div class="kurs-name">AROHA</div>
             <div class="kurs-desc">Ausdauertraining &amp; Stressabbau</div>
           </div>
-        </div>
+        </a>
         <div class="col-cta">
           <a class="detail-btn" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank" rel="noopener">Kurs buchen (Fyndery) →</a>
         </div>
@@ -393,34 +402,95 @@ footer .legal-links a{color:rgba(250,246,241,.62)!important}
           <h3>Zoom</h3>
           <div class="col-sub">Von zu Hause aus</div>
         </div>
-        <div class="kurs-item">
+        <a class="kurs-item" href="https://www.fyndery.de/online/kurs/16842/faszienfit-yoga-beweglich-stabil/?ref=7239" target="_blank" rel="noopener noreferrer">
           <div class="kurs-tag-day day-di">Di</div>
           <div class="kurs-info">
             <div class="kurs-time">9:00 – 9:50 Uhr</div>
             <div class="kurs-name">FaszienFit Yoga</div>
             <div class="kurs-desc">Mobilität, Stärke &amp; Balance</div>
           </div>
-        </div>
-        <div class="kurs-item">
+        </a>
+        <a class="kurs-item" href="https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239" target="_blank" rel="noopener noreferrer">
           <div class="kurs-tag-day day-mi">Mi</div>
           <div class="kurs-info">
             <div class="kurs-time">19:30 – 20:30 Uhr</div>
             <div class="kurs-name">YIN Yoga</div>
             <div class="kurs-desc">Entspannung, Loslassen &amp; Flexibilität</div>
           </div>
-        </div>
-        <div class="kurs-item">
+        </a>
+        <a class="kurs-item" href="https://www.fyndery.de/online/kurs/16133/morning-energy-yoga-ist-eine-vitalisierende-online-yogastunde/?ref=7239" target="_blank" rel="noopener noreferrer">
           <div class="kurs-tag-day day-so">So</div>
           <div class="kurs-info">
             <div class="kurs-time">9:00 – 10:00 Uhr</div>
             <div class="kurs-name">Morning Energy Yoga</div>
             <div class="kurs-desc">Power &amp; Energie, Aktivierung</div>
           </div>
-        </div>
+        </a>
         <div class="col-cta">
           <a class="detail-btn" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" target="_blank" rel="noopener">Kurs buchen (Fyndery) →</a>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<style id="testi2-section-css">
+.testi2-section{background:var(--cream);padding:90px 7vw 100px;}
+.testi2-wrap{max-width:1180px;margin:0 auto;text-align:center;}
+.testi2-eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;color:var(--terra);font-weight:600;margin-bottom:4rem;}
+.testi2-list{max-width:700px;margin:0 auto;text-align:left;}
+.testi2-item{margin-bottom:5rem;}
+.testi2-item:last-child{margin-bottom:0;}
+.testi2-mark{font-family:"Cormorant Garamond",serif;font-style:italic;font-size:3rem;line-height:1;color:var(--terra);margin-bottom:.6rem;opacity:.8;}
+.testi2-heading{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:1.55rem;line-height:1.28;color:var(--text);margin:0 0 1.4rem;}
+.testi2-text{font-family:'DM Sans',sans-serif;font-size:.97rem;line-height:1.85;color:var(--muted);font-weight:300;margin:0 0 1.1rem;}
+.testi2-text:last-of-type{margin-bottom:1.9rem;}
+.testi2-name{font-size:.95rem;font-weight:600;color:var(--text);}
+.testi2-role{font-size:.75rem;color:var(--muted);margin-top:.15rem;}
+@media(max-width:620px){
+  .testi2-section{padding:60px 6vw 70px;}
+  .testi2-eyebrow{margin-bottom:2.75rem;}
+  .testi2-item{margin-bottom:3.5rem;}
+  .testi2-heading{font-size:1.4rem;}
+}
+</style>
+
+
+<section class="testi2-section">
+  <div class="testi2-wrap">
+    <div class="testi2-eyebrow">Stimmen aus meinen Kursen</div>
+    <div class="testi2-list">
+      <article class="testi2-item">
+        <div class="testi2-mark">&bdquo;</div>
+        <h3 class="testi2-heading">Authentizität und Hingabe</h3>
+        <p class="testi2-text">Liebe Bettina, durch deine authentische, herzliche und ruhige Art kann ich mich auch mit meinen Einschränkungen sehr gut auf deine Angebote einlassen.</p>
+        <p class="testi2-text">Besonders das Nachspüren – begleitet durch deine Worte – ist mir heilig. Es gibt mir ein Gefühl von Frieden und Dankbarkeit. Ich spüre meinen Körper und weiß: Ich habe gerade etwas Gutes für mich getan.</p>
+        <p class="testi2-text">Die Musik, die Übungen und die Energie der Gruppe haben für mich einen ganz besonderen Zauber. Ich liebe dieses Gefühl der Verbundenheit.</p>
+        <p class="testi2-text">Ich empfehle dich jedem, der neugierig auf Yoga und AROHA ist. Authentizität und Hingabe sind der Schlüssel.</p>
+        <div class="testi2-name">Anette</div>
+        <div class="testi2-role">Yoga &amp; AROHA</div>
+      </article>
+      <article class="testi2-item">
+        <div class="testi2-mark">&bdquo;</div>
+        <h3 class="testi2-heading">Forderung und Entspannung – genau die richtige Mischung</h3>
+        <p class="testi2-text">Ich bin sehr froh, dass ich auf dein Yoga-Angebot aufmerksam geworden bin. Für mich ist es genau die richtige Mischung aus Forderung und Entspannung. Es gibt immer Raum, es ruhiger angehen zu lassen oder sich etwas mehr herauszufordern.</p>
+        <p class="testi2-text">Der kontinuierliche Fokus auf die Bandhas ist für mich neu und sehr effektiv. Ich merke, dass ich die Übungen dadurch noch einmal ganz anders ausführen kann und sie viel kräftigender sind. Daher finde ich es sehr gut, dass du in den Stunden regelmäßig daran erinnerst.</p>
+        <p class="testi2-text">Ich merke definitiv – auf positive Weise – am Mittwochmorgen, dass ich Dienstagabend bei dir in der Yogastunde war.</p>
+        <p class="testi2-text">Auch die Begleitung der Stunde mit ätherischen Ölen, insbesondere bei der Endentspannung, finde ich sehr schön und besonders.</p>
+        <p class="testi2-text">Vielen Dank für deine tolle Anleitung und Begleitung!</p>
+        <div class="testi2-name">Martina</div>
+        <div class="testi2-role">Yoga</div>
+      </article>
+      <article class="testi2-item">
+        <div class="testi2-mark">&bdquo;</div>
+        <h3 class="testi2-heading">Männer-Yoga? Heute freue ich mich jede Woche drauf!</h3>
+        <p class="testi2-text">Hätte mir jemand vor einem Jahr gesagt, dass ich mal freiwillig beim Männer-Yoga auf der Matte liege, hätte ich laut gelacht – und jetzt? Ich freu mich jede Woche drauf!</p>
+        <p class="testi2-text">Ich bin deutlich entspannter – sogar mein Rücken meckert weniger.</p>
+        <p class="testi2-text">Ein riesiges Dankeschön an Bettina – unsere Yoga-Heldin mit Herz, Humor und einer Engelsgeduld, wenn wir Männer mal wieder eher wie unbewegliche Kleiderschränke auf der Matte stehen.</p>
+        <p class="testi2-text">Sie bringt genau die richtige Mischung aus Lockerheit und Know-how mit. Absolute Empfehlung für alle, die sich was Gutes tun wollen – und dabei auch mal lachen dürfen!</p>
+        <div class="testi2-name">Jan</div>
+        <div class="testi2-role">Männer-Yoga</div>
+      </article>
     </div>
   </div>
 </section>
