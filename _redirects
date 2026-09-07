@@ -39,3 +39,8 @@
 
 # SEO-Bereinigung: Singular-Typo-URL auf korrekte Plural-Zielseite (ergaenzt am 07.09.2026)
 /praeventionskurs-wedemark /praeventionskurse-wedemark 301
+
+# GSC-404-Bereinigung: alte Kurs-Detailseiten und Wix-Home-Alias (ergaenzt am 07.09.2026)
+/kurse/yin-yoga-praevention-wedemark /praeventionskurse-wedemark 301
+/kurse/hatha-yoga-praevention-wedemark /praeventionskurse-wedemark 301
+/home / 301
