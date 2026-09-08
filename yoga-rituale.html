@@ -166,6 +166,12 @@
     }
     .yr-form-box ._form-branding { display: none !important; }
 
+    /* Blendet die beiden internen AC-Textblöcke im Formular 49 aus (Duplikat zu Headline/Subline oben auf der Seite) */
+    .yr-form-box ._form_49 ._x66059164,
+    .yr-form-box ._form_49 ._x14669772 {
+      display: none !important;
+    }
+
     @media(max-width:900px){
       .yr-hero { grid-template-columns:1fr; gap:36px; }
       .yr-hero-cover { order:-1; max-width:300px; margin:0 auto; }
