@@ -18,7 +18,7 @@
 <meta name="twitter:title" content="ATEMANKER – 21 Tage Atemarbeit für deinen Alltag | Bettina Kahmann">
 <meta name="twitter:description" content="ATEMANKER begleitet dich 21 Tage mit kurzen geführten Atemübungen und einem Workbook. 7–10 Minuten täglich, flexibel und in deinem eigenen Tempo.">
 <meta name="twitter:image" content="https://bettina-kahmann.com/og-image.jpg">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Course", "name": "ATEMANKER – 21 Tage zurück in deine Ruhe", "description": "ATEMANKER begleitet dich 21 Tage mit kurzen geführten Atemübungen und einem Workbook. 7–10 Minuten täglich, flexibel und in deinem eigenen Tempo.", "url": "https://bettina-kahmann.com/atemanker", "inLanguage": "de", "provider": {"@type": "Person", "name": "Bettina Kahmann", "url": "https://bettina-kahmann.com/"}, "hasCourseInstance": {"@type": "CourseInstance", "courseMode": "online"}, "offers": {"@type": "Offer", "price": "37", "priceCurrency": "EUR", "availabilityStarts": "2026-11-02", "url": "https://alfima.com/alfimasu2410/atemanker-21-tage-zuruck-in-deine-ruhe"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Course", "name": "ATEMANKER – 21 Tage zurück in deine Ruhe", "description": "ATEMANKER begleitet dich 21 Tage mit kurzen geführten Atemübungen und einem Workbook. 7–10 Minuten täglich, flexibel und in deinem eigenen Tempo.", "url": "https://bettina-kahmann.com/atemanker", "inLanguage": "de", "provider": {"@type": "Person", "name": "Bettina Kahmann", "url": "https://bettina-kahmann.com/"}, "hasCourseInstance": {"@type": "CourseInstance", "courseMode": "online"}, "offers": {"@type": "Offer", "price": "37", "priceCurrency": "EUR", "url": "https://alfima.com/alfimasu2410/atemanker-21-tage-zuruck-in-deine-ruhe", "availability": "https://schema.org/InStock"}}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -282,7 +282,8 @@
       .am-wrap { padding: 0 20px; }
       .am-sec { padding: 64px 0; }
       .am-final { padding: 80px 0; }
-      .am-hero h1 { letter-spacing: .06em; }
+      .am-hero h1 { letter-spacing: .06em; font-size: min(3.2rem, 12.8vw); }
+      .am-hero-grid > div { min-width: 0; }
       .am-get { grid-template-columns: 1fr; }
       .am-get-item { padding: 22px 22px; }
       .am-release { grid-template-columns: 1fr; row-gap: 30px; }
@@ -292,10 +293,14 @@
       .am-btn { display: block; padding: 18px 20px; letter-spacing: .08em; }
       .am-hero-price, .am-btn-note { text-align: center; }
       .am-hero .am-start { display: flex; justify-content: center; }
+      .am-start, .am-final-facts span { font-size: .68rem; letter-spacing: .12em; padding: 9px 14px; white-space: nowrap; }
       .am-faq summary { font-size: 1.2rem; padding-right: 36px; }
       .am-faq details p { padding-right: 0; }
       .am-week { padding: 28px 22px 20px; }
       .am-questions li { font-size: 1.2rem; }
+    }
+    @media (max-width: 360px) {
+      .am-start, .am-final-facts span { font-size: .6rem; letter-spacing: .06em; padding: 8px 12px; }
     }
   </style>
 <style>body{padding-top:75px}</style>
@@ -425,7 +430,7 @@ footer .legal-links{font-size:.78rem!important}
 <a class="btn-nav" href="https://www.fyndery.de/book_course/calendar/7239/1/#calendar_tab" onclick="closeMob()" rel="noopener" target="_blank">Kurs buchen</a>
 </div>
 
-<!-- Alle drei Kaufbuttons (data-checkout) führen zur ATEMANKER-Produktseite bei alfima. Verfügbar ab 02.11.2026; Freischaltung ab individuellem Kursstart. -->
+<!-- Alle drei Kaufbuttons (data-checkout) führen zur ATEMANKER-Produktseite bei alfima. Start direkt nach dem Kauf; Freischaltung ab individuellem Kursstart. -->
 <main id="atemanker">
 
 <!-- 1. HERO -->
@@ -438,10 +443,10 @@ footer .legal-links{font-size:.78rem!important}
       <p class="am-hero-sub"><strong>Jeden Tag ein paar Minuten für dich und deinen Atem.</strong></p>
       <p class="am-hero-sub">ATEMANKER begleitet dich 21 Tage lang mit kurzen geführten Atemeinheiten. Du lernst deinen Atem bewusster wahrzunehmen, verschiedene Formen der Atemarbeit kennen und entwickelst daraus Schritt für Schritt deinen persönlichen Atemanker für den Alltag.</p>
       <p class="am-info">21 Tage · 21 Atemeinheiten · ca. 7–10 Minuten täglich · Workbook</p>
-      <p class="am-start">Verfügbar ab 02.11.2026</p>
+      <p class="am-start">Direkt nach dem Kauf starten</p>
       <p class="am-hero-price"><strong>Einführungspreis 37 €</strong></p>
       <a class="am-btn" data-checkout href="https://alfima.com/alfimasu2410/atemanker-21-tage-zuruck-in-deine-ruhe">ATEMANKER jetzt für 37 € sichern</a>
-      <p class="am-btn-note">ATEMANKER ist ab 02.11.2026 verfügbar.</p>
+      <p class="am-btn-note">Nach dem Kauf kannst du direkt mit Woche 1 beginnen.</p>
     </div>
     <div aria-hidden="true">
       <div class="am-breath">
@@ -541,7 +546,7 @@ footer .legal-links{font-size:.78rem!important}
     <div class="am-narrow am-center">
       <p class="am-eyebrow">Freischaltung</p>
       <h2 class="am-h2">Dein ATEMANKER öffnet sich Woche für Woche.</h2>
-      <p class="am-lead">Mit deinem Kursstart öffnet sich sofort Woche 1 mit deinen ersten sieben Atemeinheiten. Nach sieben Tagen öffnet sich Woche 2. Nach weiteren sieben Tagen folgt Woche 3.</p>
+      <p class="am-lead">Direkt nach dem Kauf öffnet sich Woche 1 mit deinen ersten sieben Atemeinheiten. Nach sieben Tagen öffnet sich Woche 2. Nach weiteren sieben Tagen folgt Woche 3.</p>
       <p class="am-lead">So bekommst du nicht 21 Übungen auf einmal vorgelegt, sondern kannst dich eine Woche lang mit den jeweiligen Atemübungen beschäftigen und innerhalb dieser Woche deinen eigenen Rhythmus finden.</p>
     </div>
     <ol class="am-release" style="list-style:none">
@@ -641,12 +646,12 @@ footer .legal-links{font-size:.78rem!important}
         <li>begleitendes Workbook</li>
         <li>dauerhafter Zugang</li>
       </ul>
-      <p class="am-start am-offer-start">Verfügbar ab 02.11.2026</p>
+      <p class="am-start am-offer-start">Direkt nach dem Kauf starten</p>
       <p class="am-offer-label">Einführungspreis</p>
       <p class="am-offer-price">37<span class="eur">€</span></p>
       <p class="am-offer-regular">Ab 01.01.2027 regulär 47 €</p>
       <a class="am-btn" data-checkout href="https://alfima.com/alfimasu2410/atemanker-21-tage-zuruck-in-deine-ruhe">ATEMANKER jetzt für 37 € sichern</a>
-      <p class="am-btn-note">ATEMANKER ist ab 02.11.2026 verfügbar · Woche 1 wird zu deinem Kursstart freigeschaltet.</p>
+      <p class="am-btn-note">Nach dem Kauf kannst du direkt mit Woche 1 beginnen.</p>
       <p class="am-offer-meta">Kauf und Kurszugang über alfima.</p>
     </div>
   </div>
@@ -661,7 +666,7 @@ footer .legal-links{font-size:.78rem!important}
       <details><summary>Muss ich Erfahrung mit Atemarbeit oder Yoga haben?</summary><p>Nein. ATEMANKER beginnt mit der Wahrnehmung deines natürlichen Atems und baut die Übungen Schritt für Schritt auf.</p></details>
       <details><summary>Wie viel Zeit brauche ich?</summary><p>Die geführten Atemeinheiten dauern überwiegend etwa 7–10 Minuten.</p></details>
       <details><summary>Muss ich jeden Tag üben?</summary><p>Die 21 Tage geben dir eine klare Struktur. Wenn du einen Tag auslässt, setzt du anschließend dort wieder an, wo du aufgehört hast. Es geht nicht darum, den Kurs perfekt abzuarbeiten.</p></details>
-      <details><summary>Ab wann ist ATEMANKER verfügbar?</summary><p>ATEMANKER ist ab 02.11.2026 verfügbar. Zu deinem persönlichen Kursstart wird Woche 1 mit den ersten sieben Atemeinheiten freigeschaltet. Woche 2 folgt nach sieben Tagen und Woche 3 nach weiteren sieben Tagen.</p></details>
+      <details><summary>Wann kann ich starten?</summary><p>Direkt nach dem Kauf. Du kannst sofort mit Woche 1 und den ersten sieben Atemeinheiten beginnen. Woche 2 folgt nach sieben Tagen und Woche 3 nach weiteren sieben Tagen.</p></details>
       <details><summary>Wie lange habe ich Zugriff?</summary><p>Du erhältst dauerhaften Zugang zu ATEMANKER und kannst später zu deinen Atemeinheiten zurückkehren.</p></details>
       <details><summary>Ersetzt ATEMANKER eine medizinische oder therapeutische Behandlung?</summary><p>Nein. ATEMANKER ist ein Angebot zur Atem- und Körperwahrnehmung sowie zur Entspannung und ersetzt keine medizinische oder therapeutische Behandlung. Bei gesundheitlichen Beschwerden oder Unsicherheit hinsichtlich einzelner Atemübungen sollte vorab medizinischer Rat eingeholt werden.</p></details>
     </div>
@@ -676,7 +681,7 @@ footer .legal-links{font-size:.78rem!important}
     <p class="am-final-text">ATEMANKER zeigt dir über 21 Tage verschiedene Wege, deinen Atem bewusster wahrzunehmen und ihn zu einem kleinen Ritual in deinem Alltag werden zu lassen.</p>
     <p class="am-final-text">Am Ende soll nicht eine weitere Aufgabe auf deiner To-do-Liste stehen. Sondern etwas, zu dem du zurückkehren kannst.</p>
     <p class="am-final-sign">Dein Atem.<br>Dein Moment.<br>Dein ATEMANKER.</p>
-    <div class="am-final-facts"><span>Verfügbar ab 02.11.2026</span><span>Einführungspreis · 37 €</span></div>
+    <div class="am-final-facts"><span>Direkt nach dem Kauf starten</span><span>Einführungspreis · 37 €</span></div>
     <a class="am-btn" data-checkout href="https://alfima.com/alfimasu2410/atemanker-21-tage-zuruck-in-deine-ruhe">ATEMANKER jetzt für 37 € sichern</a>
   </div>
 </section>
