@@ -713,8 +713,11 @@ body{background:var(--cream);color:var(--ink)}
 <a href="aroha">AROHA</a>
 <a href="/gratis">Gratis für dich</a>
 </div></li>
+<li class="nav-dropdown"><a href="/kurse">Kurse</a><div class="nav-dropdown-menu">
+<a href="/kurse">Alle Kurse</a>
+<a href="/atemanker">ATEMANKER · Online-Kurs</a>
+</div></li>
 <li><a href="ueber-mich">Über mich</a></li>
-<li><a href="/kurse">Kurse</a></li>
 <li><a href="/reset">RESET</a></li>
 <li><a href="/yoga-studio-online">Yoga Studio Online</a></li>
 <li><a href="retreat-mallorca">Mallorca</a></li>
@@ -738,8 +741,14 @@ body{background:var(--cream);color:var(--ink)}
 <a href="/gratis" onclick="closeMob()">Gratis für dich</a>
 </div>
 </div>
+<div class="mob-dropdown">
+<button type="button" class="mob-dropdown-toggle" onclick="toggleMobSub(this)" aria-expanded="false">Kurse<span class="mob-dropdown-caret">▾</span></button>
+<div class="mob-dropdown-menu">
+<a href="/kurse" onclick="closeMob()">Alle Kurse</a>
+<a href="/atemanker" onclick="closeMob()">ATEMANKER · Online-Kurs</a>
+</div>
+</div>
 <a href="ueber-mich" onclick="closeMob()">Über mich</a>
-<a href="/kurse" onclick="closeMob()">Kurse</a>
 <a href="/reset" onclick="closeMob()">RESET</a>
 <a href="/yoga-studio-online" onclick="closeMob()">Yoga Studio Online</a>
 <a href="retreat-mallorca" onclick="closeMob()">Mallorca</a>

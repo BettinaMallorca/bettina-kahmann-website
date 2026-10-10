@@ -708,8 +708,28 @@ footer .legal-links a{color:rgba(250,246,241,.55)!important}
 @media(max-width:760px){.free-section{padding:4.5rem 1.4rem}.free-grid{grid-template-columns:1fr}}
 </style>
 
+<style id="atemanker-hinweis">
+:root{--amb-h:36px}
+.amb-bar{position:fixed;top:0;left:0;right:0;height:var(--amb-h);z-index:1001;display:flex;align-items:center;justify-content:center;padding:0 16px;background:#993A74;color:#fff!important;font-family:'DM Sans',Arial,sans-serif;font-size:.74rem;font-weight:400;letter-spacing:.05em;line-height:1;text-decoration:none!important;white-space:nowrap;overflow:hidden}
+.amb-bar:hover,.amb-bar:focus-visible{background:#7a2d5c}
+.amb-bar:focus-visible{outline:2px solid #fff;outline-offset:-4px}
+.amb-bar b{font-weight:600;letter-spacing:.14em}
+.amb-bar .amb-sep{opacity:.7;margin:0 .6em}
+.amb-bar .amb-more{font-weight:600;letter-spacing:.1em}
+.amb-bar .amb-arrow{margin-left:.5em}
+.amb-short{display:none}
+html{scroll-padding-top:calc(var(--amb-h) + 80px)}
+#prog{top:var(--amb-h)!important}
+#nav{top:calc(var(--amb-h) + 3px)!important}
+#mob-menu{top:calc(var(--amb-h) + 75px)!important;max-height:calc(100vh - var(--amb-h) - 75px);overflow-y:auto}
+#hero{padding-top:calc(75px + var(--amb-h))}
+@media(max-width:900px){.amb-long{display:none}.amb-short{display:inline}}
+@media(max-width:620px){:root{--amb-h:34px}.amb-bar{font-size:.7rem;letter-spacing:.03em;padding:0 10px}.amb-bar b{letter-spacing:.1em}.amb-bar .amb-more{letter-spacing:.05em}}
+@media(max-width:360px){.amb-bar{font-size:.64rem;letter-spacing:.02em}.amb-bar .amb-sep{margin:0 .45em}.amb-bar .amb-more{letter-spacing:.03em}}
+</style>
 </head>
 <body>
+<a class="amb-bar" href="/atemanker" aria-label="Neu: ATEMANKER – Zur Ruhe kommen, wenn dein Kopf weitermacht. Start am 02.11.2026. Mehr erfahren."><b>NEU</b><span class="amb-sep">·</span><span class="amb-long">ATEMANKER – Zur Ruhe kommen, wenn dein Kopf weitermacht<span class="amb-sep">·</span>Start 02.11.2026<span class="amb-sep">·</span></span><span class="amb-short">ATEMANKER<span class="amb-sep">·</span>Start 02.11.<span class="amb-sep">·</span></span><span class="amb-more">MEHR ERFAHREN<span class="amb-arrow">→</span></span></a>
 <div id="prog"></div>
 <!-- COOKIE -->
 <div id="cookie">
@@ -737,8 +757,11 @@ footer .legal-links a{color:rgba(250,246,241,.55)!important}
 <a href="aroha">AROHA</a>
 <a href="/gratis">Gratis für dich</a>
 </div></li>
+<li class="nav-dropdown"><a href="/kurse">Kurse</a><div class="nav-dropdown-menu">
+<a href="/kurse">Alle Kurse</a>
+<a href="/atemanker">ATEMANKER · Online-Kurs</a>
+</div></li>
 <li><a href="ueber-mich">Über mich</a></li>
-<li><a href="/kurse">Kurse</a></li>
 <li><a href="/reset">RESET</a></li>
 <li><a href="/yoga-studio-online">Yoga Studio Online</a></li>
 <li><a href="retreat-mallorca">Mallorca</a></li>
@@ -762,8 +785,14 @@ footer .legal-links a{color:rgba(250,246,241,.55)!important}
 <a href="/gratis" onclick="closeMob()">Gratis für dich</a>
 </div>
 </div>
+<div class="mob-dropdown">
+<button type="button" class="mob-dropdown-toggle" onclick="toggleMobSub(this)" aria-expanded="false">Kurse<span class="mob-dropdown-caret">▾</span></button>
+<div class="mob-dropdown-menu">
+<a href="/kurse" onclick="closeMob()">Alle Kurse</a>
+<a href="/atemanker" onclick="closeMob()">ATEMANKER · Online-Kurs</a>
+</div>
+</div>
 <a href="ueber-mich" onclick="closeMob()">Über mich</a>
-<a href="/kurse" onclick="closeMob()">Kurse</a>
 <a href="/reset" onclick="closeMob()">RESET</a>
 <a href="/yoga-studio-online" onclick="closeMob()">Yoga Studio Online</a>
 <a href="retreat-mallorca" onclick="closeMob()">Mallorca</a>
