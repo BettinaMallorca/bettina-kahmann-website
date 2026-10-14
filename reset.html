@@ -201,120 +201,14 @@
     text-align: left;
   }
 
-  /* Styling für das ActiveCampaign-Formular (überschreibt AC-Standard) */
-  .form-box ._form_41,
-  .form-box ._form_41 ._form,
-  .form-box ._form_41 form,
-  .form-box ._form_41 ._form-content {
-    background: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    border: none !important;
-    box-shadow: none !important;
-    font-family: 'DM Sans', sans-serif !important;
+  /* Alfima-Lead-Formular (iframe) */
+  .form-box {
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 8px;
+    overflow: hidden;
   }
-  .form-box ._form_41 * {
-    font-family: 'DM Sans', sans-serif !important;
-    box-sizing: border-box !important;
-  }
-  .form-box ._form_41 ._row,
-  .form-box ._form_41 ._field-wrapper,
-  .form-box ._form_41 ._form_element {
-    margin: 0 0 22px 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-  }
-  .form-box ._form_41 ._form-label,
-  .form-box ._form_41 label:not(._checkbox-label) {
-    display: block !important;
-    color: var(--cream) !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.04em;
-    margin: 0 0 8px 0 !important;
-    padding: 0 !important;
-  }
-  .form-box ._form_41 input[type="text"],
-  .form-box ._form_41 input[type="email"] {
-    width: 100% !important;
-    padding: 16px 18px !important;
-    border: none !important;
-    border-radius: 10px !important;
-    font-size: 17px !important;
-    line-height: 1.4 !important;
-    color: var(--text) !important;
-    background: var(--cream) !important;
-    height: auto !important;
-    margin: 0 !important;
-  }
-  .form-box ._form_41 input::placeholder {
-    color: #9a8a80 !important;
-    opacity: 1 !important;
-  }
-  /* Einwilligungs-Checkbox */
-  .form-box ._form_41 ._checkbox-radio,
-  .form-box ._form_41 ._row._checkbox-radio {
-    display: flex !important;
-    align-items: flex-start !important;
-    gap: 12px !important;
-  }
-  .form-box ._form_41 input[type="checkbox"] {
-    width: 20px !important;
-    height: 20px !important;
-    min-width: 20px !important;
-    margin: 3px 0 0 0 !important;
-    accent-color: var(--plum) !important;
-    cursor: pointer;
-  }
-  .form-box ._form_41 ._checkbox-radio label,
-  .form-box ._form_41 ._checkbox-radio span,
-  .form-box ._form_41 ._row span {
-    color: var(--cream) !important;
-    font-size: 14px !important;
-    line-height: 1.55 !important;
-    font-weight: 400 !important;
-  }
-  /* Button */
-  .form-box ._form_41 ._submit,
-  .form-box ._form_41 button[type="submit"],
-  .form-box ._form_41 input[type="submit"] {
-    width: 100% !important;
-    background: var(--plum) !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 999px !important;
-    padding: 17px !important;
-    font-size: 17px !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.01em;
-    cursor: pointer !important;
-    margin: 6px 0 0 0 !important;
-    transition: background 0.2s ease;
-    height: auto !important;
-    text-transform: none !important;
-  }
-  .form-box ._form_41 ._submit:hover,
-  .form-box ._form_41 button[type="submit"]:hover {
-    background: #7d2f5f !important;
-  }
-  /* Fehlermeldungen und Bestätigung */
-  .form-box ._form_41 ._error-inner {
-    background: var(--cream) !important;
-    color: #a03030 !important;
-    border-radius: 8px !important;
-    padding: 8px 12px !important;
-    font-size: 14px !important;
-  }
-  .form-box ._form_41 ._form-thank-you {
-    color: var(--cream) !important;
-    font-size: 19px !important;
-    line-height: 1.5 !important;
-    text-align: center !important;
-    padding: 20px 0 !important;
-  }
-  .form-box ._form-branding { display: none !important; }
+  .form-box iframe { display: block; width: 100%; border: none; min-height: 400px; }
   .signup .datenschutz {
     font-size: 13px;
     margin-top: 18px;
@@ -539,7 +433,7 @@ footer .legal-links a{color:rgba(250,246,241,.62)!important}
     <h1>Dein Körper ist müde. Dein Kopf läuft weiter.</h1>
     <p class="sub">Der 5-Tage-Nervensystem-Reset holt dich aus dem Dauer-Alarm. Jeden Tag ein Audio, jede Einheit unter zehn Minuten. Keine Vorkenntnisse, keine Matte nötig.</p>
     <a href="#anmeldung" class="cta-btn">Reset starten</a>
-    <span class="kostenlos">Kostenlos. Tag 1 kommt sofort in dein Postfach.</span>
+    <span class="kostenlos">Kostenlos. Tag 1 kommt direkt nach deiner Bestätigung.</span>
   </div>
 </section>
 
@@ -609,11 +503,11 @@ footer .legal-links a{color:rgba(250,246,241,.62)!important}
 <section class="signup" id="anmeldung">
   <div class="wrap">
     <h2>Starte deinen Reset</h2>
-    <p>Trag deine E-Mail-Adresse ein. Tag 1 kommt sofort, die weiteren Audios folgen an den nächsten vier Tagen.</p>
+    <p>Trag deinen Namen und deine E-Mail-Adresse ein und bestätige die Anmeldung in der Mail, die du gleich bekommst. Dann kommt Tag 1 sofort, die weiteren Audios folgen an den nächsten vier Tagen.</p>
     <div class="form-box">
 
-      <div class="_form_41"></div>
-      <script src="https://bettinakahmann43364.activehosted.com/f/embed.php?id=41" charset="utf-8"></script>
+      <iframe src="https://alfima.com/alfimasu2410/leads/nervensystem-reset/embed" style="width:100%;border:none;min-height:400px;" title="Anmeldung 5-Tage-Nervensystem-Reset"></iframe>
+      <script>(function(){var u=new URL("https://alfima.com/alfimasu2410/leads/nervensystem-reset/embed");var allowedOrigin=u.origin;var iframe=document.currentScript&&document.currentScript.previousElementSibling;window.addEventListener("message",function(e){if(e.origin!==allowedOrigin)return;if(!e.data||typeof e.data.type!=="string")return;if(e.data.type==="alfima-embed-resize"){if(iframe&&iframe.tagName==="IFRAME")iframe.style.height=e.data.height+"px";}else if(e.data.type==="alfima-embed-redirect"){var url=e.data.url;if(typeof url==="string"&&/^https?:\/\//.test(url)){window.top.location.href=url;}}});})();</script>
     </div>
     <p class="datenschutz">Du bekommst die fünf Reset-Audios und danach meinen Newsletter mit Impulsen für dein Nervensystem. Abmeldung jederzeit mit einem Klick. Details in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>
   </div>
@@ -625,7 +519,7 @@ footer .legal-links a{color:rgba(250,246,241,.62)!important}
       <div class="about-photo"><img src="/IMG_4687-2.jpg" alt="Bettina Kahmann" width="1130" height="1698"></div>
       <div>
         <h2>Wer dich begleitet</h2>
-        <p>Ich bin Bettina Kahmann, zertifizierte Yogalehrerin und Präventionstrainerin nach §20 SGB V. Seit über 20 Jahren unterrichte ich Bewegung, seit sieben Jahren Yoga, mit mehr als 7.000 Unterrichtsstunden und über 4.000 Frauen, die ich begleitet habe.</p>
+        <p>Ich bin Bettina Kahmann, zertifizierte Yogalehrerin und Präventionstrainerin nach §20 SGB V. Seit 30 Jahren unterrichte ich Bewegung, Yoga gehört seit vielen Jahren fest dazu. Mehr als 7.000 Unterrichtsstunden und über 4.000 Frauen, die ich begleitet habe.</p>
         <p>Ich arbeite mit Frauen, die seit Jahren funktionieren und deren Körper deutliche Signale sendet. Mein Ansatz ist klar und geerdet: Atmung, Haltung und Routinen, die im echten Alltag halten. Ohne Esoterik, ohne Leistungsdruck.</p>
       </div>
     </div>
@@ -675,78 +569,7 @@ footer .legal-links a{color:rgba(250,246,241,.62)!important}
 </div>
 <div class="legal-links" style="margin-top:12px;"><a href="/datenschutz">Datenschutz</a> · <a href="/agb">AGB</a></div>
 </footer>
-<script>function toggleMob(){var m=document.getElementById('mob-menu');if(!m)return;var willOpen=!m.classList.contains('open');m.classList.toggle('open');if(!willOpen){m.querySelectorAll('.mob-dropdown.open').forEach(function(w){w.classList.remove('open');var b=w.querySelector('.mob-dropdown-toggle');if(b)b.setAttribute('aria-expanded','false')})}}function closeMob(){var m=document.getElementById('mob-menu');if(!m)return;m.classList.remove('open');m.querySelectorAll('.mob-dropdown.open').forEach(function(w){w.classList.remove('open');var b=w.querySelector('.mob-dropdown-toggle');if(b)b.setAttribute('aria-expanded','false')})}function toggleMobSub(el){var w=el.closest('.mob-dropdown');if(!w)return;var open=w.classList.toggle('open');el.setAttribute('aria-expanded',open?'true':'false')}</script><script>
-(function () {
-  function set(el, props) {
-    for (var k in props) { el.style.setProperty(k, props[k], 'important'); }
-  }
-  function styleForm() {
-    var box = document.querySelector('._form_41');
-    if (!box || !box.querySelector('form')) return false;
-
-    var cream = '#FAF6F1', plum = '#993A74', text = '#3A2E28';
-    var font = "'DM Sans', sans-serif";
-
-    // Formular-Container: weißen Kasten entfernen
-    box.querySelectorAll('form, ._form, ._form-content, ._form-inner').forEach(function (el) {
-      set(el, { background: 'transparent', padding: '0', margin: '0', width: '100%', 'max-width': '100%', border: 'none', 'box-shadow': 'none', 'font-family': font });
-    });
-
-    // Abstände zwischen den Zeilen
-    box.querySelectorAll('._form_element, ._row, ._field-wrapper').forEach(function (el) {
-      set(el, { margin: '0 0 22px 0', padding: '0', width: '100%' });
-    });
-
-    // Labels über den Feldern
-    box.querySelectorAll('._form-label, label').forEach(function (el) {
-      if (el.querySelector('input[type="checkbox"]') || el.closest('._checkbox-radio')) return;
-      set(el, { color: cream, 'font-size': '14px', 'font-weight': '500', margin: '0 0 8px 0', padding: '0', display: 'block', 'font-family': font });
-    });
-
-    // Eingabefelder
-    box.querySelectorAll('input[type="text"], input[type="email"]').forEach(function (el) {
-      set(el, { width: '100%', padding: '16px 18px', border: 'none', 'border-radius': '10px', 'font-size': '17px', color: text, background: cream, height: 'auto', margin: '0', 'font-family': font, 'box-sizing': 'border-box' });
-    });
-
-    // Checkbox und Einwilligungstext
-    box.querySelectorAll('input[type="checkbox"]').forEach(function (el) {
-      set(el, { width: '20px', height: '20px', 'min-width': '20px', margin: '3px 10px 0 0', 'accent-color': plum });
-      var row = el.closest('._checkbox-radio') || el.closest('._row') || el.parentElement;
-      if (row) set(row, { display: 'flex', 'align-items': 'flex-start', color: cream });
-    });
-    box.querySelectorAll('._checkbox-radio label, ._checkbox-radio span, ._row span').forEach(function (el) {
-      set(el, { color: cream, 'font-size': '14px', 'line-height': '1.55', 'font-weight': '400', 'font-family': font });
-    });
-
-    // Button
-    box.querySelectorAll('button[type="submit"], ._submit, input[type="submit"]').forEach(function (el) {
-      set(el, { width: '100%', background: plum, color: '#fff', border: 'none', 'border-radius': '999px', padding: '17px', 'font-size': '17px', 'font-weight': '700', cursor: 'pointer', margin: '6px 0 0 0', height: 'auto', 'text-transform': 'none', 'font-family': font });
-    });
-
-    // ActiveCampaign-Branding ausblenden
-    box.querySelectorAll('._form-branding').forEach(function (el) {
-      set(el, { display: 'none' });
-    });
-
-    // Danke-Nachricht
-    box.querySelectorAll('._form-thank-you').forEach(function (el) {
-      set(el, { color: cream, 'font-size': '19px', 'text-align': 'center', padding: '20px 0', 'font-family': font });
-    });
-
-    return true;
-  }
-
-  var tries = 0;
-  var timer = setInterval(function () {
-    if (styleForm() || ++tries > 60) clearInterval(timer);
-  }, 250);
-
-  // Nachziehen, falls AC das Formular später neu rendert (z.B. Danke-Ansicht)
-  var mo = new MutationObserver(function () { styleForm(); });
-  var target = document.querySelector('._form_41');
-  if (target) mo.observe(target, { childList: true, subtree: true });
-})();
-</script>
+<script>function toggleMob(){var m=document.getElementById('mob-menu');if(!m)return;var willOpen=!m.classList.contains('open');m.classList.toggle('open');if(!willOpen){m.querySelectorAll('.mob-dropdown.open').forEach(function(w){w.classList.remove('open');var b=w.querySelector('.mob-dropdown-toggle');if(b)b.setAttribute('aria-expanded','false')})}}function closeMob(){var m=document.getElementById('mob-menu');if(!m)return;m.classList.remove('open');m.querySelectorAll('.mob-dropdown.open').forEach(function(w){w.classList.remove('open');var b=w.querySelector('.mob-dropdown-toggle');if(b)b.setAttribute('aria-expanded','false')})}function toggleMobSub(el){var w=el.closest('.mob-dropdown');if(!w)return;var open=w.classList.toggle('open');el.setAttribute('aria-expanded',open?'true':'false')}</script>
 
 </body>
 </html>
