@@ -76,101 +76,8 @@
 
     .yr-form-box { max-width:420px; margin:0 auto; text-align:left; }
 
-    /* Styling für das ActiveCampaign-Formular (überschreibt AC-Standard) */
-    .yr-form-box ._form_49,
-    .yr-form-box ._form_49 ._form,
-    .yr-form-box ._form_49 form,
-    .yr-form-box ._form_49 ._form-content {
-      background: transparent !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      border: none !important;
-      box-shadow: none !important;
-      font-family: 'DM Sans', sans-serif !important;
-    }
-    .yr-form-box ._form_49 * {
-      font-family: 'DM Sans', sans-serif !important;
-      box-sizing: border-box !important;
-    }
-    .yr-form-box ._form_49 ._row,
-    .yr-form-box ._form_49 ._field-wrapper,
-    .yr-form-box ._form_49 ._form_element {
-      margin: 0 0 18px 0 !important;
-      padding: 0 !important;
-      width: 100% !important;
-    }
-    .yr-form-box ._form_49 ._form-label,
-    .yr-form-box ._form_49 label:not(._checkbox-label) {
-      display: block !important;
-      color: var(--text) !important;
-      font-size: 14px !important;
-      font-weight: 500 !important;
-      letter-spacing: 0.02em;
-      margin: 0 0 8px 0 !important;
-      padding: 0 !important;
-    }
-    .yr-form-box ._form_49 input[type="text"],
-    .yr-form-box ._form_49 input[type="email"] {
-      width: 100% !important;
-      padding: 16px 18px !important;
-      border: none !important;
-      border-radius: 10px !important;
-      font-size: 17px !important;
-      line-height: 1.4 !important;
-      color: var(--text) !important;
-      background: #fff !important;
-      height: auto !important;
-      margin: 0 !important;
-    }
-    .yr-form-box ._form_49 input::placeholder {
-      color: #9a8a80 !important;
-      opacity: 1 !important;
-    }
-    .yr-form-box ._form_49 ._submit,
-    .yr-form-box ._form_49 button[type="submit"],
-    .yr-form-box ._form_49 input[type="submit"] {
-      width: 100% !important;
-      background: var(--plum) !important;
-      color: #fff !important;
-      border: none !important;
-      border-radius: 999px !important;
-      padding: 17px !important;
-      font-size: .78rem !important;
-      font-weight: 600 !important;
-      letter-spacing: .08em !important;
-      text-transform: uppercase !important;
-      cursor: pointer !important;
-      margin: 6px 0 0 0 !important;
-      transition: background 0.2s ease;
-      height: auto !important;
-    }
-    .yr-form-box ._form_49 ._submit:hover,
-    .yr-form-box ._form_49 button[type="submit"]:hover {
-      background: #7a2d5c !important;
-    }
-    .yr-form-box ._form_49 ._error-inner {
-      background: #fff !important;
-      color: #a03030 !important;
-      border-radius: 8px !important;
-      padding: 8px 12px !important;
-      font-size: 14px !important;
-    }
-    .yr-form-box ._form_49 ._form-thank-you {
-      color: var(--text) !important;
-      font-size: 19px !important;
-      line-height: 1.5 !important;
-      text-align: center !important;
-      padding: 20px 0 !important;
-    }
-    .yr-form-box ._form-branding { display: none !important; }
-
-    /* Blendet die beiden internen AC-Textblöcke im Formular 49 aus (Duplikat zu Headline/Subline oben auf der Seite) */
-    .yr-form-box ._form_49 ._x66059164,
-    .yr-form-box ._form_49 ._x14669772 {
-      display: none !important;
-    }
+    .yr-form-box { background:#fff; border-radius:16px; padding:8px; overflow:hidden; }
+    .yr-form-box iframe { display:block; width:100%; border:none; min-height:400px; }
 
     @media(max-width:900px){
       .yr-hero { grid-template-columns:1fr; gap:36px; }
@@ -374,10 +281,10 @@ footer .legal-links{font-size:.78rem!important}
 <section class="yr-cta-final" id="anmeldung">
   <p class="yr-eyebrow">Jetzt sichern</p>
   <h2>Hol dir die 8 Yoga-Rituale kostenlos</h2>
-  <p class="yr-cta-note">Trag deinen Vornamen und deine E-Mail-Adresse ein und ich schicke dir das PDF per E-Mail zu.</p>
+  <p class="yr-cta-note">Trag deinen Vornamen und deine E-Mail-Adresse ein und bestätige die Anmeldung in der Mail, die du gleich bekommst. Danach schicke ich dir das PDF.</p>
   <div class="yr-form-box">
-    <div class="_form_49"></div>
-    <script src="https://bettinakahmann43364.activehosted.com/f/embed.php?id=49" charset="utf-8"></script>
+    <iframe src="https://alfima.com/bettinakahmann/leads/yoga-rituale/embed" style="width:100%;border:none;min-height:400px;" title="Anmeldung 8 Yoga-Rituale"></iframe>
+    <script>(function(){var u=new URL("https://alfima.com/bettinakahmann/leads/yoga-rituale/embed");var allowedOrigin=u.origin;var iframe=document.currentScript&&document.currentScript.previousElementSibling;window.addEventListener("message",function(e){if(e.origin!==allowedOrigin)return;if(!e.data||typeof e.data.type!=="string")return;if(e.data.type==="alfima-embed-resize"){if(iframe&&iframe.tagName==="IFRAME")iframe.style.height=e.data.height+"px";}else if(e.data.type==="alfima-embed-redirect"){var url=e.data.url;if(typeof url==="string"&&/^https?:\/\//.test(url)){window.top.location.href=url;}}});})();</script>
   </div>
   <p class="yr-privacy-note">Mit dem Absenden gilt die <a href="/datenschutz">Datenschutzerklärung</a>. Abmeldung jederzeit möglich.</p>
 </section>
@@ -428,59 +335,6 @@ footer .legal-links{font-size:.78rem!important}
 <div class="legal-links" style="margin-top:12px;"><a href="/datenschutz">Datenschutz</a> · <a href="/agb">AGB</a></div>
 </footer>
 <script>function toggleMob(){var m=document.getElementById('mob-menu');if(!m)return;var willOpen=!m.classList.contains('open');m.classList.toggle('open');if(!willOpen){m.querySelectorAll('.mob-dropdown.open').forEach(function(w){w.classList.remove('open');var b=w.querySelector('.mob-dropdown-toggle');if(b)b.setAttribute('aria-expanded','false')})}}function closeMob(){var m=document.getElementById('mob-menu');if(!m)return;m.classList.remove('open');m.querySelectorAll('.mob-dropdown.open').forEach(function(w){w.classList.remove('open');var b=w.querySelector('.mob-dropdown-toggle');if(b)b.setAttribute('aria-expanded','false')})}function toggleMobSub(el){var w=el.closest('.mob-dropdown');if(!w)return;var open=w.classList.toggle('open');el.setAttribute('aria-expanded',open?'true':'false')}</script>
-<script>
-(function () {
-  function set(el, props) {
-    for (var k in props) { el.style.setProperty(k, props[k], 'important'); }
-  }
-  function styleForm() {
-    var box = document.querySelector('._form_49');
-    if (!box || !box.querySelector('form')) return false;
 
-    var cream = '#FAF6F1', plum = '#993A74', text = '#3D2B22';
-    var font = "'DM Sans', sans-serif";
-
-    box.querySelectorAll('form, ._form, ._form-content, ._form-inner').forEach(function (el) {
-      set(el, { background: 'transparent', padding: '0', margin: '0', width: '100%', 'max-width': '100%', border: 'none', 'box-shadow': 'none', 'font-family': font });
-    });
-
-    box.querySelectorAll('._form_element, ._row, ._field-wrapper').forEach(function (el) {
-      set(el, { margin: '0 0 18px 0', padding: '0', width: '100%' });
-    });
-
-    box.querySelectorAll('._form-label, label').forEach(function (el) {
-      if (el.querySelector('input[type="checkbox"]') || el.closest('._checkbox-radio')) return;
-      set(el, { color: text, 'font-size': '14px', 'font-weight': '500', margin: '0 0 8px 0', padding: '0', display: 'block', 'font-family': font });
-    });
-
-    box.querySelectorAll('input[type="text"], input[type="email"]').forEach(function (el) {
-      set(el, { width: '100%', padding: '16px 18px', border: 'none', 'border-radius': '10px', 'font-size': '17px', color: text, background: '#fff', height: 'auto', margin: '0', 'font-family': font, 'box-sizing': 'border-box' });
-    });
-
-    box.querySelectorAll('button[type="submit"], ._submit, input[type="submit"]').forEach(function (el) {
-      set(el, { width: '100%', background: plum, color: '#fff', border: 'none', 'border-radius': '999px', padding: '17px', 'font-size': '.78rem', 'font-weight': '600', 'letter-spacing': '.08em', 'text-transform': 'uppercase', cursor: 'pointer', margin: '6px 0 0 0', height: 'auto', 'font-family': font });
-    });
-
-    box.querySelectorAll('._form-thank-you').forEach(function (el) {
-      set(el, { color: text, 'font-size': '19px', 'text-align': 'center', padding: '20px 0', 'font-family': font });
-    });
-
-    box.querySelectorAll('._form-branding').forEach(function (el) {
-      set(el, { display: 'none' });
-    });
-
-    return true;
-  }
-
-  var tries = 0;
-  var timer = setInterval(function () {
-    if (styleForm() || ++tries > 60) clearInterval(timer);
-  }, 250);
-
-  var mo = new MutationObserver(function () { styleForm(); });
-  var target = document.querySelector('._form_49');
-  if (target) mo.observe(target, { childList: true, subtree: true });
-})();
-</script>
 </body>
 </html>
