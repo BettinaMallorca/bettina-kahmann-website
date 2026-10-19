@@ -250,8 +250,10 @@
       color: rgba(153,58,116,0.08); line-height: 1;
     }
     .ang-card.featured .ang-num { color: rgba(255,255,255,0.08); }
-    .ang-card h3 { font-family: var(--fd); font-size: 1.5rem; font-weight: 500; color: var(--text); margin-bottom: 0.6rem; line-height: 1.2; }
-    .ang-card.featured h3 { color: white; }
+    .ang-card .ang-promise { font-family: var(--fd); font-size: 1.65rem; font-style: italic; font-weight: 500; color: var(--pink); line-height: 1.2; margin: 0 0 0.9rem; padding-right: 2.5rem; }
+    .ang-card.featured .ang-promise, .ang-card.online-card .ang-promise { color: #fff; }
+    .ang-card h3 { font-family: var(--fb); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terra); margin-bottom: 0.7rem; line-height: 1.4; }
+    .ang-card.featured h3 { color: rgba(255,255,255,0.75); }
     .ang-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 1.5rem; }
     .ang-card.featured p { color: rgba(255,255,255,0.7); }
     .ang-link {
@@ -265,7 +267,7 @@
     /* Kachel „Präventionskurse Online“: Sage Green, identisch zur LIVE-ONLINE-Karte auf /kurse */
     .ang-card.online-card { background: #7A9E7E; }
     .ang-card.online-card .ang-num { color: rgba(255,255,255,0.08); }
-    .ang-card.online-card h3 { color: #fff; }
+    .ang-card.online-card h3 { color: rgba(255,255,255,0.85); }
     .ang-card.online-card p { color: rgba(255,255,255,0.8); }
     .ang-card.online-card .ang-link { color: #fff; }
 
@@ -859,47 +861,54 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 <div class="ang-card featured">
 <span class="ang-icon">🏥</span>
 <span class="ang-num">01</span>
+<p class="ang-promise">Mit Stress anders umgehen lernen.</p>
 <h3>Präventionskurse Wedemark</h3>
-<p>Acht Wochen Yoga vor Ort in der Wedemark, in denen du lernst, mit Stress anders umzugehen. Zertifiziert nach §20 SGB V, viele Krankenkassen bezuschussen den Kurs.</p>
+<p>Acht Wochen Yoga vor Ort in der Wedemark. Zertifiziert nach §20 SGB V, viele Krankenkassen bezuschussen den Kurs.</p>
 <a class="ang-link" href="praeventionskurse-wedemark">Kurse ansehen</a>
 </div>
 <div class="ang-card online-card"><span class="ang-icon">💻</span>
 <span class="ang-num">02</span>
+<p class="ang-promise">Acht Wochen für mehr Ruhe, von zu Hause aus.</p>
 <h3>Präventionskurse Online</h3>
-<p>Acht Wochen live über Zoom, mit fester Kursgruppe und Anleitung, ohne Anfahrt. Zertifiziert nach §20 SGB V, viele Krankenkassen bezuschussen den Kurs.</p>
+<p>Live über Zoom, mit fester Kursgruppe und Anleitung, ohne Anfahrt. Zertifiziert nach §20 SGB V, viele Krankenkassen bezuschussen den Kurs.</p>
 <a class="ang-link" href="praeventionskurse-online">Online-Kurse ansehen</a>
 </div>
 <div class="ang-card">
 <span class="ang-icon">📅</span>
 <span class="ang-num">03</span>
+<p class="ang-promise">Der Termin, der in deine Woche passt.</p>
 <h3>Alle Kurse</h3>
 <p>Alle aktuellen Yoga- und Bewegungskurse auf einen Blick – vor Ort in der Wedemark und live online.</p><a class="ang-link" href="/kurse/">Alle Kurse ansehen</a></div>
 <div class="ang-card">
 <span class="ang-icon">🧘</span>
 <span class="ang-num">04</span>
+<p class="ang-promise">Dich wieder stabil und beweglich fühlen.</p>
 <h3>Hatha Yoga</h3>
-<p>Für einen Körper, der sich wieder stabil und beweglich anfühlt. Haltungen, bewusste Atmung und Zeit zum Nachspüren.</p>
+<p>Haltungen, bewusste Atmung und Zeit zum Nachspüren.</p>
 <a class="ang-link" href="hatha-yoga">Hatha Yoga ansehen</a>
 </div>
 <div class="ang-card">
 <span class="ang-icon">🌙</span>
 <span class="ang-num">05</span>
+<p class="ang-promise">Abends endlich abschalten können.</p>
 <h3>Yin Yoga</h3>
-<p>Für Abende, an denen du nicht abschalten kannst. Ruhige, länger gehaltene Positionen und bewusste Atmung.</p>
+<p>Ruhige, länger gehaltene Positionen und bewusste Atmung.</p>
 <a class="ang-link" href="yin-yoga">Yin Yoga ansehen</a>
 </div>
 <div class="ang-card">
 <span class="ang-icon">〰️</span>
 <span class="ang-num">06</span>
+<p class="ang-promise">Morgens nicht mehr steif aufstehen.</p>
 <h3>FaszienFit Yoga</h3>
-<p>Für einen Körper, der sich morgens nicht mehr steif anfühlt. Mobilität, Kräftigung und faszienorientierte Bewegung, verbunden mit Yoga.</p>
+<p>Mobilität, Kräftigung und faszienorientierte Bewegung, verbunden mit Yoga.</p>
 <a class="ang-link" href="faszienfit-yoga">FaszienFit ansehen</a>
 </div>
 <div class="ang-card">
 <span class="ang-icon">🔥</span>
 <span class="ang-num">07</span>
+<p class="ang-promise">Druck abbauen und dich wieder lebendig fühlen.</p>
 <h3>AROHA</h3>
-<p>Für Tage, an denen du Druck abbauen und dich danach wieder lebendig fühlen willst. Kraftvolle, fließende Bewegungen ohne komplizierte Choreografie.</p>
+<p>Kraftvolle, fließende Bewegungen ohne komplizierte Choreografie.</p>
 <a class="ang-link" href="aroha">AROHA ansehen</a>
 </div>
 </div>
