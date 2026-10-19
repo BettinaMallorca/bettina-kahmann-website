@@ -252,8 +252,9 @@
     .ang-card.featured .ang-num { color: rgba(255,255,255,0.08); }
     .ang-card .ang-promise { font-family: var(--fd); font-size: 1.65rem; font-style: italic; font-weight: 500; color: var(--pink); line-height: 1.2; margin: 0 0 0.9rem; padding-right: 2.5rem; }
     .ang-card.featured .ang-promise, .ang-card.online-card .ang-promise { color: #fff; }
-    .ang-card h3 { font-family: var(--fb); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--terra); margin-bottom: 0.7rem; line-height: 1.4; }
-    .ang-card.featured h3 { color: rgba(255,255,255,0.75); }
+    .ang-card h3 { font-family: var(--fb); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terra-dark); margin-bottom: 0.8rem; line-height: 1.4; display: flex; align-items: center; gap: 0.6rem; }
+    .ang-card h3::before { content: ''; flex: 0 0 22px; height: 2px; background: currentColor; }
+    .ang-card.featured h3 { color: #fff; }
     .ang-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; font-weight: 300; margin-bottom: 1.5rem; }
     .ang-card.featured p { color: rgba(255,255,255,0.7); }
     .ang-link {
@@ -267,7 +268,7 @@
     /* Kachel „Präventionskurse Online“: Sage Green, identisch zur LIVE-ONLINE-Karte auf /kurse */
     .ang-card.online-card { background: #7A9E7E; }
     .ang-card.online-card .ang-num { color: rgba(255,255,255,0.08); }
-    .ang-card.online-card h3 { color: rgba(255,255,255,0.85); }
+    .ang-card.online-card h3 { color: #fff; }
     .ang-card.online-card p { color: rgba(255,255,255,0.8); }
     .ang-card.online-card .ang-link { color: #fff; }
 
