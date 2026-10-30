@@ -75,7 +75,6 @@ ol.plan li b{display:block;font-weight:600}
 .quote{font-family:'Cormorant Garamond',serif;font-size:24px;text-align:center;color:var(--terra-d);margin:30px 8px 10px;line-height:1.25}
 footer{text-align:center;font-size:13px;color:var(--muted);margin-top:26px;line-height:1.6}
 footer strong{color:var(--terra-d);font-weight:600}
-#optin:empty{display:none}
 @media print{
   .noprint,.btn,.back{display:none!important}
   .card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
@@ -152,14 +151,21 @@ footer strong{color:var(--terra-d);font-weight:600}
       <button class="btn btn-main" id="ex-btn" onclick="toggleBreath()">Übung starten</button>
     </div>
 
+    <div class="card soft noprint" id="optin">
+      <div class="eyebrow">Bleib dran</div>
+      <h3>Impulse für dein Nervensystem per Mail</h3>
+      <p>Trag dich ein, und ich schicke dir regelmäßig Übungen und Impulse, die dir helfen, deinen Plan durchzuziehen.</p>
+      <iframe src="https://alfima.com/bettinakahmann/leads/nervensystem-check/embed" style="width:100%;border:none;min-height:400px;" title="Anmeldung Nervensystem-Check"></iframe>
+      <script>(function(){var u=new URL("https://alfima.com/bettinakahmann/leads/nervensystem-check/embed");var allowedOrigin=u.origin;var iframe=document.currentScript&&document.currentScript.previousElementSibling;window.addEventListener("message",function(e){if(e.origin!==allowedOrigin)return;if(!e.data||typeof e.data.type!=="string")return;if(e.data.type==="alfima-embed-resize"){if(iframe&&iframe.tagName==="IFRAME")iframe.style.height=e.data.height+"px";}else if(e.data.type==="alfima-embed-redirect"){var url=e.data.url;if(typeof url==="string"&&/^https?:\/\//.test(url)){window.top.location.href=url;}}});})();</script>
+      <p class="muted">Abmeldung jederzeit mit einem Klick. Details in der <a href="/datenschutz" style="color:inherit">Datenschutzerklärung</a>.</p>
+    </div>
+
     <div class="card">
       <div class="eyebrow">Dein 7-Tage-Plan</div>
       <h3 id="p-title"></h3>
       <ol class="plan" id="p-list"></ol>
       <p class="muted" id="p-extra" style="margin-top:12px"></p>
     </div>
-
-    <div id="optin" class="noprint"></div>
 
     <div class="card cta noprint">
       <div class="eyebrow" style="color:#f3d9c8">Wenn du das nicht allein aufbauen willst</div>
@@ -193,10 +199,7 @@ const CONFIG = {
     button: "Zu ATEMANKER",
     url: "https://bettina-kahmann.com/atemanker",
     price: "37 € Einführungspreis"
-  },
-  /* Optional: HTML-Code deines alfima-Formulars einfügen.
-     Bleibt das Feld leer, wird kein Formular angezeigt. */
-  optinHtml: ""
+  }
 };
 
 /* ===== FRAGEN ===== */
@@ -395,7 +398,6 @@ function showResult(){
   $('c-btn').textContent = CONFIG.cta.button;
   $('c-btn').href = CONFIG.cta.url;
   $('c-price').textContent = CONFIG.cta.price;
-  $('optin').innerHTML = CONFIG.optinHtml;
 
   $('q-bar').style.width = "100%";
   show('s-result');
