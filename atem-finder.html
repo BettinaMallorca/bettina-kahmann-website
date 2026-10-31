@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atem-Finder · beVital InsideOut</title>
+<meta name="description" content="Drei kurze Fragen, eine passende Atemübung für genau diesen Moment. Mit Atemkreis zum Mitatmen. Von Bettina Kahmann, beVital InsideOut.">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{
+  --cream:#FAF6F1;--cream2:#F0E8DE;--terra:#C17B52;--terra-d:#8C492E;
+  --sage:#7A9E7E;--plum:#993A74;--ink:#3B2A22;--muted:#7A6A60;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;font-size:17px;line-height:1.55;min-height:100vh}
+.wrap{max-width:560px;margin:0 auto;padding:28px 18px 48px}
+h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;line-height:1.15;color:var(--terra-d)}
+h1{font-size:38px;margin:10px 0 14px}
+h2{font-size:30px;margin-bottom:12px}
+h3{font-size:24px;margin-bottom:8px}
+.eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);font-weight:600}
+p{margin-bottom:12px}
+.muted{color:var(--muted);font-size:15px}
+.card{background:#fff;border-radius:18px;padding:22px 20px;margin:16px 0;box-shadow:0 2px 14px rgba(140,73,46,.07)}
+.card.soft{background:var(--cream2);box-shadow:none}
+.btn{display:block;width:100%;border:0;border-radius:40px;padding:16px 20px;font:600 17px 'DM Sans',sans-serif;cursor:pointer;text-align:center;text-decoration:none;transition:transform .1s}
+.btn:active{transform:scale(.98)}
+.btn-main{background:var(--plum);color:#fff}
+.btn-line{background:transparent;color:var(--terra-d);border:1.5px solid var(--terra)}
+.btn+.btn{margin-top:10px}
+.screen{display:none;animation:fade .35s ease}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.progress{height:6px;background:var(--cream2);border-radius:6px;overflow:hidden;margin:6px 0 26px}
+.progress i{display:block;height:100%;background:var(--terra);width:0;transition:width .3s}
+.qcount{font-size:14px;color:var(--muted)}
+.qtext{font-family:'Cormorant Garamond',serif;font-size:30px;line-height:1.2;color:var(--ink);margin:4px 0 22px}
+.opts{display:grid;gap:10px}
+.opt{background:#fff;border:1.5px solid var(--cream2);border-radius:14px;padding:15px 18px;font:500 17px 'DM Sans',sans-serif;color:var(--ink);text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--terra)}
+.opt.sel{border-color:var(--plum);background:#fbf2f7}
+.opt small{display:block;color:var(--muted);font-size:14px;font-weight:400;margin-top:2px}
+.back{background:none;border:0;color:var(--muted);font:500 15px 'DM Sans',sans-serif;margin-top:20px;cursor:pointer;padding:6px 0}
+.breath{display:flex;flex-direction:column;align-items:center;padding:6px 0 4px}
+.circle-box{width:220px;height:220px;display:flex;align-items:center;justify-content:center;margin:8px 0 14px}
+.circle{width:90px;height:90px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#e9c3ab,var(--terra));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:15px;text-align:center;padding:8px;transition-property:width,height;transition-timing-function:ease-in-out}
+.cue{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--terra-d);min-height:36px;text-align:center}
+.timer{font-size:14px;color:var(--muted);margin-bottom:14px}
+.steps{list-style:none;counter-reset:s;margin:4px 0 6px}
+.steps li{counter-increment:s;position:relative;padding:6px 0 6px 38px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:6px;width:26px;height:26px;border-radius:50%;background:var(--cream2);color:var(--terra-d);font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center}
+.feel{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.feel .opt{text-align:center;padding:14px 8px;font-size:16px}
+.note{background:#eef4ef;border-radius:12px;padding:12px 14px;font-size:15px;color:#3f5f43;margin-top:12px}
+.note.warm{background:#fbf2f7;color:var(--ink);border-left:4px solid var(--plum)}
+.hist{list-style:none}
+.hist li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--cream2);font-size:15px}
+.hist li:last-child{border:0}
+.hist b{font-weight:600}
+.hist span{color:var(--muted);white-space:nowrap}
+.cta{background:var(--terra-d);color:#fff}
+.cta h3{color:#fff}
+.cta .btn-main{background:#fff;color:var(--plum)}
+.cta .price{font-size:15px;opacity:.85;margin-top:10px;text-align:center}
+.quote{font-family:'Cormorant Garamond',serif;font-size:24px;text-align:center;color:var(--terra-d);margin:30px 8px 10px;line-height:1.25}
+footer{text-align:center;font-size:13px;color:var(--muted);margin-top:26px;line-height:1.6}
+footer strong{color:var(--terra-d);font-weight:600}
+footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){.circle{transition-duration:0s!important}}
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-bllIfkQwv4BWUuhsLZSaO.js"></script>
+<script>
+  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()
+</script>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- START -->
+  <section class="screen on" id="s-start">
+    <div class="eyebrow">beVital InsideOut · Atem-Finder</div>
+    <h1>Welche Atemübung brauchst du jetzt?</h1>
+    <p>Drei kurze Fragen. Dann bekommst du eine Übung für genau diesen Moment und atmest direkt mit mir.</p>
+    <p>Speicher dir die Seite auf dem Handy. Dann hast du sie da, wenn es eng wird.</p>
+    <button class="btn btn-main" onclick="startFinder()">Übung finden</button>
+    <div class="card soft" id="hist-card" style="display:none">
+      <div class="eyebrow">Deine Übungen bisher</div>
+      <ul class="hist" id="hist"></ul>
+    </div>
+    <p class="muted" style="margin-top:14px;text-align:center">Deine Angaben bleiben auf deinem Gerät.</p>
+  </section>
+
+  <!-- FRAGEN -->
+  <section class="screen" id="s-quiz">
+    <div class="qcount" id="q-num"></div>
+    <div class="progress"><i id="q-bar"></i></div>
+    <div class="qtext" id="q-text"></div>
+    <div class="opts" id="q-opts"></div>
+    <button class="back" id="q-back" onclick="prevQ()">Zurück</button>
+  </section>
+
+  <!-- ÜBUNG -->
+  <section class="screen" id="s-ex">
+    <div class="eyebrow" id="ex-eyebrow"></div>
+    <h2 id="ex-title"></h2>
+    <p id="ex-why"></p>
+    <div class="card">
+      <ol class="steps" id="ex-steps"></ol>
+      <div class="breath">
+        <div class="circle-box"><div class="circle" id="ex-circle">Bereit?</div></div>
+        <div class="cue" id="ex-cue"></div>
+        <div class="timer" id="ex-timer"></div>
+      </div>
+      <button class="btn btn-main" id="ex-btn" onclick="toggleBreath()">Übung starten</button>
+      <p class="muted" style="margin-top:12px">Wenn dir schwindelig wird, atme ganz normal weiter.</p>
+    </div>
+
+    <div class="card" id="feel-card" style="display:none">
+      <h3>Wie fühlst du dich jetzt?</h3>
+      <div class="feel">
+        <button class="opt" onclick="rate(1)">Ruhiger</button>
+        <button class="opt" onclick="rate(0)">Gleich</button>
+        <button class="opt" onclick="rate(-1)">Unruhiger</button>
+      </div>
+      <div id="feel-note"></div>
+    </div>
+
+    <div id="after" style="display:none">
+      <div class="card soft">
+        <div class="eyebrow">Bleib dran</div>
+        <h3>Impulse für deinen Atem per Mail</h3>
+        <p>Trag dich ein, und ich schicke dir regelmäßig Übungen und Impulse für dein Nervensystem.</p>
+        <iframe src="https://alfima.com/bettinakahmann/leads/atem-finder/embed" style="width:100%;border:none;min-height:400px;" title="Anmeldung Atem-Finder"></iframe>
+        <script>(function(){var u=new URL("https://alfima.com/bettinakahmann/leads/atem-finder/embed");var allowedOrigin=u.origin;var iframe=document.currentScript&&document.currentScript.previousElementSibling;window.addEventListener("message",function(e){if(e.origin!==allowedOrigin)return;if(!e.data||typeof e.data.type!=="string")return;if(e.data.type==="alfima-embed-resize"){if(iframe&&iframe.tagName==="IFRAME")iframe.style.height=e.data.height+"px";}else if(e.data.type==="alfima-embed-redirect"){var url=e.data.url;if(typeof url==="string"&&/^https?:\/\//.test(url)){window.top.location.href=url;}}});})();</script>
+        <p class="muted">Abmeldung jederzeit mit einem Klick. Details in der <a href="/datenschutz" style="color:inherit">Datenschutzerklärung</a>.</p>
+      </div>
+
+      <div class="card cta">
+        <div class="eyebrow" style="color:#f3d9c8">Jeden Tag so eine Übung</div>
+        <h3 id="c-title"></h3>
+        <p id="c-text"></p>
+        <a class="btn btn-main" id="c-btn" target="_blank" rel="noopener" onclick="track('Atem-Finder ATEMANKER Klick')"></a>
+        <div class="price" id="c-price"></div>
+      </div>
+
+      <button class="btn btn-line" onclick="restart()">Andere Übung finden</button>
+    </div>
+
+    <div class="quote">Dein Körper kennt den Weg in die Entspannung, du musst ihm nur die Zeit geben.</div>
+  </section>
+
+  <footer>
+    <strong>Bettina Kahmann · beVital InsideOut</strong><br>
+    Yoga · Atemarbeit · Nervensystem<br>
+    Spezialisiert auf Stressprävention<br>
+    <span style="display:block;margin-top:10px">Die Übungen ersetzen keine ärztliche Behandlung.</span>
+    <span style="display:block;margin-top:10px"><a href="/">Startseite</a> · <a href="/nervensystem-check">Nervensystem-Check</a> · <a href="/impressum">Impressum</a> · <a href="/datenschutz">Datenschutz</a></span>
+  </footer>
+</div>
+
+<script>
+/* ===== EINSTELLUNGEN: Angebot und Link ===== */
+const CONFIG = {
+  cta: {
+    title: "ATEMANKER",
+    text: "Zur Ruhe kommen, wenn dein Kopf weitermacht. 21 Tage lang führe ich dich jeden Tag mit einem Atem-Audio von 7 bis 10 Minuten. So wird aus einer Übung im Notfall eine Gewohnheit, die dich trägt.",
+    button: "Zu ATEMANKER",
+    url: "https://bettina-kahmann.com/atemanker",
+    price: "37 € Einführungspreis"
+  }
+};
+
+/* ===== FRAGEN ===== */
+const QUESTIONS = [
+  {k:"feel", t:"Was spürst du gerade?", o:[
+    ["Mein Kopf rast","kopf"],
+    ["Innere Unruhe, ich bin aufgedreht","unruhe"],
+    ["Mein Körper ist angespannt","koerper"],
+    ["Ich bin müde, komme aber nicht zur Ruhe","schlaf"]]},
+  {k:"place", t:"Wo bist du gerade?", o:[
+    ["Im Bett","bett"],
+    ["Am Schreibtisch oder bei der Arbeit","arbeit","Die Übung bleibt unauffällig."],
+    ["Unterwegs","unterwegs","Im Auto nur, wenn du parkst."],
+    ["Zu Hause","zuhause"]]},
+  {k:"min", t:"Wie viel Zeit hast du?", o:[
+    ["1 Minute","1"],["3 Minuten","3"],["5 Minuten","5"]]}
+];
+
+/* ===== ÜBUNGEN ===== */
+const POSTURE = {
+  bett:"Leg dich auf den Rücken und leg eine Hand auf deinen Bauch.",
+  arbeit:"Setz dich aufrecht hin, beide Füße am Boden. Niemand muss merken, dass du übst.",
+  unterwegs:"Bleib stehen oder setz dich. Die Augen bleiben offen.",
+  zuhause:"Setz dich bequem hin oder leg dich hin. Erde dich über deine Füße."
+};
+const QUIET = {arbeit:true, unterwegs:true};
+
+function buildExercise(feel, place){
+  const q = !!QUIET[place];
+  if(feel==="kopf") return {
+    id:"ausatmung", title:"Lange Ausatmung",
+    why:"Wenn der Kopf rast, sucht dein Nervensystem nach Gefahr. Beim langen Ausatmen wird dein Herzschlag langsamer. Das ist das Signal, dass du sicher bist.",
+    steps:[POSTURE[place], "Atme 4 Sekunden durch die Nase ein.", q ? "Atme 6 Sekunden leise durch die Nase aus." : "Atme 6 Sekunden langsam durch den Mund aus, als würdest du durch einen Strohhalm pusten."],
+    rhythm:[["Ein",4,"in"],["Aus",6,"out"]]
+  };
+  if(feel==="unruhe") return {
+    id:"doppelt", title:"Doppelt einatmen, lang aus",
+    why:"Bei innerer Unruhe hilft ein kurzer Reset. Das zweite kleine Einatmen dehnt die Lunge noch einmal, die lange Ausatmung bringt dich danach herunter.",
+    steps:[POSTURE[place], "Atme durch die Nase ein und dann noch ein kleines Stück nach.", q ? "Atme lang und leise durch die Nase aus." : "Atme lang und hörbar durch den Mund aus."],
+    rhythm:[["Ein",2,"in"],["Nachatmen",1,"in2"],["Lang aus",6,"out"]]
+  };
+  if(feel==="koerper") return {
+    id:"loslassen", title: q ? "Ausatmen und sinken lassen" : "Schultern loslassen",
+    why:"Feste Schultern und ein fester Kiefer melden deinem Gehirn: Gefahr. Diese Schleife unterbrichst du über den Körper, nicht über den Kopf.",
+    steps: q
+      ? [POSTURE[place], "Lass die Zunge vom Gaumen sinken, die Zähne gehen leicht auseinander.", "Atme 4 Sekunden ein. Beim Ausatmen lässt du die Schultern einen Zentimeter tiefer sinken."]
+      : [POSTURE[place], "Lass die Zunge vom Gaumen sinken, die Zähne gehen leicht auseinander.", "Beim Einatmen ziehst du die Schultern zu den Ohren. Beim Ausatmen lässt du sie fallen."],
+    rhythm: q ? [["Ein",4,"in"],["Aus · sinken lassen",6,"out"]] : [["Ein · Schultern hoch",4,"in"],["Aus · Schultern fallen",6,"out"]]
+  };
+  /* schlaf */
+  return {
+    id:"summen", title: q ? "Langsam ausatmen" : "Summend ausatmen",
+    why:"Müde und trotzdem wach heißt: Dein System findet den Schalter nicht. Eine Ausatmung, die doppelt so lang ist wie die Einatmung, gibt deinem Körper dieses Signal.",
+    steps: q
+      ? [POSTURE[place], "Atme 4 Sekunden durch die Nase ein.", "Atme 8 Sekunden leise durch die Nase aus. Lass den Atem am Ende von allein auslaufen."]
+      : [POSTURE[place], "Atme 4 Sekunden durch die Nase ein.", "Atme 8 Sekunden mit geschlossenem Mund aus und summe dabei leise."],
+    rhythm:[["Ein",4,"in"],[q ? "Aus" : "Summen",8,"out"]]
+  };
+}
+
+const LABEL = {kopf:"Kopf rast", unruhe:"Innere Unruhe", koerper:"Angespannt", schlaf:"Müde, nicht zur Ruhe"};
+const PLACE = {bett:"im Bett", arbeit:"bei der Arbeit", unterwegs:"unterwegs", zuhause:"zu Hause"};
+
+/* ===== LOGIK ===== */
+let idx = 0, current = null, choice = {};
+const answers = new Array(QUESTIONS.length).fill(null);
+const $ = id => document.getElementById(id);
+function track(name){ try{ if(window.plausible) window.plausible(name); }catch(e){} }
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  $(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function startFinder(){ idx=0; renderQ(); show('s-quiz'); }
+function restart(){ stopBreath(); answers.fill(null); renderHist(); show('s-start'); }
+
+function renderQ(){
+  const q = QUESTIONS[idx];
+  $('q-num').textContent = "Frage "+(idx+1)+" von "+QUESTIONS.length;
+  $('q-bar').style.width = (idx/QUESTIONS.length*100)+"%";
+  $('q-text').textContent = q.t;
+  $('q-opts').innerHTML = "";
+  q.o.forEach(([label,val,hint])=>{
+    const b = document.createElement('button');
+    b.className = 'opt' + (answers[idx]===val ? ' sel':'');
+    b.textContent = label;
+    if(hint){ const s=document.createElement('small'); s.textContent=hint; b.appendChild(s); }
+    b.onclick = ()=>{ answers[idx]=val; b.classList.add('sel'); setTimeout(nextQ,180); };
+    $('q-opts').appendChild(b);
+  });
+  $('q-back').style.visibility = idx===0 ? 'hidden':'visible';
+}
+function nextQ(){ if(idx<QUESTIONS.length-1){ idx++; renderQ(); } else { showExercise(); } }
+function prevQ(){ if(idx>0){ idx--; renderQ(); } }
+
+function showExercise(){
+  choice = {feel:answers[0], place:answers[1], min:parseInt(answers[2],10)};
+  current = buildExercise(choice.feel, choice.place);
+  $('ex-eyebrow').textContent = LABEL[choice.feel]+" · "+PLACE[choice.place]+" · "+choice.min+" Min.";
+  $('ex-title').textContent = current.title;
+  $('ex-why').textContent = current.why;
+  $('ex-steps').innerHTML = current.steps.map(s=>'<li>'+s+'</li>').join("");
+  $('feel-card').style.display = 'none';
+  $('feel-note').innerHTML = "";
+  document.querySelectorAll('#feel-card .opt').forEach(b=>{ b.classList.remove('sel'); b.disabled=false; });
+  $('after').style.display = 'none';
+  $('c-title').textContent = CONFIG.cta.title;
+  $('c-text').textContent = CONFIG.cta.text;
+  $('c-btn').textContent = CONFIG.cta.button;
+  $('c-btn').href = CONFIG.cta.url;
+  $('c-price').textContent = CONFIG.cta.price;
+  resetBreathUI();
+  show('s-ex');
+}
+
+/* ===== ATEM-BEGLEITER ===== */
+let breathTimer=null, breathRunning=false, endAt=0, clockTimer=null;
+function minTxt(n){ return n===1 ? "1 Minute" : n+" Minuten"; }
+function resetBreathUI(){
+  const c=$('ex-circle');
+  c.style.transitionDuration='.6s'; c.style.width='90px'; c.style.height='90px';
+  c.textContent='Bereit?'; $('ex-cue').textContent=''; $('ex-timer').textContent=minTxt(choice.min||1);
+  $('ex-btn').textContent='Übung starten';
+}
+function toggleBreath(){ breathRunning ? stopBreath(true) : startBreath(); }
+function startBreath(){
+  breathRunning=true; $('ex-btn').textContent='Übung beenden';
+  track('Atem-Finder Übung gestartet');
+  endAt = Date.now()+choice.min*60000;
+  clockTimer=setInterval(()=>{
+    const s=Math.ceil(Math.max(0,endAt-Date.now())/1000);
+    $('ex-timer').textContent = Math.floor(s/60)+":"+String(s%60).padStart(2,'0')+" verbleibend";
+  },250);
+  runStep(0);
+}
+function runStep(i){
+  if(!breathRunning) return;
+  if(Date.now()>=endAt && i===0){ finishBreath(); return; }
+  const [label,sec,type] = current.rhythm[i];
+  const c=$('ex-circle');
+  c.style.transitionDuration = sec+'s';
+  const two = current.rhythm.some(s=>s[2]==="in2");
+  const size = type==="in" ? (two?'175px':'200px') : type==="in2" ? '205px' : '90px';
+  c.style.width=size; c.style.height=size;
+  c.textContent = sec+" Sek.";
+  $('ex-cue').textContent = label;
+  breathTimer=setTimeout(()=>runStep((i+1)%current.rhythm.length), sec*1000);
+}
+function stopBreath(manual){
+  breathRunning=false; clearTimeout(breathTimer); clearInterval(clockTimer);
+  if(manual){ resetBreathUI(); }
+}
+function finishBreath(){
+  stopBreath(false);
+  track('Atem-Finder Übung beendet');
+  const c=$('ex-circle'); c.style.transitionDuration='1s'; c.style.width='120px'; c.style.height='120px';
+  c.textContent='Geschafft';
+  $('ex-cue').textContent='Spür kurz nach.';
+  $('ex-timer').textContent='';
+  $('ex-btn').textContent='Noch einmal';
+  $('feel-card').style.display='block';
+  setTimeout(()=>$('feel-card').scrollIntoView({behavior:'smooth',block:'center'}),400);
+}
+
+/* ===== RÜCKMELDUNG UND VERLAUF ===== */
+const STORE='bv-atemfinder';
+function loadHist(){ try{ return JSON.parse(localStorage.getItem(STORE))||[]; }catch(e){ return []; } }
+function saveHist(h){ try{ localStorage.setItem(STORE, JSON.stringify(h.slice(-60))); }catch(e){} }
+
+function rate(v){
+  document.querySelectorAll('#feel-card .opt').forEach((b,i)=>{ b.disabled=true; if([1,0,-1][i]===v) b.classList.add('sel'); });
+  const h = loadHist(); h.push({id:current.id, title:current.title, v, d:Date.now()}); saveHist(h);
+  const same = h.filter(x=>x.id===current.id);
+  const calmer = same.filter(x=>x.v===1).length;
+  let note;
+  if(v===1) note = '<div class="note">Gut. Diese Übung hat dir '+(same.length>1 ? calmer+' von '+same.length+' Mal' : 'heute')+' geholfen. Merk sie dir für den nächsten Moment, in dem es eng wird.</div>';
+  else if(v===0) note = '<div class="note warm">Das ist normal, gerade am Anfang. Dein Nervensystem lernt über Wiederholung. Mach dieselbe Übung morgen noch einmal, zur gleichen Zeit.</div>';
+  else note = '<div class="note warm">Danke für deine Ehrlichkeit. Mach die Übung beim nächsten Mal mit offenen Augen und atme nur so lange aus, wie es sich angenehm anfühlt.</div>';
+  $('feel-note').innerHTML = note;
+  $('after').style.display='block';
+}
+
+function renderHist(){
+  const h = loadHist();
+  if(!h.length){ $('hist-card').style.display='none'; return; }
+  const by = {};
+  h.forEach(x=>{ by[x.id] = by[x.id] || {title:x.title, n:0, c:0}; by[x.id].n++; if(x.v===1) by[x.id].c++; });
+  $('hist').innerHTML = Object.values(by).sort((a,b)=>b.c/b.n-a.c/a.n || b.n-a.n)
+    .map(x=>'<li><b>'+x.title+'</b><span>'+x.c+' von '+x.n+' Mal ruhiger</span></li>').join("");
+  $('hist-card').style.display='block';
+}
+renderHist();
+</script>
+</body>
+</html>
