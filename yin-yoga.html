@@ -228,6 +228,7 @@ footer .legal-links{font-size:.78rem!important}
   window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
   plausible.init()
 </script>
+<style id="nav-fit">#nav .nav-links>li>a{white-space:nowrap}@media(max-width:1280px){#nav{padding:0 1.5rem!important}#nav .nav-links{gap:1.05rem!important}#nav .nav-links a{letter-spacing:.12em!important}}@media(max-width:1120px){#nav .nav-links{display:none!important}#nav .hamburger{display:flex!important}}</style>
 </head>
 <body>
 <nav id="nav">
@@ -241,9 +242,6 @@ footer .legal-links{font-size:.78rem!important}
 <a href="yin-yoga">Yin Yoga</a>
 <a href="faszienfit-yoga">FaszienFit Yoga</a>
 <a href="aroha">AROHA</a>
-<a href="/gratis">Gratis für dich</a>
-<a href="/nervensystem-check">Nervensystem-Check</a>
-<a href="/atem-finder">Atem-Finder</a>
 </div></li>
 <li class="nav-dropdown"><a href="/kurse">Kurse</a><div class="nav-dropdown-menu">
 <a href="/kurse">Alle Kurse</a>
@@ -251,7 +249,20 @@ footer .legal-links{font-size:.78rem!important}
 <a href="/blissful-balance">Blissful Balance · Online-Kurs</a>
 </div></li>
 <li><a href="ueber-mich">Über mich</a></li>
-<li><a href="/reset">RESET</a></li>
+<li class="nav-dropdown"><a href="/gratis">Gratis für dich</a><div class="nav-dropdown-menu">
+<a href="/gratis">Alle Gratis-Angebote</a>
+<a href="/nervensystem-check">Nervensystem-Check</a>
+<a href="/atem-finder">Atem-Finder</a>
+<a href="/reset">5-Tage-RESET</a>
+<a href="/nervensystem-3-minuten">Nervensystem in 3 Minuten</a>
+<a href="/vagusnerv-yin-yoga">Vagusnerv &amp; Yin Yoga</a>
+<a href="/besser-schlafen">Besser schlafen</a>
+<a href="/yoga-ruecken">Yoga für deinen Rücken</a>
+<a href="/yoga-huefte">Yoga für deine Hüfte</a>
+<a href="/yoga-rituale">8 Yoga-Rituale</a>
+<a href="/rezeptheft">Rezeptheft Öle &amp; Healthy Food</a>
+<a href="/krankenkassen-kompass">Krankenkassen-Kompass</a>
+</div></li>
 <li><a href="/yoga-studio-online">Yoga Studio Online</a></li>
 <li><a href="retreat-mallorca">Mallorca</a></li>
 
@@ -271,9 +282,6 @@ footer .legal-links{font-size:.78rem!important}
 <a href="yin-yoga" onclick="closeMob()">Yin Yoga</a>
 <a href="faszienfit-yoga" onclick="closeMob()">FaszienFit Yoga</a>
 <a href="aroha" onclick="closeMob()">AROHA</a>
-<a href="/gratis" onclick="closeMob()">Gratis für dich</a>
-<a href="/nervensystem-check" onclick="closeMob()">Nervensystem-Check</a>
-<a href="/atem-finder" onclick="closeMob()">Atem-Finder</a>
 </div>
 </div>
 <div class="mob-dropdown">
@@ -285,7 +293,23 @@ footer .legal-links{font-size:.78rem!important}
 </div>
 </div>
 <a href="ueber-mich" onclick="closeMob()">Über mich</a>
-<a href="/reset" onclick="closeMob()">RESET</a>
+<div class="mob-dropdown">
+<button type="button" class="mob-dropdown-toggle" onclick="toggleMobSub(this)" aria-expanded="false">Gratis für dich<span class="mob-dropdown-caret">▾</span></button>
+<div class="mob-dropdown-menu">
+<a href="/gratis" onclick="closeMob()">Alle Gratis-Angebote</a>
+<a href="/nervensystem-check" onclick="closeMob()">Nervensystem-Check</a>
+<a href="/atem-finder" onclick="closeMob()">Atem-Finder</a>
+<a href="/reset" onclick="closeMob()">5-Tage-RESET</a>
+<a href="/nervensystem-3-minuten" onclick="closeMob()">Nervensystem in 3 Minuten</a>
+<a href="/vagusnerv-yin-yoga" onclick="closeMob()">Vagusnerv &amp; Yin Yoga</a>
+<a href="/besser-schlafen" onclick="closeMob()">Besser schlafen</a>
+<a href="/yoga-ruecken" onclick="closeMob()">Yoga für deinen Rücken</a>
+<a href="/yoga-huefte" onclick="closeMob()">Yoga für deine Hüfte</a>
+<a href="/yoga-rituale" onclick="closeMob()">8 Yoga-Rituale</a>
+<a href="/rezeptheft" onclick="closeMob()">Rezeptheft Öle &amp; Healthy Food</a>
+<a href="/krankenkassen-kompass" onclick="closeMob()">Krankenkassen-Kompass</a>
+</div>
+</div>
 <a href="/yoga-studio-online" onclick="closeMob()">Yoga Studio Online</a>
 <a href="retreat-mallorca" onclick="closeMob()">Mallorca</a>
 
