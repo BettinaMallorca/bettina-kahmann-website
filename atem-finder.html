@@ -66,6 +66,24 @@ p{margin-bottom:12px}
 footer{text-align:center;font-size:13px;color:var(--muted);margin-top:26px;line-height:1.6}
 footer strong{color:var(--terra-d);font-weight:600}
 footer a{color:inherit}
+body.nacht{background:#1f1915;color:#e9dccf}
+.nacht .card,.nacht .card.soft{background:#2a221d;box-shadow:none}
+.nacht h2,.nacht h3,.nacht .cue,.nacht .quote{color:#e3b79c}
+.nacht .eyebrow{color:#c9937a}
+.nacht .muted,.nacht footer,.nacht .timer{color:#a8978a}
+.nacht footer strong{color:#c9937a}
+.nacht .steps li::before{background:#3a2f28;color:#e3b79c}
+.nacht .circle{background:radial-gradient(circle at 40% 35%,#9a6650,#5e3a2b)}
+.nacht .opt{background:#2a221d;border-color:#3a2f28;color:#e9dccf}
+.nacht .opt.sel{background:#3b2632;border-color:#b25a8c}
+.nacht .note{background:#26302a;color:#bfd3c2}
+.nacht .note.warm{background:#33242d;color:#e9dccf}
+.nacht .btn-main{background:#8a3468}
+.nacht .btn-line{color:#e3b79c;border-color:#8a5a44}
+.nacht a{color:#e3b79c}
+.tone{display:flex;align-items:center;gap:10px;font-size:15px;margin:2px 0 14px;cursor:pointer}
+.tone input{width:20px;height:20px;accent-color:var(--plum)}
+.compact{font-size:15px;text-align:center;margin:16px 0}
 @media (prefers-reduced-motion:reduce){.circle{transition-duration:0s!important}}
 </style>
 <!-- Privacy-friendly analytics by Plausible -->
@@ -82,7 +100,7 @@ footer a{color:inherit}
   <section class="screen on" id="s-start">
     <div class="eyebrow">beVital InsideOut · Atem-Finder</div>
     <h1>Welche Atemübung brauchst du jetzt?</h1>
-    <p>Drei kurze Fragen. Dann bekommst du eine Übung für genau diesen Moment und atmest direkt mit mir.</p>
+    <p>Drei kurze Fragen. Dann bekommst du eine Übung für genau diesen Moment und atmest mit dem Atemkreis mit.</p>
     <p>Speicher dir die Seite auf dem Handy. Dann hast du sie da, wenn es eng wird.</p>
     <button class="btn btn-main" onclick="startFinder()">Übung finden</button>
     <div class="card soft" id="hist-card" style="display:none">
@@ -113,6 +131,7 @@ footer a{color:inherit}
         <div class="cue" id="ex-cue"></div>
         <div class="timer" id="ex-timer"></div>
       </div>
+      <label class="tone"><input type="checkbox" id="tone"> Leiser Ton bei jedem Wechsel. Dann kannst du die Augen schließen.</label>
       <button class="btn btn-main" id="ex-btn" onclick="toggleBreath()">Übung starten</button>
       <p class="muted" style="margin-top:12px">Wenn dir schwindelig wird, atme ganz normal weiter.</p>
     </div>
@@ -128,7 +147,8 @@ footer a{color:inherit}
     </div>
 
     <div id="after" style="display:none">
-      <div class="card soft">
+      <p class="compact" id="compact" style="display:none">Jeden Tag so eine Übung, 21 Tage lang geführt: <a href="https://bettina-kahmann.com/atemanker" target="_blank" rel="noopener" onclick="track('Atem-Finder ATEMANKER Klick')">ATEMANKER</a></p>
+      <div class="card soft" id="optin-card">
         <div class="eyebrow">Bleib dran</div>
         <h3>Impulse für deinen Atem per Mail</h3>
         <p>Trag dich ein, und ich schicke dir regelmäßig Übungen und Impulse für dein Nervensystem.</p>
@@ -137,7 +157,7 @@ footer a{color:inherit}
         <p class="muted">Abmeldung jederzeit mit einem Klick. Details in der <a href="/datenschutz" style="color:inherit">Datenschutzerklärung</a>.</p>
       </div>
 
-      <div class="card cta">
+      <div class="card cta" id="cta-card">
         <div class="eyebrow" style="color:#f3d9c8">Jeden Tag so eine Übung</div>
         <h3 id="c-title"></h3>
         <p id="c-text"></p>
@@ -244,7 +264,7 @@ function show(id){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function startFinder(){ idx=0; renderQ(); show('s-quiz'); }
-function restart(){ stopBreath(); answers.fill(null); renderHist(); show('s-start'); }
+function restart(){ stopBreath(); answers.fill(null); document.body.classList.remove('nacht'); renderHist(); show('s-start'); }
 
 function renderQ(){
   const q = QUESTIONS[idx];
@@ -268,6 +288,8 @@ function prevQ(){ if(idx>0){ idx--; renderQ(); } }
 function showExercise(){
   choice = {feel:answers[0], place:answers[1], min:parseInt(answers[2],10)};
   current = buildExercise(choice.feel, choice.place);
+  document.body.classList.toggle('nacht', choice.place==='bett');
+  $('tone').checked = false;
   $('ex-eyebrow').textContent = LABEL[choice.feel]+" · "+PLACE[choice.place]+" · "+choice.min+" Min.";
   $('ex-title').textContent = current.title;
   $('ex-why').textContent = current.why;
@@ -294,8 +316,34 @@ function resetBreathUI(){
   c.textContent='Bereit?'; $('ex-cue').textContent=''; $('ex-timer').textContent=minTxt(choice.min||1);
   $('ex-btn').textContent='Übung starten';
 }
-function toggleBreath(){ breathRunning ? stopBreath(true) : startBreath(); }
+function toggleBreath(){
+  if(breathRunning){ stopBreath(true); showFeel(); }
+  else startBreath();
+}
+function showFeel(){
+  if($('feel-card').style.display==='block') return;
+  $('feel-card').style.display='block';
+  setTimeout(()=>$('feel-card').scrollIntoView({behavior:'smooth',block:'center'}),400);
+}
+let wakeLock=null, audio=null;
+async function keepAwake(){
+  try{ if('wakeLock' in navigator && !wakeLock) wakeLock = await navigator.wakeLock.request('screen'); }catch(e){}
+}
+function releaseAwake(){ try{ if(wakeLock){ wakeLock.release(); } }catch(e){} wakeLock=null; }
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible' && breathRunning){ wakeLock=null; keepAwake(); } });
+function beep(freq){
+  if(!$('tone').checked) return;
+  try{
+    audio = audio || new (window.AudioContext||window.webkitAudioContext)();
+    const o=audio.createOscillator(), g=audio.createGain(), t=audio.currentTime;
+    o.type='sine'; o.frequency.value=freq;
+    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.07,t+0.05); g.gain.linearRampToValueAtTime(0,t+0.45);
+    o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t+0.5);
+  }catch(e){}
+}
 function startBreath(){
+  keepAwake();
+  if($('tone').checked){ try{ audio = audio || new (window.AudioContext||window.webkitAudioContext)(); audio.resume(); }catch(e){} }
   breathRunning=true; $('ex-btn').textContent='Übung beenden';
   track('Atem-Finder Übung gestartet');
   endAt = Date.now()+choice.min*60000;
@@ -316,10 +364,11 @@ function runStep(i){
   c.style.width=size; c.style.height=size;
   c.textContent = sec+" Sek.";
   $('ex-cue').textContent = label;
+  beep(type==="out" ? 220 : type==="in2" ? 392 : 330);
   breathTimer=setTimeout(()=>runStep((i+1)%current.rhythm.length), sec*1000);
 }
 function stopBreath(manual){
-  breathRunning=false; clearTimeout(breathTimer); clearInterval(clockTimer);
+  breathRunning=false; clearTimeout(breathTimer); clearInterval(clockTimer); releaseAwake();
   if(manual){ resetBreathUI(); }
 }
 function finishBreath(){
@@ -330,8 +379,7 @@ function finishBreath(){
   $('ex-cue').textContent='Spür kurz nach.';
   $('ex-timer').textContent='';
   $('ex-btn').textContent='Noch einmal';
-  $('feel-card').style.display='block';
-  setTimeout(()=>$('feel-card').scrollIntoView({behavior:'smooth',block:'center'}),400);
+  showFeel();
 }
 
 /* ===== RÜCKMELDUNG UND VERLAUF ===== */
@@ -347,8 +395,12 @@ function rate(v){
   let note;
   if(v===1) note = '<div class="note">Gut. Diese Übung hat dir '+(same.length>1 ? calmer+' von '+same.length+' Mal' : 'heute')+' geholfen. Merk sie dir für den nächsten Moment, in dem es eng wird.</div>';
   else if(v===0) note = '<div class="note warm">Das ist normal, gerade am Anfang. Dein Nervensystem lernt über Wiederholung. Mach dieselbe Übung morgen noch einmal, zur gleichen Zeit.</div>';
-  else note = '<div class="note warm">Danke für deine Ehrlichkeit. Mach die Übung beim nächsten Mal mit offenen Augen und atme nur so lange aus, wie es sich angenehm anfühlt.</div>';
+  else note = '<div class="note warm">Danke für deine Ehrlichkeit. Wenn dir die Ausatmung zu lang ist, atme kürzer aus, als der Kreis es zeigt. Dein Atem gibt das Tempo vor, nicht der Kreis. Halte beim nächsten Mal die Augen offen.</div>';
   $('feel-note').innerHTML = note;
+  const full = h.length<=3 && choice.place!=='bett';
+  $('optin-card').style.display = full ? 'block' : 'none';
+  $('cta-card').style.display = full ? 'block' : 'none';
+  $('compact').style.display = full ? 'none' : 'block';
   $('after').style.display='block';
 }
 
