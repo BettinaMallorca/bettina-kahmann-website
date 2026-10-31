@@ -100,7 +100,7 @@ body.nacht{background:#1f1915;color:#e9dccf}
   <section class="screen on" id="s-start">
     <div class="eyebrow">beVital InsideOut · Atem-Finder</div>
     <h1>Welche Atemübung brauchst du jetzt?</h1>
-    <p>Drei kurze Fragen. Dann bekommst du eine Übung für genau diesen Moment und atmest mit dem Atemkreis mit.</p>
+    <p>Drei kurze Fragen. Dann bekommst du eine Übung für genau diesen Moment und atmest mit meiner Stimme mit.</p>
     <p>Speicher dir die Seite auf dem Handy. Dann hast du sie da, wenn es eng wird.</p>
     <button class="btn btn-main" onclick="startFinder()">Übung finden</button>
     <div class="card soft" id="hist-card" style="display:none">
@@ -131,7 +131,7 @@ body.nacht{background:#1f1915;color:#e9dccf}
         <div class="cue" id="ex-cue"></div>
         <div class="timer" id="ex-timer"></div>
       </div>
-      <label class="tone"><input type="checkbox" id="tone"> Leiser Ton bei jedem Wechsel. Dann kannst du die Augen schließen.</label>
+      <label class="tone"><input type="checkbox" id="tone"> Mit meiner Stimme. Dann kannst du die Augen schließen.</label>
       <button class="btn btn-main" id="ex-btn" onclick="toggleBreath()">Übung starten</button>
       <p class="muted" style="margin-top:12px">Wenn dir schwindelig wird, atme ganz normal weiter.</p>
     </div>
@@ -289,7 +289,7 @@ function showExercise(){
   choice = {feel:answers[0], place:answers[1], min:parseInt(answers[2],10)};
   current = buildExercise(choice.feel, choice.place);
   document.body.classList.toggle('nacht', choice.place==='bett');
-  $('tone').checked = false;
+  $('tone').checked = (choice.place==='bett' || choice.place==='zuhause');
   $('ex-eyebrow').textContent = LABEL[choice.feel]+" · "+PLACE[choice.place]+" · "+choice.min+" Min.";
   $('ex-title').textContent = current.title;
   $('ex-why').textContent = current.why;
@@ -331,27 +331,49 @@ async function keepAwake(){
 }
 function releaseAwake(){ try{ if(wakeLock){ wakeLock.release(); } }catch(e){} wakeLock=null; }
 document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible' && breathRunning){ wakeLock=null; keepAwake(); } });
-function beep(freq){
-  if(!$('tone').checked) return;
-  try{
-    audio = audio || new (window.AudioContext||window.webkitAudioContext)();
-    const o=audio.createOscillator(), g=audio.createGain(), t=audio.currentTime;
-    o.type='sine'; o.frequency.value=freq;
-    g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.07,t+0.05); g.gain.linearRampToValueAtTime(0,t+0.45);
-    o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t+0.5);
-  }catch(e){}
+/* ===== BETTINAS STIMME ===== */
+const VOICE = {start:'/audio/start.mp3', einatmen:'/audio/einatmen.mp3', ausatmen:'/audio/ausatmen.mp3', nach:'/audio/nach.mp3', summen:'/audio/summen.mp3', ende:'/audio/ende.mp3'};
+const buffers = {};
+function voiceOn(){ return $('tone').checked; }
+function ctx(){ audio = audio || new (window.AudioContext||window.webkitAudioContext)(); return audio; }
+async function loadVoice(){
+  await Promise.all(Object.entries(VOICE).map(async ([k,u])=>{
+    if(buffers[k]) return;
+    try{ const r = await fetch(u); buffers[k] = await ctx().decodeAudioData(await r.arrayBuffer()); }catch(e){}
+  }));
 }
-function startBreath(){
+function play(k){
+  if(!voiceOn() || !buffers[k]) return 0;
+  try{ const src=ctx().createBufferSource(); src.buffer=buffers[k]; src.connect(ctx().destination); src.start(); return buffers[k].duration; }catch(e){ return 0; }
+}
+function cueFor(step){
+  const [label,,type] = step;
+  if(type==="in2") return 'nach';
+  if(type==="out") return /Summen/.test(label) ? 'summen' : 'ausatmen';
+  return 'einatmen';
+}
+async function startBreath(){
   keepAwake();
-  if($('tone').checked){ try{ audio = audio || new (window.AudioContext||window.webkitAudioContext)(); audio.resume(); }catch(e){} }
   breathRunning=true; $('ex-btn').textContent='Übung beenden';
   track('Atem-Finder Übung gestartet');
-  endAt = Date.now()+choice.min*60000;
-  clockTimer=setInterval(()=>{
-    const s=Math.ceil(Math.max(0,endAt-Date.now())/1000);
-    $('ex-timer').textContent = Math.floor(s/60)+":"+String(s%60).padStart(2,'0')+" verbleibend";
-  },250);
-  runStep(0);
+  let intro = 0;
+  if(voiceOn()){
+    try{ ctx().resume(); }catch(e){}
+    $('ex-cue').textContent='Einen Moment …';
+    await loadVoice();
+    if(!breathRunning) return;
+    intro = play('start');
+    if(intro) $('ex-cue').textContent='Hör kurz zu.';
+  }
+  breathTimer = setTimeout(()=>{
+    if(!breathRunning) return;
+    endAt = Date.now()+choice.min*60000;
+    clockTimer=setInterval(()=>{
+      const s=Math.ceil(Math.max(0,endAt-Date.now())/1000);
+      $('ex-timer').textContent = Math.floor(s/60)+":"+String(s%60).padStart(2,'0')+" verbleibend";
+    },250);
+    runStep(0);
+  }, intro ? intro*1000+400 : 0);
 }
 function runStep(i){
   if(!breathRunning) return;
@@ -364,7 +386,7 @@ function runStep(i){
   c.style.width=size; c.style.height=size;
   c.textContent = sec+" Sek.";
   $('ex-cue').textContent = label;
-  beep(type==="out" ? 220 : type==="in2" ? 392 : 330);
+  play(cueFor(current.rhythm[i]));
   breathTimer=setTimeout(()=>runStep((i+1)%current.rhythm.length), sec*1000);
 }
 function stopBreath(manual){
@@ -379,6 +401,7 @@ function finishBreath(){
   $('ex-cue').textContent='Spür kurz nach.';
   $('ex-timer').textContent='';
   $('ex-btn').textContent='Noch einmal';
+  play('ende');
   showFeel();
 }
 
