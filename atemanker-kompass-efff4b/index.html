@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ATEMANKER Kompass</title>
+<link rel="icon" type="image/png" href="/LOGO.png">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+</head>
+<body>
+<style>
+/* Layout: eine ruhige Spalte. Oben Stand und zwei Knöpfe, darunter die Antwort, darunter die 21 Tage als Liste je Woche. */
+:root{
+  --bg:#FAF6F1; --surface:#F0E8DE; --fg:#3A2A22; --muted:#7A665A;
+  --accent:#8C492E; --accent-soft:#C17B52; --sage:#7A9E7E; --plum:#993A74;
+  --line:#E3D6C8; --on-accent:#FAF6F1;
+  --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#211915; --surface:#2E241F; --fg:#F2E9DF; --muted:#B9A595;
+  --accent:#D8936B; --accent-soft:#C17B52; --sage:#94B898; --plum:#C66FA3;
+  --line:#463831; --on-accent:#211915; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#211915; --surface:#2E241F; --fg:#F2E9DF; --muted:#B9A595;
+  --accent:#D8936B; --accent-soft:#C17B52; --sage:#94B898; --plum:#C66FA3;
+  --line:#463831; --on-accent:#211915; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:620px;margin:0 auto;padding-inline:20px;padding-block:28px 48px;display:flex;flex-direction:column;gap:28px}
+header{display:flex;flex-direction:column;gap:4px}
+.brand{font-family:var(--display);font-weight:600;font-size:min(2.6rem,11vw);letter-spacing:.14em;line-height:1;color:var(--accent);margin:0}
+.claim{font-family:var(--display);font-size:1.3rem;margin:0;color:var(--fg)}
+.status{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:.92rem;font-variant-numeric:tabular-nums}
+.status b{font-weight:600;color:var(--fg)}
+.start{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:.92rem;color:var(--muted)}
+.start input{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:440px){.actions{grid-template-columns:1fr}}
+.btn{font:inherit;font-weight:500;border-radius:12px;padding:16px 18px;cursor:pointer;text-align:left;border:1px solid var(--accent);background:transparent;color:var(--accent);display:flex;flex-direction:column;gap:2px}
+.btn small{font-weight:400;color:var(--muted);font-size:.85rem}
+.btn.primary{background:var(--accent);color:var(--on-accent)}
+.btn.primary small{color:var(--on-accent);opacity:.85}
+.btn:focus-visible,.day:focus-visible,.chip:focus-visible,.link:focus-visible{outline:3px solid var(--plum);outline-offset:2px}
+.panel{background:var(--surface);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.panel h2{font-family:var(--display);font-weight:600;font-size:1.55rem;margin:0;line-height:1.2;text-wrap:balance}
+.panel p{margin:0;max-width:60ch}
+.q{display:flex;flex-direction:column;gap:8px}
+.q label,.q .ql{font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.q select{font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;max-width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-size:.95rem;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:999px;padding:8px 14px;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--on-accent)}
+.result{border-top:1px solid var(--line);padding-top:14px;display:flex;flex-direction:column;gap:10px}
+.today{font-family:var(--display);font-size:1.45rem;font-weight:600;color:var(--accent);margin:0}
+.eyebrow{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);font-weight:600;margin:0}
+.voice{font-style:normal;border-left:3px solid var(--sage);padding-left:12px}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.link{font:inherit;background:none;border:none;color:var(--accent);text-decoration:underline;cursor:pointer;padding:0;align-self:flex-start}
+.week{display:flex;flex-direction:column;gap:6px}
+.week h3{font-family:var(--display);font-size:1.3rem;font-weight:600;margin:0 0 4px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.week h3 span{font-family:var(--body);font-size:.82rem;font-weight:400;color:var(--muted);font-variant-numeric:tabular-nums}
+.day{width:100%;font:inherit;text-align:left;display:grid;grid-template-columns:2.4rem 1fr auto;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--fg);cursor:pointer}
+.day .n{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem}
+.day .t{min-width:0}
+.mark{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:.8rem;color:var(--on-accent)}
+.day.done{background:var(--surface);border-color:var(--surface)}
+.day.done .mark{background:var(--sage);border-color:var(--sage)}
+.day.next{border-color:var(--accent)}
+.day.next .n{color:var(--accent);font-weight:600}
+.day.locked{cursor:default;opacity:.55}
+.day.locked .mark{border-style:dashed}
+.note{font-size:.85rem;color:var(--muted);max-width:60ch;margin:0}
+.plan{border:1.5px solid var(--accent);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:12px}
+.plan h2{font-family:var(--display);font-weight:600;font-size:1.45rem;margin:0;line-height:1.2;text-wrap:balance}
+.plan p{margin:0;max-width:60ch}
+.plan .save{font:inherit;font-weight:500;border:none;border-radius:10px;padding:12px 18px;background:var(--accent);color:var(--on-accent);cursor:pointer;align-self:flex-start}
+.plan .save:disabled{opacity:.4;cursor:default}
+.home{background:var(--surface);border-radius:14px;padding:14px 18px}
+.home summary{cursor:pointer;font-weight:500;color:var(--accent)}
+.home summary:focus-visible,.plan .save:focus-visible{outline:3px solid var(--plum);outline-offset:2px}
+.home .how{display:flex;flex-direction:column;gap:12px;padding-top:12px}
+.home h4{margin:0 0 2px;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sage)}
+.home p{margin:0;max-width:60ch}
+.startbox{display:flex;flex-direction:column;gap:8px}
+.hint{margin:0;max-width:60ch;font-size:.92rem;border-left:3px solid var(--sage);padding:2px 0 2px 12px}
+.err{color:var(--plum);font-size:.88rem;margin:0}
+footer{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:16px}
+@media (prefers-reduced-motion:no-preference){.panel{animation:in .25s ease-out}@keyframes in{from{transform:translateY(4px)}to{transform:none}}}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="brand">ATEMANKER</p>
+    <p class="claim">Dein Kompass: Wo stehst du, und welcher Tag ist heute dran?</p>
+  </header>
+
+  <div class="startbox">
+    <div class="start">
+      <label for="startDate">Dein Kursstart:</label>
+      <input type="date" id="startDate" min="2026-11-02">
+    </div>
+    <p class="note">Trage hier deinen tatsächlichen Kursstart in alfima ein. Frühester Kursstart ist Montag, der 2. November 2026.</p>
+    <p class="err" id="startErr" role="alert" hidden></p>
+    <p class="note" id="startOk" hidden>Der Kompass rechnet jetzt mit diesem Datum. In alfima ändert sich dadurch nichts.</p>
+    <p class="hint">Der Kompass hilft dir bei der Orientierung. Er ist nicht mit alfima verbunden. Welche Inhalte verfügbar sind, siehst du in deinem Kurs.</p>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <section class="plan" id="plan" aria-live="polite"></section>
+
+  <details class="home" id="home">
+    <summary>Leg dir den Kompass auf dein Handy</summary>
+    <div class="how">
+      <p>Dann siehst du ihn jeden Tag neben deinen anderen Apps, auch an Tagen, an denen du nicht an den Kurs denkst.</p>
+      <div><h4>iPhone</h4><p>Öffne diesen Link in Safari. Tipp unten auf das Teilen-Symbol, das Quadrat mit dem Pfeil nach oben. Wähl „Zum Home-Bildschirm“, nenn es ATEMANKER und tipp auf „Hinzufügen“.</p></div>
+      <div><h4>Android</h4><p>Öffne diesen Link in Chrome. Tipp oben rechts auf die drei Punkte. Wähl „Zum Startbildschirm hinzufügen“ und nenn es ATEMANKER.</p></div>
+      <p class="note">Mach das am besten gleich zu Beginn und öffne den Kompass danach nur noch über das Symbol. Deine Häkchen bleiben in dem Browser, in dem du sie setzt.</p>
+      <button type="button" class="link" id="homeDone">Erledigt, Anleitung ausblenden</button>
+    </div>
+  </details>
+
+  <div class="actions">
+    <button class="btn primary" id="btnBack" type="button">Ich war ein paar Tage weg<small>Wo steige ich wieder ein?</small></button>
+    <button class="btn" id="btnShort" type="button">Heute habe ich wenig Zeit<small>Was zählt heute trotzdem?</small></button>
+  </div>
+
+  <section class="panel" id="panel" hidden aria-live="polite"></section>
+
+  <section id="map" style="display:flex;flex-direction:column;gap:26px" aria-label="Deine 21 Tage"></section>
+
+  <footer>
+    <p class="note">Tipp auf einen Tag, wenn du ihn gehört hast. Noch einmal tippen nimmt das Häkchen weg.</p>
+    <p class="note">Dein Fortschritt wird in diesem Browser auf diesem Gerät gespeichert. Er wird nicht automatisch auf andere Geräte übertragen. Wenn du die Browserdaten löschst, kann dein Fortschritt verloren gehen.</p>
+    <p class="note">Wird dir bei einer Übung schwindelig, hör auf und atme normal weiter. Hält es an, lass es ärztlich abklären.</p>
+    <button type="button" class="link note" id="homeShow" hidden>Anleitung fürs Handy wieder zeigen</button>
+  </footer>
+</div>
+
+<script>
+const WEEKS=[
+ {name:"Woche 1 · Ankommen",days:["Dein Atem ist schon da","Raum für deinen Atem","Länger ausatmen","Der bewusste Seufzer","Atem & Bewegung","Atmen im Liegen","Dein erster Atemanker"]},
+ {name:"Woche 2 · Regulieren",days:["Dein ruhiger Rhythmus","Summen & Ausatmen","Gleichmäßig atmen","Wenn die Gedanken weiterlaufen","Dein 3-Minuten-Atemanker","Den Tag ausatmen","Was reguliert dich?"]},
+ {name:"Woche 3 · Verankern",days:["Kohärent atmen","Vor einem herausfordernden Moment","Dein Atem am Morgen","Atem & Körperscan","Finde deinen Atemanker","Dein Ritual für den Alltag","Dein Atem bleibt bei dir"]}
+];
+const TITLE=n=>WEEKS[Math.floor((n-1)/7)].days[(n-1)%7];
+const KEY="atemanker-lotse-v1";
+const EARLIEST="2026-11-02";
+let S={start:null,done:[],last:null,returns:0,minis:0};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
+if(S.start&&S.start<EARLIEST)S.start=null;
+S.done=[...new Set((S.done||[]).filter(n=>Number.isInteger(n)&&n>=1&&n<=21))];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+const DAY=864e5;
+function todayISO(){const d=new Date();const z=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+z(d.getMonth()+1)+"-"+z(d.getDate())}
+function parse(iso){return new Date(iso+"T12:00:00")}
+function fmt(d){return d.toLocaleDateString("de-DE",{day:"2-digit",month:"2-digit"})}
+function fmtLong(d){return d.toLocaleDateString("de-DE",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}
+function daysSince(iso){return Math.round((parse(todayISO())-parse(iso))/DAY)}
+// Kein Bezug zu alfima: der Kompass rechnet nur mit dem eingetragenen Kursstart.
+function hasStart(){return !!S.start&&S.start>=EARLIEST}
+function started(){return hasStart()&&daysSince(S.start)>=0}
+function weekDueDate(w){return hasStart()?new Date(parse(S.start).getTime()+w*7*DAY):null}
+function isDue(n){if(!hasStart())return false;return daysSince(S.start)>=Math.floor((n-1)/7)*7}
+const heard=n=>S.done.includes(n);
+function lastHeard(){return S.done.length?S.done[S.done.length-1]:0}
+function nextDay(){for(let n=1;n<=21;n++){if(!heard(n))return n}return null}
+function allDone(){return S.done.length===21}
+// Abschluss laut Kursstart nach 21 Tagen (Woche 1 ab Start, Woche 2 nach 7, Woche 3 nach 14 Tagen).
+function finalDate(){return hasStart()?new Date(parse(S.start).getTime()+21*DAY):null}
+function finalDue(off){return hasStart()&&daysSince(S.start)+(off||0)>=21}
+function finalLine(){return finalDue()?"die Abschlusslektion, Dein ATEMANKER für danach":`ab ${fmt(finalDate())} laut deinem Kursstart die Abschlusslektion, Dein ATEMANKER für danach`}
+
+const startEl=document.getElementById("startDate"),startErr=document.getElementById("startErr"),startOk=document.getElementById("startOk");
+startEl.value=S.start||"";
+startEl.addEventListener("change",()=>{
+  const v=startEl.value;startErr.hidden=true;startOk.hidden=true;
+  if(!v){S.start=null;save();panel.hidden=true;render();return}
+  if(v<EARLIEST){startErr.textContent="Der früheste Kursstart ist Montag, der 2. November 2026. Trag bitte dein Startdatum aus alfima ein.";startErr.hidden=false;startEl.value=S.start||"";return}
+  S.start=v;save();startOk.hidden=false;panel.hidden=true;render();
+});
+
+function render(){
+  const done=S.done.length;
+  const st=document.getElementById("status");
+  let parts=[`<span><b>${done}</b> von 21 Tagen gehört</span>`];
+  if(started())parts.push(`<span>Kalendertag <b>${daysSince(S.start)+1}</b> seit deinem Kursstart</span>`);
+  else if(hasStart())parts.push(`<span>Kursstart am <b>${fmt(parse(S.start))}</b></span>`);
+  parts.push(`<span><b>${S.returns}</b> Mal zurückgekommen</span>`);
+  if(S.minis)parts.push(`<span><b>${S.minis}</b> Minimum-Tage</span>`);
+  st.innerHTML=parts.join("");
+  const map=document.getElementById("map");map.innerHTML="";
+  const nd=nextDay();
+  WEEKS.forEach((wk,wi)=>{
+    const sec=document.createElement("div");sec.className="week";
+    const cnt=wk.days.filter((_,i)=>heard(wi*7+i+1)).length;
+    const due=isDue(wi*7+1);
+    const label=due?cnt+" von 7":hasStart()?"laut Kursstart ab "+fmt(weekDueDate(wi)):"Kursstart eintragen";
+    sec.innerHTML=`<h3>${wk.name}<span>${label}</span></h3>`;
+    wk.days.forEach((t,i)=>{
+      const n=wi*7+i+1,b=document.createElement("button");b.type="button";
+      const isDone=heard(n);
+      b.className="day"+(isDone?" done":"")+(!isDone&&n===nd&&due?" next":"")+(due?"":" locked");
+      b.innerHTML=`<span class="n">Tag ${n}</span><span class="t">${t}</span><span class="mark" aria-hidden="true">${isDone?"✓":""}</span>`;
+      b.setAttribute("aria-pressed",isDone?"true":"false");
+      if(due)b.addEventListener("click",()=>toggle(n));else b.setAttribute("aria-disabled","true");
+      sec.appendChild(b);
+    });
+    map.appendChild(sec);
+  });
+  renderPlan();
+  const ab=document.createElement("div");ab.className="week";
+  ab.innerHTML=`<h3>Abschluss<span>${allDone()&&finalDue()?"jetzt dran":hasStart()?"laut Kursstart ab "+fmt(finalDate()):"nach allen 21 Tagen"}</span></h3><p class="note">Dein ATEMANKER für danach${allDone()?"":`. Noch offen: ${21-done} von 21 Tagen.`}</p>`;
+  map.appendChild(ab);
+}
+
+function toggle(n){
+  const i=S.done.indexOf(n);
+  if(i>-1){S.done.splice(i,1)}
+  else{
+    if(S.last&&daysSince(S.last)>=2){S.returns++;flash()}
+    S.done.push(n);S.last=todayISO();
+  }
+  save();render();
+}
+
+// Kurzübung: nur, was bereits als gehört markiert ist.
+function quick(){
+  if(heard(12))return {kind:"lesson",n:12};
+  if(heard(3))return {kind:"breath"};
+  if(S.done.length)return {kind:"lesson",n:lastHeard()};
+  return {kind:"start"};
+}
+function startText(){
+  if(!hasStart())return "Trag oben deinen Kursstart aus alfima ein. Dann zeigt dir der Kompass, wann Tag 1 dran ist.";
+  if(!started())return `Dein Kursstart ist am ${fmtLong(parse(S.start))}. Dann beginnst du in deinem Kurs mit Tag 1: ${TITLE(1)}.`;
+  return `Starte in deinem Kurs mit Tag 1: ${TITLE(1)}.`;
+}
+
+const MOMENTS=["Nach dem ersten Kaffee","Vor der Arbeit","In der Mittagspause","Nach dem Abendessen","Vor dem Schlafen"];
+const STORERS={besuch:["Besuch oder Familie","Wenn Besuch oder Familie da ist"],arbeit:["Ein voller Arbeitstag","Wenn der Arbeitstag voll ist"],reise:["Eine Reise","Wenn du unterwegs bist"],muede:["Ein müder Tag","Wenn du müde bist"]};
+let planEdit=false,draft={moment:null,storer:null};
+function renderPlan(){
+  const el=document.getElementById("plan");
+  if(!S.moment||!S.storer||planEdit){
+    const chip=(k,v,l)=>`<button type="button" class="chip" data-k="${k}" data-v="${v}" aria-pressed="${draft[k]===v}">${l}</button>`;
+    el.innerHTML=`<p class="eyebrow">Dein Plan</p><h2>Zwei Antworten, dann weißt du jeden Tag, was dran ist.</h2>
+     <div class="q"><span class="ql">Wann hörst du dein Audio?</span><div class="chips">${MOMENTS.map(m=>chip("moment",m,m)).join("")}</div></div>
+     <div class="q"><span class="ql">Was hält dich in den nächsten Tagen am ehesten ab?</span><div class="chips">${Object.entries(STORERS).map(([k,v])=>chip("storer",k,v[0])).join("")}</div></div>
+     <button type="button" class="save" id="planSave" ${draft.moment&&draft.storer?"":"disabled"}>Plan speichern</button>`;
+    el.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{draft[c.dataset.k]=c.dataset.v;renderPlan()}));
+    document.getElementById("planSave").addEventListener("click",()=>{S.moment=draft.moment;S.storer=draft.storer;planEdit=false;save();renderPlan()});
+    return;
+  }
+  let head,extra="",storer="";
+  const sw=STORERS[S.storer][1];
+  if(!started()){
+    head=hasStart()?`${S.moment}, ab ${fmt(parse(S.start))}: Tag 1: ${TITLE(1)}`:"Trag oben deinen Kursstart ein.";
+    extra=`<p class="note">${startText()}</p>`;
+  }else{
+    const nd=nextDay();
+    if(nd===null&&finalDue())head=`${S.moment}: die Abschlusslektion, Dein ATEMANKER für danach`;
+    else if(nd===null){const L=lastHeard();head=`${S.moment}: Tag ${L}: ${TITLE(L)}, noch einmal`;
+      extra=`<p class="note">Du hast alle 21 Tage gehört. Die Abschlusslektion ist laut deinem Kursstart ab ${fmt(finalDate())} dran. Was in deinem Kurs sichtbar ist, siehst du in alfima.</p>`}
+    else if(isDue(nd))head=`${S.moment}: Tag ${nd}: ${TITLE(nd)}`;
+    else{const L=lastHeard();head=`${S.moment}: Tag ${L}: ${TITLE(L)}, noch einmal`;
+      extra=`<p class="note">Laut deinem Kursstart ist die nächste Woche ab ${fmt(weekDueDate(Math.floor((nd-1)/7)))} dran. Was in deinem Kurs sichtbar ist, siehst du in alfima.</p>`}
+    const q=quick();
+    if(q.kind==="lesson")storer=`<p>${sw}, hörst du Tag ${q.n}: ${TITLE(q.n)}.</p>`;
+    else if(q.kind==="breath")storer=`<p>${sw}, wiederholst du die Übung aus Tag 3 · Länger ausatmen.</p><p class="note">Erinnere dich an Tag 3 · Länger ausatmen. Lass deine Ausatmung sanft etwas länger werden als deine Einatmung. Bleib bei einem Rhythmus, der sich für dich angenehm anfühlt. Wenn es anstrengend wird, kehre zu deinem natürlichen Atem zurück.</p>`;
+    else storer=`<p>${sw}, reicht Tag 1 in deinem Kurs.</p>`;
+  }
+  el.innerHTML=`<p class="eyebrow">Dein Plan für heute</p><p class="today">${head}</p>${storer}${extra}
+   <button type="button" class="link" id="planEdit">Plan ändern</button>`;
+  document.getElementById("planEdit").addEventListener("click",()=>{planEdit=true;draft={moment:S.moment,storer:S.storer};renderPlan()});
+}
+const homeEl=document.getElementById("home"),homeShow=document.getElementById("homeShow");
+function renderHome(){homeEl.hidden=!!S.homeDone;homeShow.hidden=!S.homeDone;if(!S.homeDone&&!S.moment)homeEl.open=false}
+document.getElementById("homeDone").addEventListener("click",()=>{S.homeDone=true;save();renderHome()});
+homeShow.addEventListener("click",()=>{S.homeDone=false;save();renderHome();homeEl.open=true});
+renderHome();
+
+const panel=document.getElementById("panel");
+function flash(){
+  const n=S.returns;
+  const t=n===1?["Du bist zurück.","Genau das übst du hier auch: wieder ankommen, wenn der Alltag dazwischenkam."]
+   :n===2?["Zum zweiten Mal zurück.","Du lässt dich nicht rausdrängen. Das zählt mehr als eine lückenlose Liste."]
+   :[`Zum ${n}. Mal zurück.`,"Wer zurückkommt, bleibt dran. Du machst das jetzt schon zum "+n+". Mal."];
+  panel.hidden=false;panel.innerHTML=`<p class="eyebrow">Rückkehr</p><h2>${t[0]}</h2><p>${t[1]}</p>`;
+}
+
+let lotse={last:null,gap:null};
+function showLotse(){
+  panel.hidden=false;
+  if(!started()){panel.innerHTML=`<p class="eyebrow">Wiedereinstieg</p><h2>Noch keine Atemeinheit dran.</h2><p>${startText()}</p>`;}
+  else{
+    lotse.last=lastHeard();lotse.gap=null;
+    if(S.last){const g=daysSince(S.last);lotse.gap=g<=3?"kurz":g<=7?"mittel":"lang"}
+    drawLotse();
+  }
+  panel.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+}
+function drawLotse(){
+  let opts=`<option value="0">Noch keinen, nur die Willkommenslektion</option>`;
+  for(let n=1;n<=21;n++)if(isDue(n))opts+=`<option value="${n}" ${n===lotse.last?"selected":""}>Tag ${n}: ${TITLE(n)}</option>`;
+  const chip=(v,l)=>`<button type="button" class="chip" data-gap="${v}" aria-pressed="${lotse.gap===v}">${l}</button>`;
+  panel.innerHTML=`<p class="eyebrow">Wiedereinstieg</p><h2>Du fängst nicht neu an.</h2>
+   <div class="q"><label for="lastSel">Welchen Tag hast du zuletzt gehört?</label><select id="lastSel">${opts}</select></div>
+   <div class="q"><span class="ql">Wie lange ist das her?</span><div class="chips">${chip("kurz","1 bis 3 Tage")}${chip("mittel","4 bis 7 Tage")}${chip("lang","länger als eine Woche")}</div></div>
+   <div class="result" id="res"></div>`;
+  document.getElementById("lastSel").addEventListener("change",e=>{lotse.last=+e.target.value;drawResult()});
+  panel.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{lotse.gap=c.dataset.gap;panel.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===c));drawResult()}));
+  drawResult();
+}
+// Kurstage (neue Lektionen) dürfen empfohlen werden, wenn sie laut Kursstart dran sind.
+function dueOn(n,off){if(!hasStart())return false;return daysSince(S.start)+off>=Math.floor((n-1)/7)*7}
+function nextUnheard(after){for(let k=after+1;k<=21;k++)if(!heard(k))return k;for(let k=1;k<after;k++)if(!heard(k))return k;return null}
+function drawResult(){
+  const r=document.getElementById("res");if(!r)return;
+  const L=lotse.last;
+  if(!lotse.gap){r.innerHTML=`<p class="note">Wähl aus, wie lange deine Pause war. Dann bekommst du genau einen Schritt für heute.</p>`;return}
+  let today,then,pause,stage;
+  if(L===0){today=1;then=nextUnheard(1);stage="Dein Start";pause="Die Willkommenslektion kennst du. Jetzt kommt der erste Übungstag."}
+  else if(lotse.gap==="kurz"){
+    const nu=nextUnheard(L);
+    if(nu===null&&finalDue()){r.innerHTML=res("Abschluss","Dein ATEMANKER für danach","Du hast alle 21 Tage gehört. In der Abschlusslektion legst du fest, wie dein Atemanker nach dem Kurs bei dir bleibt.");return}
+    if(nu===null){r.innerHTML=res("Kurze Pause",`Tag ${L}: ${TITLE(L)}`,`Du hast alle 21 Tage gehört. Hör heute Tag ${L} noch einmal. Die Abschlusslektion ist laut deinem Kursstart ab ${fmt(finalDate())} dran.`);return}
+    stage="Kurze Pause";
+    if(!isDue(nu)){today=L;then=nu;pause="Du warst nur kurz raus. Der nächste neue Tag ist laut deinem Kursstart noch nicht dran, darum hörst du heute Tag "+L+" noch einmal."}
+    else{
+      today=nu;then=nextUnheard(nu);
+      pause=L===21?`Tag 21 hast du gehört. Dir fehlen noch ${21-S.done.length} von 21 Tagen. Als Nächstes holst du Tag ${nu} nach.`
+        :nu===L+1?"Du warst nur kurz raus. Du gehst direkt weiter mit dem nächsten Tag."
+        :`Du warst nur kurz raus. Als Nächstes kommt Tag ${nu}, den du noch nicht gehört hast.`;
+    }
+  }
+  else if(lotse.gap==="mittel"){today=L;then=nextUnheard(L);stage="Mittlere Pause";
+    pause=`Ein paar Tage Abstand. Darum hörst du Tag ${L} heute noch einmal und bist morgen wieder im Takt.`}
+  else{today=L;then=nextUnheard(L);stage="Längere Pause";
+    pause=`Länger raus, aber nicht weg. Tag ${L} kennst du schon. Damit steigst du heute ein.`}
+  let thenHtml="";
+  if(then===null)thenHtml=`<p class="note">Danach: ${finalLine()}</p>`;
+  else if(then!==today){
+    if(dueOn(then,1))thenHtml=`<p class="note">Morgen: Tag ${then}: ${TITLE(then)}</p>`;
+    else thenHtml=`<p class="note">Laut deinem Kursstart ist Tag ${then}: ${TITLE(then)} ab ${fmt(weekDueDate(Math.floor((then-1)/7)))} dran. Bis dahin hörst du Tag ${today} noch einmal. Was in deinem Kurs sichtbar ist, siehst du in alfima.</p>`;
+  }
+  const wk=Math.floor((today-1)/7);
+  r.innerHTML=`<p class="eyebrow">${stage}</p><p class="today">Tag ${today}: ${TITLE(today)}</p><p>${DAYLINE[today-1]}</p><p>${pause}</p>${thenHtml}<p class="voice">${WEEKLINE[wk]}</p>`;
+}
+const WEEKLINE=[
+ "Du bist in Woche 1, Ankommen. Hier zählt, dass du da bist.",
+ "Du bist in Woche 2, Regulieren. Was du in Woche 1 geübt hast, nimmst du mit.",
+ "Du bist in Woche 3, Verankern. Du bist näher am Ende als am Anfang."
+];
+const DAYLINE=[
+ "Heute musst du nichts lernen. Du hörst zu und nimmst wahr, dass dein Atem längst arbeitet.",
+ "Heute bekommt dein Atem Platz. Setz dich aufrecht hin, bevor du startest.",
+ "Heute zählt die Ausatmung. Sie wird länger als die Einatmung.",
+ "Heute atmest du hörbar aus. Ein Seufzer ist hier ausdrücklich erwünscht.",
+ "Heute bewegst du dich mit deinem Atem. Sorg vorher für etwas Platz um dich herum.",
+ "Heute übst du im Liegen. Leg dir vorher eine Decke bereit.",
+ "Heute bündelst du Woche 1. Du gehst mit deinem ersten eigenen Atemanker aus dieser Woche.",
+ "Heute findest du dein eigenes Tempo. Es muss zu niemandem passen außer zu dir.",
+ "Heute summst du. Such dir einen Ort, an dem dich niemand dabei stört.",
+ "Heute werden Einatmung und Ausatmung gleich lang.",
+ "Heute geht es um die Gedanken, die nicht aufhören. Sie dürfen da sein, während du übst.",
+ "Heute lernst du die kurze Form. Drei Minuten, die du überall dabeihast.",
+ "Diese Einheit gehört an den Abend. Hör sie nach deinem letzten Termin.",
+ "Heute schaust du auf zwei Wochen zurück. Nimm dein Workbook dazu.",
+ "Heute hältst du einen gleichmäßigen Rhythmus über mehrere Minuten. Setz dich so, dass du ruhig sitzen bleibst.",
+ "Heute bereitest du dich auf einen Moment vor, der dich fordert. Denk vorher an einen konkreten Termin.",
+ "Diese Einheit gehört an den Morgen. Hör sie vor dem ersten Blick aufs Handy.",
+ "Heute verbindest du Atem und Körper. Nimm dir die volle Zeit und eine ruhige Ecke.",
+ "Heute entscheidest du, welche Übung bei dir bleibt. Du hast jetzt genug geübt, um das zu wissen.",
+ "Heute legst du fest, wann und wo dein Atemanker im Alltag seinen Platz hat.",
+ "Dein letzter Übungstag. Danach wartet die Abschlusslektion auf dich."
+];
+function res(eb,title,txt){return `<p class="eyebrow">${eb}</p><p class="today">${title}</p><p>${txt}</p>`}
+
+function showShort(){
+  panel.hidden=false;
+  const q=quick();
+  if(q.kind==="start"){
+    panel.innerHTML=`<p class="eyebrow">Minimum-Tag</p><h2>Heute zählt der Anfang.</h2><p>${startText()}</p>`;
+    return;
+  }
+  let body;
+  if(q.kind==="lesson"&&q.n===12)body=res("3 Minuten reichen","Tag 12: Dein 3-Minuten-Atemanker","Hör diese Lektion heute noch einmal. Du kennst sie schon, und sie passt in kurze Lücken.");
+  else if(q.kind==="lesson")body=res("Eine Einheit, die du kennst",`Tag ${q.n}: ${TITLE(q.n)}`,"Hör diese Einheit heute noch einmal. Du hast sie schon gehört.");
+  else body=`<p class="eyebrow">Wiederholung aus Tag 3</p><p class="today">Tag 3 · Länger ausatmen</p>
+    <p>Erinnere dich an Tag 3 · Länger ausatmen. Lass deine Ausatmung sanft etwas länger werden als deine Einatmung. Bleib bei einem Rhythmus, der sich für dich angenehm anfühlt. Wenn es anstrengend wird, kehre zu deinem natürlichen Atem zurück.</p>
+    <p class="note">Das ist die Übung, die du aus Tag 3 kennst. Keine neue Technik.</p>`;
+  panel.innerHTML=`<p class="eyebrow">Minimum-Tag</p><h2>Ein kurzer Tag zählt mit.</h2>${body}
+   <button type="button" class="link" id="miniOk">Erledigt, als Minimum-Tag zählen</button>`;
+  document.getElementById("miniOk").addEventListener("click",()=>{
+    if(S.last&&daysSince(S.last)>=2)S.returns++;
+    S.minis++;S.last=todayISO();save();render();
+    panel.innerHTML=`<p class="eyebrow">Minimum-Tag</p><h2>Gezählt.</h2><p>Dein Faden ist nicht gerissen. Morgen hörst du wieder deinen nächsten Tag.</p>`;
+  });
+}
+document.getElementById("btnBack").addEventListener("click",showLotse);
+document.getElementById("btnShort").addEventListener("click",showShort);
+render();
+</script>
+
+</body></html>
