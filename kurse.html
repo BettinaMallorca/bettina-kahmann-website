@@ -243,6 +243,16 @@ a.online-btn, .btn-online {
 .kursplan-col .col-cta{padding:1.2rem 1.5rem;margin-top:auto;}
 .kursplan-col .col-cta .detail-btn{display:block;text-align:center;width:100%;box-sizing:border-box;}
 @media(max-width:1100px){.kursplan-grid{grid-template-columns:1fr;}}
+
+.preise-box{background:var(--white,#FFFDFC);border-top:4px solid var(--terra);padding:1.8rem 2.2rem;margin:2rem auto 0;max-width:900px;box-shadow:0 10px 35px rgba(61,43,34,.05);}
+.preise-box .preise-head strong{display:block;font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--terra-dark);margin-bottom:.4rem;}
+.preise-box .preise-head p{font-size:.87rem;color:var(--muted);line-height:1.6;font-weight:300;margin-bottom:1.3rem;}
+.preise-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:1.1rem 1.4rem;}
+.preise-item{display:flex;flex-direction:column;gap:.2rem;}
+.preise-amount{font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--pink);line-height:1;}
+.preise-label{font-size:.8rem;color:var(--muted);line-height:1.4;}
+.preise-pt{margin-top:1.4rem;padding-top:1.1rem;border-top:1px solid #eee3dd;font-size:.87rem;color:var(--muted);}
+.preise-pt a{color:var(--pink);font-weight:600;text-decoration:none;}
 </style>
 
 <meta name="description" content="Alle Yoga- und Präventionskurse von Bettina Kahmann in Wedemark und online.">
@@ -477,6 +487,20 @@ footer .legal-links a{color:rgba(250,246,241,.62)!important}
         </div>
       </div>
     </div>
+  </div>
+  <div class="preise-box fade">
+    <div class="preise-head">
+      <strong>Preise für offene Teilnahme</strong>
+      <p>Ohne Abo – einzeln buchbar, Karten sammelbar für alle offenen Yogastunden.</p>
+    </div>
+    <div class="preise-grid">
+      <div class="preise-item"><span class="preise-amount">10 &euro;</span><span class="preise-label">Schnupperstunde</span></div>
+      <div class="preise-item"><span class="preise-amount">19 &euro;</span><span class="preise-label">Einzelstunde (Hatha/Yin)</span></div>
+      <div class="preise-item"><span class="preise-amount">90 &euro;</span><span class="preise-label">5er-Karte &middot; 6 Monate g&uuml;ltig</span></div>
+      <div class="preise-item"><span class="preise-amount">160 &euro;</span><span class="preise-label">10er-Karte &middot; 12 Monate g&uuml;ltig</span></div>
+      <div class="preise-item"><span class="preise-amount">6 &euro;</span><span class="preise-label">Zuzahlung epassi/Hansefit</span></div>
+    </div>
+    <p class="preise-pt">Personal Training nach Absprache &ndash; <a href="/kontakt">Kontakt aufnehmen &rarr;</a></p>
   </div>
 </section>
 
