@@ -377,6 +377,42 @@
       .am-hero .am-eyebrow { margin-bottom: 10px; }
       .am-info { margin: 16px 0 18px; }
     }
+
+    /* Hero mit Hörprobe (Nov 2026) */
+    .am-hero-grid { grid-template-areas: "copy try" "offer try"; }
+    .am-hero-copy { grid-area: copy; } .am-hero-try { grid-area: try; } .am-hero-offer { grid-area: offer; }
+    .am-h1-q { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(2rem, 4.2vw, 3.1rem); line-height: 1.12; letter-spacing: 0 !important; color: var(--text); margin: 6px 0 16px; text-transform: none; }
+    .am-hero-me { display: flex; align-items: center; gap: 12px; margin-top: 18px; font-size: .84rem; color: var(--text-light); line-height: 1.45; }
+    .am-hero-me img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex: none; }
+    .am-play { position: absolute; inset: 0; margin: auto; width: 46%; height: 46%; border-radius: 50%; border: 0; background: var(--plum); color: #fff; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-family: 'DM Sans', sans-serif; box-shadow: 0 8px 24px rgba(153,58,116,.28); transition: background .2s; z-index: 2; }
+    .am-play:hover, .am-play:focus-visible { background: var(--plum-dark); }
+    .am-play:focus-visible { outline: 2px solid var(--plum); outline-offset: 4px; }
+    .am-play b { font-weight: 600; font-size: .92rem; letter-spacing: .04em; }
+    .am-play small { font-size: .72rem; opacity: .85; }
+    .am-play-icon { width: 0; height: 0; border-left: 14px solid #fff; border-top: 9px solid transparent; border-bottom: 9px solid transparent; margin-left: 4px; margin-bottom: 2px; }
+    .am-breath.is-running .am-play { background: transparent; color: var(--terracotta-dark); box-shadow: none; }
+    .am-breath.is-running .am-play-icon { display: none; }
+    .am-breath.is-running .r3, .am-breath.is-running .r4 { animation: none; transition: transform 4s ease-in-out; }
+    .am-breath.is-running.out .r3, .am-breath.is-running.out .r4 { transition-duration: 6s; transform: scale(.86); }
+    .am-breath.is-running.in .r3, .am-breath.is-running.in .r4 { transform: scale(1.08); }
+    .am-breath.is-running .am-play b { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 500; }
+    .am-after { font-size: 1rem; color: var(--text); background: var(--cream-dark); border-left: 3px solid var(--sage); padding: 14px 16px; border-radius: 6px; margin-bottom: 18px; }
+    .am-offer-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--terracotta-dark); line-height: 1.25; margin-top: 8px; }
+    @media (max-width: 860px) {
+      .am-hero-grid { grid-template-areas: "copy" "try" "offer"; gap: 26px; }
+      .am-hero { padding-top: 34px; }
+      .am-breath { max-width: 230px; }
+      .am-play { width: 58%; height: 58%; }
+      .am-play b { font-size: .84rem; }
+      .am-play small { font-size: .66rem; }
+      .am-hero .am-h1-q { font-size: 1.85rem; margin: 4px 0 10px; }
+      .am-hero .am-hero-sub { font-size: .95rem; line-height: 1.55; }
+      .am-hero-me { margin-top: 12px; font-size: .78rem; }
+      .am-hero-me img { width: 36px; height: 36px; }
+      .am-hero-grid { gap: 18px; }
+      .am-breath-note { margin-top: 10px; }
+    }
   </style>
 <style>body{padding-top:75px}</style>
 <style id="canonical-start-header">#nav{position:fixed!important;top:3px!important;left:0!important;right:0!important;z-index:1000!important;height:72px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding:0 3.5rem!important;background:rgba(250,246,241,.93)!important;backdrop-filter:blur(14px)!important;border-bottom:1px solid #e2d5c8!important;box-sizing:border-box!important}#nav .brand{text-decoration:none!important;line-height:1.25!important}#nav .brand-top{font-family:'Cormorant Garamond',Georgia,serif!important;font-size:1.05rem!important;color:#3d2b22!important;display:block!important;font-weight:400!important}#nav .brand-sub{font-family:'Cormorant Garamond',Georgia,serif!important;font-size:.9rem!important;color:#993A74!important;display:block!important;font-style:italic!important}#nav .nav-links{display:flex!important;align-items:center!important;gap:1.6rem!important;list-style:none!important;margin:0!important;padding:0!important}#nav .nav-links a{font-family:'DM Sans',Arial,sans-serif!important;font-size:.65rem!important;font-weight:600!important;letter-spacing:.18em!important;text-transform:uppercase!important;color:#8a6e62!important;text-decoration:none!important}#nav .nav-links a:hover{color:#993A74!important}#nav .btn-nav,#mob-menu .btn-nav{background:#993A74!important;color:#fff!important;padding:.52rem 1.3rem!important;border-radius:999px!important;white-space:nowrap!important}#nav .hamburger{display:none!important;flex-direction:column!important;gap:5px!important;cursor:pointer!important;background:none!important;border:0!important;padding:4px!important}#nav .hamburger span{width:22px!important;height:1.5px!important;background:#3d2b22!important;display:block!important}#mob-menu{display:none;position:fixed;top:75px;left:0;right:0;z-index:999;flex-direction:column;background:#FAF6F1;border-bottom:1px solid #e2d5c8;box-shadow:0 8px 30px rgba(140,73,46,.14)}#mob-menu.open{display:flex!important}#mob-menu a{padding:1rem 1.5rem;font-family:'DM Sans',Arial,sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#3d2b22;text-decoration:none;border-bottom:1px solid rgba(226,213,200,.5)}@media(max-width:900px){#nav{padding:0 1.25rem!important}#nav .nav-links{display:none!important}#nav .hamburger{display:flex!important}}#nav .nav-links a.btn-nav,#mob-menu a.btn-nav{color:#FFFFFF!important;background:#993A74!important}#nav .nav-links a.btn-nav:hover,#nav .nav-links a.btn-nav:focus-visible,#mob-menu a.btn-nav:hover{color:#FFFFFF!important;background:#7a2d5c!important}</style><style id="mob-dropdown-fix-css">#mob-menu .mob-dropdown{border-bottom:1px solid rgba(226,213,200,.5)}#mob-menu .mob-dropdown-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:1rem 1.5rem;font-family:'DM Sans',Arial,sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:#3d2b22;background:none;border:0;text-align:left;cursor:pointer}#mob-menu .mob-dropdown-caret{font-size:.7em;transition:transform .2s ease;flex-shrink:0}#mob-menu .mob-dropdown.open .mob-dropdown-caret{transform:rotate(180deg)}#mob-menu .mob-dropdown-menu{display:none;flex-direction:column;background:#F0E8DE}#mob-menu .mob-dropdown.open .mob-dropdown-menu{display:flex}#mob-menu .mob-dropdown-menu a{padding-left:2.75rem;border-bottom:1px solid rgba(226,213,200,.5)}#mob-menu .mob-dropdown-menu a:last-child{border-bottom:0}</style>
@@ -554,29 +590,35 @@ footer .legal-links{font-size:.78rem!important}
 <!-- 1. HERO: Wunsch und Ergebnis zuerst -->
 <section class="am-hero">
   <div class="am-wrap am-hero-grid">
-    <div>
-      <p class="am-eyebrow">21 Tage · Geführte Atemarbeit · Selbstlernkurs</p>
-      <h1>ATEMANKER</h1>
-      <p class="am-hero-claim">Zur Ruhe kommen, wenn dein Kopf weitermacht.</p>
-      <p class="am-start">Start direkt nach dem Kauf</p>
-      <p class="am-hero-sub am-hero-q"><strong>Ein langer Tag. Eine Nachricht, die dich aus der Bahn wirft. Und in deinem Kopf geht es weiter?</strong></p>
-      <p class="am-hero-sub">Mit ATEMANKER lernst du, deinen Atem als bewussten Anker im Alltag zu nutzen. In 21 Tagen lernst du verschiedene Atemübungen kennen und entwickelst daraus ein kleines Ritual, zu dem du zurückkehren kannst – gerade dann, wenn deine Gedanken nicht zur Ruhe kommen.</p>
-      <p class="am-info">21 geführte Atemeinheiten · täglich 7–10 Minuten · Workbook · digitaler ATEMANKER-Kompass</p>
-      <div class="am-buy">
-        <a class="am-btn" data-checkout href="https://alfima.com/bettinakahmann/ATEMANKER">Ich möchte meinen Atemanker finden</a>
-        <p class="am-buy-price"><strong>37 €</strong><span>Einführungspreis, einmalig</span></p>
-      </div>
-      <p class="am-btn-note">Woche 1 öffnet sich direkt nach dem Kauf.</p>
+    <div class="am-hero-copy">
+      <p class="am-eyebrow">ATEMANKER · Online-Kurs für zu Hause</p>
+      <h1 class="am-h1-q">Dein Kopf hört nicht auf?<br>Atme eine Minute mit mir.</h1>
+      <p class="am-hero-sub">Vier Sekunden ein, sechs aus. Meine Stimme führt dich durch die Minute. Atme nur so tief, wie es sich angenehm anfühlt.</p>
+      <p class="am-hero-me"><img src="/IMG_4687-2.jpg" alt="" width="44" height="44" loading="eager"><span>Bettina Kahmann · Yogalehrerin und Präventionsexpertin aus der Wedemark, seit 30 Jahren im Unterricht</span></p>
     </div>
-    <div aria-hidden="true">
-      <div class="am-breath">
+    <div class="am-hero-try">
+      <div class="am-breath" id="am-breath">
         <div class="ring r1"></div>
         <div class="ring r2"></div>
         <div class="ring r3"></div>
         <div class="ring r4"></div>
-        <div class="am-breath-label"><b>ein · aus</b><small>4 Sek. · 6 Sek.</small></div>
+        <button type="button" class="am-play" id="am-play" aria-label="Eine Minute mit Bettina atmen">
+          <span class="am-play-icon" aria-hidden="true"></span>
+          <b id="am-play-label">Jetzt mitatmen</b>
+          <small id="am-play-sub">1 Minute · Ton an</small>
+        </button>
       </div>
-      <p class="am-breath-note">Atme mit: ein, wenn der Kreis wächst. Aus, wenn er kleiner wird.</p>
+      <p class="am-breath-note" id="am-breath-note">Ein, wenn der Kreis wächst. Aus, wenn er kleiner wird.</p>
+    </div>
+    <div class="am-hero-offer" id="am-hero-offer">
+      <p class="am-after" id="am-after" hidden>Mit meiner Stimme übst du auch in ATEMANKER: 21 Tage lang, jeden Tag 7–10 Minuten, bis du deinen eigenen Atemanker für den Alltag gefunden hast.</p>
+      <p class="am-offer-name">ATEMANKER – Zur Ruhe kommen, wenn dein Kopf weitermacht</p>
+      <p class="am-info">21 geführte Atemeinheiten · täglich 7–10 Minuten · Workbook · digitaler ATEMANKER-Kompass</p>
+      <div class="am-buy">
+        <a class="am-btn" data-checkout data-pos="hero" href="https://alfima.com/bettinakahmann/ATEMANKER">Ich möchte meinen Atemanker finden</a>
+        <p class="am-buy-price"><strong>37 €</strong><span>Einführungspreis, einmalig</span></p>
+      </div>
+      <p class="am-btn-note">Woche 1 öffnet sich direkt nach dem Kauf.</p>
     </div>
   </div>
 </section>
@@ -745,7 +787,6 @@ footer .legal-links{font-size:.78rem!important}
       <p class="am-lead">Du trägst deinen Kursstart ein und hakst ab, welche Einheiten du gehört hast. Der Kompass zeigt dir dann, wo du stehst und welcher Schritt als Nächstes dran ist – auch nach ein paar Tagen Pause.</p>
       <p class="am-lead">Hast du an einem Tag wenig Zeit, schlägt er dir eine kurze Übung aus Lektionen vor, die du bereits kennst. Der Kompass arbeitet nach festen Regeln, die auf dem Kursablauf beruhen. Er ersetzt keine persönliche Begleitung.</p>
       <p class="am-ko-incl">Der Kompass ist im Kurspreis enthalten. Du zahlst nichts zusätzlich.</p>
-      <p class="am-ko-note">Dein Fortschritt wird in dem Browser gespeichert, in dem du den Kompass nutzt. Er wandert nicht automatisch auf andere Geräte.</p>
     </div>
     <div class="am-ko-visual" aria-hidden="true">
       <div class="am-ko-card">
@@ -851,6 +892,7 @@ footer .legal-links{font-size:.78rem!important}
       <details><summary>Wann kann ich anfangen?</summary><p>Direkt nach dem Kauf. Woche 1 mit den ersten sieben Atemeinheiten öffnet sich sofort in deinem Kursbereich. Woche 2 folgt nach sieben Tagen und Woche 3 nach weiteren sieben Tagen.</p></details>
       <details><summary>Werde ich persönlich betreut?</summary><p>Nein. ATEMANKER ist ein Selbstlernkurs. Du übst mit den geführten Atemeinheiten, dem Workbook und dem Kompass. Persönliche Betreuung oder individuelle Rückmeldungen sind nicht enthalten.</p></details>
       <details><summary>Wie lange habe ich Zugriff?</summary><p>Zugang für 24 Monate ab Kauf. In dieser Zeit kannst du jederzeit zu deinen Atemeinheiten zurückkehren.</p></details>
+      <details><summary>Wo speichert der Kompass meinen Fortschritt?</summary><p>In dem Browser, in dem du den Kompass nutzt. Er wandert nicht automatisch auf andere Geräte.</p></details>
       <details><summary>Ersetzt ATEMANKER eine medizinische oder therapeutische Behandlung?</summary><p>Nein. ATEMANKER ist ein Angebot zur Atem- und Körperwahrnehmung sowie zur Entspannung und ersetzt keine medizinische oder therapeutische Behandlung. Bei gesundheitlichen Beschwerden oder Unsicherheit hinsichtlich einzelner Atemübungen sollte vorab medizinischer Rat eingeholt werden.</p></details>
     </div>
   </div>
@@ -916,6 +958,53 @@ footer .legal-links{font-size:.78rem!important}
 <div class="legal-links" style="margin-top:12px;"><a href="/datenschutz">Datenschutz</a> · <a href="/agb">AGB</a></div>
 </footer>
 <script>function toggleMob(){var m=document.getElementById('mob-menu');if(!m)return;var willOpen=!m.classList.contains('open');m.classList.toggle('open');if(!willOpen){m.querySelectorAll('.mob-dropdown.open').forEach(function(w){w.classList.remove('open');var b=w.querySelector('.mob-dropdown-toggle');if(b)b.setAttribute('aria-expanded','false')})}}function closeMob(){var m=document.getElementById('mob-menu');if(!m)return;m.classList.remove('open');m.querySelectorAll('.mob-dropdown.open').forEach(function(w){w.classList.remove('open');var b=w.querySelector('.mob-dropdown-toggle');if(b)b.setAttribute('aria-expanded','false')})}function toggleMobSub(el){var w=el.closest('.mob-dropdown');if(!w)return;var open=w.classList.toggle('open');el.setAttribute('aria-expanded',open?'true':'false')}</script>
+<script>
+(function(){
+  var V={start:'/audio/start.mp3',ein:'/audio/einatmen.mp3',aus:'/audio/ausatmen.mp3',ende:'/audio/ende.mp3'};
+  var box=document.getElementById('am-breath'), btn=document.getElementById('am-play'),
+      lab=document.getElementById('am-play-label'), sub=document.getElementById('am-play-sub'),
+      note=document.getElementById('am-breath-note'), after=document.getElementById('am-after');
+  if(!box||!btn) return;
+  function track(n,p){ try{ window.plausible && plausible(n, p?{props:p}:undefined); }catch(e){} }
+  var ac=null, buf={}, running=false, timers=[];
+  function ctx(){ if(!ac){ var C=window.AudioContext||window.webkitAudioContext; ac=C?new C():null; } return ac; }
+  function load(k){ return fetch(V[k]).then(function(r){return r.arrayBuffer();}).then(function(b){
+    return new Promise(function(res){ ctx().decodeAudioData(b,function(d){buf[k]=d;res();},function(){res();}); }); }); }
+  function play(k){ try{ if(!buf[k]||!ctx()) return 0; var s=ac.createBufferSource(); s.buffer=buf[k]; s.connect(ac.destination); s.start(); return buf[k].duration; }catch(e){ return 0; } }
+  function at(ms,f){ timers.push(setTimeout(f,ms)); }
+  function stop(done){
+    running=false; timers.forEach(clearTimeout); timers=[];
+    box.classList.remove('is-running','in','out');
+    lab.textContent = done ? 'Noch einmal' : 'Jetzt mitatmen';
+    sub.textContent='1 Minute · Ton an';
+    note.textContent='Ein, wenn der Kreis wächst. Aus, wenn er kleiner wird.';
+    if(done){ after.hidden=false; track('ATEMANKER Hoerprobe beendet');
+      if(window.innerWidth<861) after.scrollIntoView({behavior:'smooth',block:'center'}); }
+  }
+  btn.addEventListener('click',function(){
+    if(running){ stop(false); return; }
+    running=true; track('ATEMANKER Hoerprobe gestartet');
+    box.classList.add('is-running'); lab.textContent='…'; sub.textContent='Tippen zum Beenden';
+    note.textContent='Lass die Schultern sinken.';
+    var c=ctx(); if(c&&c.state==='suspended') c.resume();
+    Promise.all(Object.keys(V).map(function(k){return buf[k]?null:load(k);})).catch(function(){}).then(function(){
+      if(!running) return;
+      var t=Math.ceil((play('start')||3)*1000)+600, ROUNDS=6;
+      for(var i=0;i<ROUNDS;i++){
+        (function(i){
+          at(t+i*10000,function(){ box.classList.remove('out'); box.classList.add('in'); lab.textContent='Ein'; play('ein'); });
+          at(t+i*10000+4000,function(){ box.classList.remove('in'); box.classList.add('out'); lab.textContent='Aus'; play('aus'); });
+        })(i);
+      }
+      var end=t+ROUNDS*10000;
+      at(end,function(){ box.classList.remove('in','out'); lab.textContent='Gut gemacht'; var d=play('ende')||4; at(Math.ceil(d*1000)+400,function(){ stop(true); }); });
+    });
+  });
+  document.querySelectorAll('a[data-checkout]').forEach(function(a){
+    a.addEventListener('click',function(){ track('ATEMANKER Checkout Klick',{position:a.getAttribute('data-pos')||'unten'}); });
+  });
+})();
+</script>
 <script src="/check-hinweis.js" defer></script>
 </body>
 </html>
