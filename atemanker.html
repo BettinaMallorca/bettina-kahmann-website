@@ -592,8 +592,8 @@ footer .legal-links{font-size:.78rem!important}
   <div class="am-wrap am-hero-grid">
     <div class="am-hero-copy">
       <p class="am-eyebrow">ATEMANKER · Online-Kurs für zu Hause</p>
-      <h1 class="am-h1-q">Dein Kopf hört nicht auf?<br>Atme eine Minute mit mir.</h1>
-      <p class="am-hero-sub">Vier Sekunden ein, sechs aus. Meine Stimme führt dich durch die Minute. Atme nur so tief, wie es sich angenehm anfühlt.</p>
+      <h1 class="am-h1-q">Dein Kopf hört nicht auf?<br>Atme 30 Sekunden mit mir.</h1>
+      <p class="am-hero-sub">Vier Sekunden ein, sechs aus, drei Atemzüge lang. Meine Stimme führt dich. Atme nur so tief, wie es sich angenehm anfühlt.</p>
       <p class="am-hero-me"><img src="/bettina-avatar.jpg" alt="Bettina Kahmann" width="56" height="56" loading="eager"><span>Bettina Kahmann · Yogalehrerin und Präventionsexpertin aus der Wedemark. Ich unterrichte seit 30 Jahren Bewegung, heute mit den Schwerpunkten Yoga, Atem und Nervensystem.</span></p>
     </div>
     <div class="am-hero-try">
@@ -602,10 +602,10 @@ footer .legal-links{font-size:.78rem!important}
         <div class="ring r2"></div>
         <div class="ring r3"></div>
         <div class="ring r4"></div>
-        <button type="button" class="am-play" id="am-play" aria-label="Eine Minute mit Bettina atmen">
+        <button type="button" class="am-play" id="am-play" aria-label="30 Sekunden mit Bettina atmen">
           <span class="am-play-icon" aria-hidden="true"></span>
           <b id="am-play-label">Jetzt mitatmen</b>
-          <small id="am-play-sub">1 Minute · Ton an</small>
+          <small id="am-play-sub">30 Sekunden · Ton an</small>
         </button>
       </div>
       <p class="am-breath-note" id="am-breath-note">Ein, wenn der Kreis wächst. Aus, wenn er kleiner wird.</p>
@@ -976,9 +976,9 @@ footer .legal-links{font-size:.78rem!important}
     running=false; timers.forEach(clearTimeout); timers=[];
     box.classList.remove('is-running','in','out');
     lab.textContent = done ? 'Noch einmal' : 'Jetzt mitatmen';
-    sub.textContent='1 Minute · Ton an';
+    sub.textContent='30 Sekunden · Ton an';
     note.textContent='Ein, wenn der Kreis wächst. Aus, wenn er kleiner wird.';
-    if(done){ after.hidden=false; track('ATEMANKER Hoerprobe beendet');
+    if(done){ after.hidden=false;
       if(window.innerWidth<861) after.scrollIntoView({behavior:'smooth',block:'center'}); }
   }
   btn.addEventListener('click',function(){
@@ -989,7 +989,8 @@ footer .legal-links{font-size:.78rem!important}
     var c=ctx(); if(c&&c.state==='suspended') c.resume();
     Promise.all(Object.keys(V).map(function(k){return buf[k]?null:load(k);})).catch(function(){}).then(function(){
       if(!running) return;
-      var t=Math.ceil((play('start')||3)*1000)+600, ROUNDS=6;
+      var t=Math.ceil((play('start')||3)*1000)+600, ROUNDS=3;
+      at(t+10000,function(){ if(after.hidden){ after.hidden=false; track('ATEMANKER Angebot waehrend Hoerprobe'); } });
       for(var i=0;i<ROUNDS;i++){
         (function(i){
           at(t+i*10000,function(){ box.classList.remove('out'); box.classList.add('in'); lab.textContent='Ein'; play('ein'); });
@@ -997,7 +998,7 @@ footer .legal-links{font-size:.78rem!important}
         })(i);
       }
       var end=t+ROUNDS*10000;
-      at(end,function(){ box.classList.remove('in','out'); lab.textContent='Gut gemacht'; var d=play('ende')||4; at(Math.ceil(d*1000)+400,function(){ stop(true); }); });
+      at(end,function(){ track('ATEMANKER Hoerprobe beendet'); box.classList.remove('in','out'); lab.textContent='Gut gemacht'; var d=play('ende')||4; at(Math.ceil(d*1000)+400,function(){ stop(true); }); });
     });
   });
   document.querySelectorAll('a[data-checkout]').forEach(function(a){
