@@ -114,7 +114,7 @@ function oeffentlich(t, doc, eigeneIds) {
   if (eigeneIds.length) {
     res.eigene = {};
     doc.eintraege.forEach((e, i) => {
-      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < PLAETZE ? { status: 'platz', kostenfrei: !!e.spaetNachgerueckt } : { status: 'warteliste', position: i - PLAETZE + 1 };
+      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < PLAETZE ? { status: 'platz' } : { status: 'warteliste', position: i - PLAETZE + 1 };
     });
   }
   return res;
@@ -193,10 +193,9 @@ export default async (req) => {
       const [e] = doc.eintraege.splice(i, 1);
       // Späte Absage: nur wer einen Platz hatte, nicht bei ausgefallener Stunde
       const fenster = !!t && imFristfenster(t);
-      // Wer erst im Fristfenster von der Warteliste nachrückt, sagt kostenfrei ab
-      const spaet = fenster && i < PLAETZE && !doc.ausfall && !e.spaetNachgerueckt;
+      // Auch wer im Fristfenster nachgerückt ist, sagt kostenpflichtig ab
+      const spaet = fenster && i < PLAETZE && !doc.ausfall;
       if (spaet) doc.spaet.push({ id: e.id, name: e.name, art: e.art, abgesagt: new Date().toISOString() });
-      if (fenster && i < PLAETZE && doc.eintraege.length >= PLAETZE) doc.eintraege[PLAETZE - 1].spaetNachgerueckt = true;
       return { ok: true, spaet };
     });
     return json(r, r.fehler ? 404 : 200);

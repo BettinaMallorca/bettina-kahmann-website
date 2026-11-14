@@ -120,8 +120,8 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       if (st) {
         h += st.status === 'platz'
           ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>'
-          : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du nach. Schau vor der Stunde noch einmal hier rein.</p></div>';
-        var kostet = st.status === 'platz' && t.kostenpflichtig && !st.kostenfrei;
+          : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du automatisch nach. Dein Platz gilt dann verbindlich, auch kurz vor der Stunde. Kannst du nicht, melde dich rechtzeitig von der Warteliste ab.</p></div>';
+        var kostet = st.status === 'platz' && t.kostenpflichtig;
         h += '<button class="link" data-ab="' + esc(ich.id) + '"' + (kostet ? ' data-kostet' : '') + '>Abmelden</button>';
         if (kostet) h += '<div class="warn" hidden><p>Die Stunde beginnt in weniger als 12 Stunden. Wenn du jetzt absagst, wird sie dir trotzdem berechnet.</p>' +
           '<div class="zeile"><button class="btn zweit" data-ab-ok="' + esc(ich.id) + '">Trotzdem absagen</button><button class="link" data-ab-nein>Ich komme doch</button></div></div>';
