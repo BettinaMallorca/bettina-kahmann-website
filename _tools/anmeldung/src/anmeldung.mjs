@@ -196,13 +196,10 @@ const neuerCode = (karten) => {
 const normCode = (c) => String(c || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
 const datumDE = (d) => d.split('-').reverse().join('.');
 
-// Hat die Stunde stattgefunden? Ausfall nein, bestätigt ja, sonst mindestens 5 inklusive aller späten Absagen
-// (auch erlassene: Wer kurzfristig absagt, ändert nichts daran, dass die Stunde zustande kam)
+// Hat die Stunde stattgefunden? Immer, außer Bettina hat sie als ausgefallen markiert.
+// Die Mindestzahl 5 steuert nur die Anzeige auf der Anmeldeseite.
 function stattgefunden(doc) {
-  if (doc.ausfall) return false;
-  if (doc.bestaetigt) return true;
-  const platz = Math.min(doc.eintraege.length, PLAETZE);
-  return platz + doc.spaet.length >= MINDEST;
+  return !doc.ausfall;
 }
 const begonnen = (t) => minutenBis(t.datum, t.start) <= 0;
 

@@ -1094,10 +1094,7 @@ var neuerCode = (karten) => {
 var normCode = (c) => String(c || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
 var datumDE = (d) => d.split("-").reverse().join(".");
 function stattgefunden(doc) {
-  if (doc.ausfall) return false;
-  if (doc.bestaetigt) return true;
-  const platz = Math.min(doc.eintraege.length, PLAETZE);
-  return platz + doc.spaet.length >= MINDEST;
+  return !doc.ausfall;
 }
 var begonnen = (t) => minutenBis(t.datum, t.start) <= 0;
 async function abrechnen(st) {
