@@ -173,7 +173,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
           ARTEN.map(function (a) { return '<option value="' + a[0] + '"' + (a[0] === art ? ' selected' : '') + '>' + a[1] + '</option>'; }).join('') + '</select></label>' +
           '<label class="codefeld"' + (art === 'Karte' || art === 'KarteHansefit' ? '' : ' hidden') + '>Dein Kartencode<input type="text" name="code" maxlength="8" autocapitalize="characters" autocomplete="off" value="' + esc(code) + '" placeholder="z. B. K7F3QM"></label>' +
           '<div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>' +
-          '<div class="zeile"><button class="btn" type="submit">Eintragen</button><button class="link" type="button" data-zu>Abbrechen</button></div><p class="fehler" hidden></p>' +
+          '<p class="klein">Mit deiner Anmeldung gelten meine <a href="/agb" target="_blank">AGB</a>.</p><div class="zeile"><button class="btn" type="submit">Eintragen</button><button class="link" type="button" data-zu>Abbrechen</button></div><p class="fehler" hidden></p>' +
           '<p class="klein">Deine Anmeldung ist verbindlich. Kostenfrei absagen kannst du bis 12 Stunden vor Beginn.</p></form>';
       }
       return h + '</article>';

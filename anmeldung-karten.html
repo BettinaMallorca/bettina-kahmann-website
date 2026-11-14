@@ -139,9 +139,16 @@ button{font:inherit;cursor:pointer}
   document.getElementById('filter').addEventListener('input', zeigen);
   document.getElementById('export').addEventListener('click', function () {
     function zelle(v) { v = String(v == null ? '' : v); return /[;"\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
-    var zeilen = [['Name', 'Karte', 'Code', 'Stunden', 'Rest', 'Gekauft am', 'Gültig bis', 'Abgelaufen']].concat(karten.map(function (k) {
-      return [k.name, k.typ + '-Karte', k.code, k.stunden, k.rest, de(k.gekauft), de(k.gueltigBis), k.abgelaufen ? 'ja' : 'nein'];
-    }));
+    var zeilen = [['Name', 'Karte', 'Code', 'Gekauft am', 'Gültig bis', 'Datum', 'Stunde', 'Vorgang', 'Stunden', 'Rest danach', 'Rest aktuell']];
+    karten.forEach(function (k) {
+      var rest = k.stunden;
+      if (!k.buchungen.length) zeilen.push([k.name, k.typ + '-Karte', k.code, de(k.gekauft), de(k.gueltigBis), '', '', 'Noch nichts genutzt', '', rest, k.rest]);
+      k.buchungen.forEach(function (b) {
+        rest += b.delta;
+        var vorgang = b.art === 'Späte Absage' ? 'Späte Absage' : b.art === 'Teilnahme' ? 'Teilnahme' : (b.notiz || 'Korrektur');
+        zeilen.push([k.name, k.typ + '-Karte', k.code, de(k.gekauft), de(k.gueltigBis), de(b.datum), b.titel || '', vorgang, b.delta, rest, k.rest]);
+      });
+    });
     var csv = '\ufeff' + zeilen.map(function (z) { return z.map(zelle).join(';'); }).join('\r\n');
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
