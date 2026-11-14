@@ -55,5 +55,6 @@
 /anmeldung-karten /anmeldung-karten.html 200
 /anmeldung-termine /anmeldung-termine.html 200
 /karte /karte.html 200
+/gutschein /gutschein.html 200
 /netlify/* /404 404!
 /_tools/* /404 404!

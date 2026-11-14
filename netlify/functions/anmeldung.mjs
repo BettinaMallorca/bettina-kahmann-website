@@ -937,6 +937,8 @@ var KARTEN = { "5er": { stunden: 5, monate: 6 }, "10er": { stunden: 10, monate: 
 var KARTEN_KEY = "karten";
 var KARTEN_LOESCHEN_MONATE = 6;
 var CODE_ZEICHEN = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+var PREISE = { "5er": 90, "10er": 160 };
+var GUTSCHEIN_OFFEN_TAGE = 30;
 var WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 var PRODUKTION = true;
 var store = () => PRODUKTION ? getStore({ name: "wochen-anmeldung", consistency: "strong" }) : getDeployStore({ name: "wochen-anmeldung", consistency: "strong" });
@@ -1035,8 +1037,8 @@ async function aendern(st, key, fn, loader = lade) {
   }
   return { fehler: "Gerade ist viel los. Bitte versuch es gleich noch einmal." };
 }
-async function sha(text) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+async function sha(text2) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text2));
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 var zufall = (n) => [...crypto.getRandomValues(new Uint8Array(n))].map((b) => b.toString(16).padStart(2, "0")).join("");
@@ -1080,7 +1082,9 @@ function istAdmin(req) {
 }
 async function ladeKarten(st) {
   const r = await st.getWithMetadata(KARTEN_KEY, { type: "json" });
-  return { doc: r ? r.data : { karten: [] }, etag: r ? r.etag : null };
+  const doc = r ? r.data : { karten: [] };
+  doc.gutscheine = doc.gutscheine || [];
+  return { doc, etag: r ? r.etag : null };
 }
 function plusMonate(datum, n) {
   const [y, m, d] = datum.split("-").map(Number);
@@ -1129,6 +1133,44 @@ async function abrechnen(st) {
     return JSON.stringify(doc.karten) === vorher ? { unveraendert: true } : { ok: true };
   }, ladeKarten);
 }
+var gutscheinGueltig = (bestellt) => `${Number(bestellt.slice(0, 4)) + 3}-12-31`;
+var alleCodes = (doc) => [...doc.karten, ...doc.gutscheine];
+function einloesen(doc, g, heute) {
+  const karte = {
+    id: zufall(8),
+    code: g.code,
+    name: g.fuer,
+    typ: g.typ,
+    stunden: KARTEN[g.typ].stunden,
+    gekauft: heute,
+    gueltigBis: plusMonate(heute, KARTEN[g.typ].monate),
+    buchungen: [],
+    ausGutschein: g.id
+  };
+  doc.karten.push(karte);
+  g.status = "eingeloest";
+  g.eingeloest = heute;
+  g.kartenId = karte.id;
+  return karte;
+}
+function gutscheinAdmin(g) {
+  return {
+    id: g.id,
+    code: g.code,
+    typ: g.typ,
+    preis: PREISE[g.typ],
+    fuer: g.fuer,
+    von: g.von,
+    email: g.email,
+    gruss: g.gruss,
+    status: g.status,
+    bestellt: g.bestellt,
+    bezahlt: g.bezahlt || null,
+    eingeloest: g.eingeloest || null,
+    gueltigBis: g.gueltigBis
+  };
+}
+var text = (v, n) => String(v || "").replace(/\s+/g, " ").trim().slice(0, n);
 function karteAdmin(k) {
   const heute = jetztBerlin().datum;
   return {
@@ -1191,11 +1233,42 @@ var anmeldung_default = async (req, context) => {
       const { doc } = await ladeKarten(st);
       return json({ karten: doc.karten.map(karteAdmin).sort((a, b) => a.name.localeCompare(b.name, "de")) });
     }
+    if (url.searchParams.has("gutschein")) {
+      const code = normCode(url.searchParams.get("gutschein"));
+      const g = (await ladeKarten(st)).doc.gutscheine.find((x) => x.code === code && x.status !== "offen");
+      if (!g) return json({ fehler: "Diesen Gutschein gibt es nicht oder er ist noch nicht freigegeben." }, 404);
+      return json({
+        code: g.code,
+        typ: g.typ,
+        stunden: KARTEN[g.typ].stunden,
+        monate: KARTEN[g.typ].monate,
+        fuer: g.fuer,
+        von: g.von,
+        gruss: g.gruss,
+        gueltigBis: datumDE(g.gueltigBis),
+        eingeloest: g.status === "eingeloest"
+      });
+    }
+    if (url.searchParams.get("gutscheine") === "1") {
+      if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
+      const grenze = plusTage(jetztBerlin().datum, -GUTSCHEIN_OFFEN_TAGE);
+      await aendern(st, KARTEN_KEY, (doc2) => {
+        const n = doc2.gutscheine.length;
+        const heute = jetztBerlin().datum;
+        doc2.gutscheine = doc2.gutscheine.filter((g) => g.status === "offen" ? g.bestellt >= grenze : g.status === "bezahlt" ? g.gueltigBis >= heute : g.eingeloest >= plusMonate(heute, -18));
+        return doc2.gutscheine.length === n ? { unveraendert: true } : { ok: true };
+      }, ladeKarten);
+      const { doc } = await ladeKarten(st);
+      return json({ gutscheine: doc.gutscheine.map(gutscheinAdmin).sort((a, b) => b.bestellt.localeCompare(a.bestellt)) });
+    }
     if (url.searchParams.has("karte")) {
       const code = normCode(url.searchParams.get("karte"));
       if (code.length < 6) return json({ fehler: "Bitte gib deinen Kartencode ein." }, 400);
       await abrechnen(st);
-      const k = (await ladeKarten(st)).doc.karten.find((x) => x.code === code);
+      const kd = (await ladeKarten(st)).doc;
+      const gs = kd.gutscheine.find((x) => x.code === code && x.status === "bezahlt");
+      if (gs) return json({ gutschein: true, vorname: gs.fuer.split(" ")[0], typ: gs.typ, stunden: KARTEN[gs.typ].stunden, monate: KARTEN[gs.typ].monate, gueltigBis: datumDE(gs.gueltigBis) });
+      const k = kd.karten.find((x) => x.code === code);
       if (!k) return json({ fehler: "Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich." }, 404);
       const a = karteAdmin(k);
       return json({
@@ -1244,6 +1317,16 @@ var anmeldung_default = async (req, context) => {
     if (art === "Karte" || art === "KarteHansefit") {
       const code = normCode(body.code);
       karte = (await ladeKarten(st)).doc.karten.find((x) => x.code === code);
+      if (!karte) {
+        const r2 = await aendern(st, KARTEN_KEY, (doc) => {
+          const g = doc.gutscheine.find((x) => x.code === code && x.status === "bezahlt");
+          if (!g) return { fehler: "nicht" };
+          if (g.gueltigBis < jetztBerlin().datum) return { fehler: "Dieser Gutschein ist abgelaufen. Sprich mich bitte an." };
+          return { karte: einloesen(doc, g, jetztBerlin().datum) };
+        }, ladeKarten);
+        if (r2.fehler && r2.fehler !== "nicht") return json({ fehler: r2.fehler }, 400);
+        karte = r2.karte || null;
+      }
       if (!karte) return json({ fehler: "Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich in der WhatsApp-Gruppe." }, 400);
       art = `${karte.typ}-Karte` + (art === "KarteHansefit" ? " + Hansefit/epassi" : "");
     }
@@ -1284,7 +1367,57 @@ var anmeldung_default = async (req, context) => {
     });
     return json(r, r.fehler ? 404 : 200);
   }
+  if (body.action === "gutschein_bestellen") {
+    if (body.website) return json({ ok: true });
+    const typ = KARTEN[body.typ] ? body.typ : "";
+    const fuer = text(body.fuer, 60), von = text(body.von, 60), email = text(body.email, 120), gruss = text(body.gruss, 160);
+    if (!typ) return json({ fehler: "Bitte w\xE4hl eine Karte aus." }, 400);
+    if (fuer.length < 2) return json({ fehler: "Bitte trag ein, f\xFCr wen der Gutschein ist." }, 400);
+    if (von.length < 2) return json({ fehler: "Bitte trag deinen Namen ein." }, 400);
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ fehler: "Bitte trag deine E-Mail-Adresse ein. Dorthin schicke ich den Gutschein." }, 400);
+    const r = await aendern(st, KARTEN_KEY, (doc) => {
+      if (doc.gutscheine.filter((g) => g.status === "offen").length >= 200) return { fehler: "Gerade sind zu viele Bestellungen offen. Schreib mir bitte direkt." };
+      const heute = jetztBerlin().datum;
+      doc.gutscheine.push({ id: zufall(8), code: neuerCode(alleCodes(doc)), typ, fuer, von, email, gruss, status: "offen", bestellt: heute, gueltigBis: gutscheinGueltig(heute) });
+      return { ok: true };
+    }, ladeKarten);
+    return json(r, r.fehler ? 409 : 200);
+  }
   if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
+  if (body.action === "gutschein_neu") {
+    const typ = KARTEN[body.typ] ? body.typ : "";
+    const fuer = text(body.fuer, 60), von = text(body.von, 60), gruss = text(body.gruss, 160), email = text(body.email, 120);
+    if (!typ || fuer.length < 2) return json({ fehler: "Bitte Karte und Namen der beschenkten Person angeben." }, 400);
+    let neu;
+    const r = await aendern(st, KARTEN_KEY, (doc) => {
+      const heute = jetztBerlin().datum;
+      neu = { id: zufall(8), code: neuerCode(alleCodes(doc)), typ, fuer, von, email, gruss, status: "bezahlt", bestellt: heute, bezahlt: heute, gueltigBis: gutscheinGueltig(heute) };
+      doc.gutscheine.push(neu);
+      return { ok: true };
+    }, ladeKarten);
+    return r.fehler ? json(r, 409) : json({ ok: true, gutschein: gutscheinAdmin(neu) });
+  }
+  if (body.action === "gutschein_bezahlt" || body.action === "gutschein_einloesen" || body.action === "gutschein_loeschen") {
+    const r = await aendern(st, KARTEN_KEY, (doc) => {
+      const g = doc.gutscheine.find((x) => x.id === body.id);
+      if (!g) return { fehler: "Gutschein nicht gefunden." };
+      if (body.action === "gutschein_loeschen") {
+        if (g.status === "eingeloest") return { fehler: "Eingel\xF6ste Gutscheine bleiben, die Karte l\xE4uft schon." };
+        doc.gutscheine = doc.gutscheine.filter((x) => x.id !== g.id);
+        return { ok: true };
+      }
+      if (body.action === "gutschein_bezahlt") {
+        if (g.status === "eingeloest") return { fehler: "Schon eingel\xF6st." };
+        g.status = body.wert === false ? "offen" : "bezahlt";
+        g.bezahlt = g.status === "bezahlt" ? jetztBerlin().datum : null;
+        return { ok: true };
+      }
+      if (g.status !== "bezahlt") return { fehler: "Nur bezahlte Gutscheine lassen sich einl\xF6sen." };
+      einloesen(doc, g, jetztBerlin().datum);
+      return { ok: true };
+    }, ladeKarten);
+    return json(r, r.fehler ? 409 : 200);
+  }
   if (body.action === "karte_neu") {
     const name = String(body.name || "").replace(/\s+/g, " ").trim().slice(0, 60);
     const typ = KARTEN[body.typ] ? body.typ : "";
@@ -1295,7 +1428,7 @@ var anmeldung_default = async (req, context) => {
     const r = await aendern(st, KARTEN_KEY, (doc) => {
       neu = {
         id: zufall(8),
-        code: neuerCode(doc.karten),
+        code: neuerCode(alleCodes(doc)),
         name,
         typ,
         stunden: KARTEN[typ].stunden,

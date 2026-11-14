@@ -39,6 +39,10 @@ button{font:inherit;cursor:pointer}
 .details li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--cream-dark)}
 .filter{margin-bottom:12px}
 .ab{opacity:.6}
+.chip{font-family:"DM Sans",Arial,sans-serif;display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:3px 9px;margin-left:6px;vertical-align:middle}
+.chip.offen{background:#f6ece4;color:var(--terracotta-dark)}.chip.bezahlt{background:#e8efe8;color:#2f4a33}.chip.eingeloest{background:var(--cream-dark);color:var(--text-light)}
+.gruss{font-style:italic;font-size:.9rem;margin-top:4px}
+details.mini summary{cursor:pointer;color:var(--plum);font-size:.88rem;margin-top:6px}
 </style>
 </head>
 <body>
@@ -54,6 +58,20 @@ button{font:inherit;cursor:pointer}
   </div>
 
   <div id="app" hidden>
+    <h2 style="margin-top:6px">Gutscheine</h2>
+    <p class="sub" style="margin-bottom:10px">Neue Bestellungen von bettina-kahmann.com/gutschein landen hier als „offen“. Sobald die Zahlung bei alfima da ist, tippst du auf „Bezahlt, freigeben“ und schickst den Mail-Text an die Käuferin. Der Code wird bei der ersten Anmeldung automatisch zur Karte.</p>
+    <div id="gutscheine"></div>
+    <details class="mini box"><summary>Gutschein ohne Bestellung anlegen (zum Beispiel bar bezahlt)</summary>
+      <label for="g-fuer">Für wen</label><input id="g-fuer" placeholder="Vorname und Nachname">
+      <div class="reihe">
+        <div><label for="g-typ">Karte</label><select id="g-typ"><option value="10er">10er-Karte</option><option value="5er">5er-Karte</option></select></div>
+        <div><label for="g-von">Von</label><input id="g-von"></div>
+        <div><label for="g-mail">E-Mail Käuferin</label><input id="g-mail" type="email"></div>
+      </div>
+      <label for="g-gruss">Gruß</label><input id="g-gruss" maxlength="160">
+      <div class="knoepfe"><button class="btn voll" id="g-anlegen">Gutschein anlegen</button></div>
+      <p class="fehler" id="g-fehler" hidden></p>
+    </details>
     <div class="box">
       <h2 style="margin-top:0">Neue Karte</h2>
       <label for="n-name">Name</label><input id="n-name" placeholder="Vorname und Nachname">
@@ -73,6 +91,54 @@ button{font:inherit;cursor:pointer}
     <div id="liste"></div>
   </div>
 </main>
+<script>
+(function () {
+  var API = '/api/anmeldung', liste = [];
+  function key() { try { return localStorage.getItem('bv-anm-key') || ''; } catch (e) { return ''; } }
+  function esc(s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function de(d) { return d ? d.split('-').reverse().join('.') : ''; }
+  function post(d) { return fetch(API, { method: 'POST', headers: { 'content-type': 'application/json', 'x-anmeldung-key': key() }, body: JSON.stringify(d) }).then(function (r) { return r.json(); }); }
+  function link(g) { return 'https://bettina-kahmann.com/gutschein?code=' + g.code; }
+  function mail(g) {
+    return 'Hallo ' + g.von.split(' ')[0] + ',\n\ndanke für deine Bestellung. Hier ist dein Gutschein für ' + g.fuer + ' (' + g.typ + '-Karte):\n' + link(g) +
+      '\n\nDu kannst ihn ausdrucken oder als PDF speichern und weiterschicken. Eingelöst wird er mit dem Code auf dem Gutschein bei der Anmeldung zur ersten Stunde.\n\nHerzliche Grüße\nBettina';
+  }
+  var NAMEN = { offen: 'offen', bezahlt: 'freigegeben', eingeloest: 'eingelöst' };
+  function zeigen() {
+    var el = document.getElementById('gutscheine');
+    if (!liste.length) { el.innerHTML = '<p class="sub">Noch keine Gutscheine.</p>'; return; }
+    el.innerHTML = liste.map(function (g) {
+      var k = '<div class="box" data-gid="' + g.id + '"><div class="name">' + esc(g.fuer) + '<span class="chip ' + g.status + '">' + NAMEN[g.status] + '</span></div>' +
+        '<div class="meta">' + g.typ + '-Karte · ' + g.preis + ' € · von ' + esc(g.von) + (g.email ? ' · ' + esc(g.email) : '') + ' · bestellt ' + de(g.bestellt) + (g.eingeloest ? ' · eingelöst ' + de(g.eingeloest) : '') + ' · Code ' + g.code + '</div>' +
+        (g.gruss ? '<div class="gruss">„' + esc(g.gruss) + '“</div>' : '') + '<div class="knoepfe">';
+      if (g.status === 'offen') k += '<button class="btn voll" data-a="bezahlt">Bezahlt, freigeben</button><button class="btn" data-a="loeschen">Löschen</button>';
+      if (g.status === 'bezahlt') k += '<button class="btn voll" data-a="mail">Mail-Text kopieren</button><a class="btn" href="' + link(g) + '" target="_blank" style="text-decoration:none">Ansehen</a><button class="btn" data-a="einloesen">Jetzt einlösen</button><button class="btn" data-a="zurueck">Doch nicht bezahlt</button>';
+      if (g.status === 'eingeloest') k += '<a class="btn" href="' + link(g) + '" target="_blank" style="text-decoration:none">Ansehen</a>';
+      return k + '</div></div>';
+    }).join('');
+  }
+  function laden() {
+    fetch(API + '?gutscheine=1', { headers: { 'x-anmeldung-key': key() }, cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : { gutscheine: [] }; })
+      .then(function (d) { liste = d.gutscheine || []; zeigen(); });
+  }
+  document.getElementById('gutscheine').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button[data-a]'); if (!b) return;
+    var id = b.closest('[data-gid]').getAttribute('data-gid'), g = liste.filter(function (x) { return x.id === id; })[0], a = b.getAttribute('data-a');
+    if (a === 'bezahlt') post({ action: 'gutschein_bezahlt', id: id }).then(laden);
+    if (a === 'zurueck') post({ action: 'gutschein_bezahlt', id: id, wert: false }).then(laden);
+    if (a === 'loeschen' && confirm('Bestellung von ' + g.von + ' löschen?')) post({ action: 'gutschein_loeschen', id: id }).then(laden);
+    if (a === 'einloesen' && confirm('Gutschein jetzt einlösen? Die Karte für ' + g.fuer + ' startet dann heute.')) post({ action: 'gutschein_einloesen', id: id }).then(function () { location.reload(); });
+    if (a === 'mail') navigator.clipboard.writeText(mail(g)).then(function () { b.textContent = 'Kopiert'; setTimeout(function () { b.textContent = 'Mail-Text kopieren'; }, 1500); });
+  });
+  document.getElementById('g-anlegen').addEventListener('click', function () {
+    var fe = document.getElementById('g-fehler'); fe.hidden = true;
+    post({ action: 'gutschein_neu', typ: document.getElementById('g-typ').value, fuer: document.getElementById('g-fuer').value, von: document.getElementById('g-von').value, email: document.getElementById('g-mail').value, gruss: document.getElementById('g-gruss').value })
+      .then(function (d) { if (!d.ok) { fe.textContent = d.fehler || 'Das hat nicht geklappt.'; fe.hidden = false; return; } ['g-fuer', 'g-von', 'g-mail', 'g-gruss'].forEach(function (i) { document.getElementById(i).value = ''; }); laden(); });
+  });
+  document.getElementById('los') && document.getElementById('los').addEventListener('click', function () { setTimeout(laden, 300); });
+  laden();
+})();
+</script>
 <script>
 (function () {
   var API = '/api/anmeldung', K = 'bv-anm-key', karten = [], offen = {};
