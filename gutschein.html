@@ -92,7 +92,7 @@ h1 em{color:var(--plum)}
   <section id="bestellen">
     <p class="eyebrow">Gutschein</p>
     <h1>Yoga <em>verschenken</em></h1>
-    <p class="sub">Eine Karte für meine Yogastunden in der Wedemark, mit deinem persönlichen Gruß. Die Karte beginnt erst mit der ersten Stunde. Die Beschenkte startet also, wann es für sie passt.</p>
+    <p class="sub">Eine Karte für meine Yogastunden, in Präsenz in der Wedemark oder live online, mit deinem persönlichen Gruß. Die Karte beginnt erst mit der ersten Stunde. Die Beschenkte startet also, wann es für sie passt.</p>
 
     <form id="form" novalidate>
       <div class="wahl" role="radiogroup" aria-label="Karte">
@@ -118,7 +118,7 @@ h1 em{color:var(--plum)}
       <li>Du bezahlst online oder bar bei mir.</li>
       <li>Sobald das Geld da ist, schicke ich dir den Gutschein per Mail. Du druckst ihn aus oder leitest ihn weiter.</li>
     </ol>
-    <p class="klein">Der Gutschein gilt drei Jahre bis zum Jahresende. Ab der ersten Stunde läuft die Karte, die 5er-Karte 6 Monate, die 10er-Karte 12 Monate. Gilt für alle offenen Yogastunden, die Termine stehen in der <a href="/kurse">Kursübersicht</a>. Mehr in den <a href="/agb">AGB</a>.</p>
+    <p class="klein">Der Gutschein gilt drei Jahre bis zum Jahresende. Ab der ersten Stunde läuft die Karte, die 5er-Karte 6 Monate, die 10er-Karte 12 Monate. Einlösbar für meine offenen Präsenzstunden und meine Live-Online-Stunden, die Termine stehen in der <a href="/kurse">Kursübersicht</a>. Mehr in den <a href="/agb">AGB</a>.</p>
   </section>
 
   <section id="danke" hidden>
@@ -133,7 +133,7 @@ h1 em{color:var(--plum)}
   <section id="ansicht" hidden>
     <div class="gs-hinweis" id="ansicht-hinweis" hidden></div>
     <div class="gs"><div class="gs-innen">
-      <div class="gs-marke">Bettina Kahmann<em>beVital InsideOut · Yoga in der Wedemark</em></div>
+      <div class="gs-marke">Bettina Kahmann<em>beVital InsideOut · Yoga in der Wedemark und live online</em></div>
       <div class="gs-titel">Gutschein</div>
       <div class="gs-fuer">für</div>
       <div class="gs-name" id="g-name"></div>
@@ -170,12 +170,12 @@ h1 em{color:var(--plum)}
       if (g.fehler) { $('ansicht-fehler').textContent = g.fehler; $('ansicht-fehler').hidden = false; return; }
       document.title = 'Gutschein für ' + g.fuer + ' · Bettina Kahmann';
       $('g-name').textContent = g.fuer;
-      $('g-karte').textContent = g.typ + '-Karte · ' + g.stunden + ' Yogastunden';
+      $('g-karte').textContent = g.typ + '-Karte · ' + g.stunden + ' Yogastunden in Präsenz oder live online';
       $('g-gruss').textContent = g.gruss ? '„' + g.gruss + '“' : '';
       $('g-gruss').hidden = !g.gruss;
       $('g-von').textContent = 'von ' + g.von;
       $('g-code').textContent = g.code;
-      $('g-so').textContent = 'So löst du ihn ein: Auf bettina-kahmann.com/anmeldung bei deiner Wunschstunde „Meine 5er- oder 10er-Karte“ wählen und den Code eingeben. Ab dieser Stunde läuft deine Karte ' + g.monate + ' Monate.';
+      $('g-so').textContent = 'So löst du ihn ein: Für eine Präsenzstunde wählst du auf bettina-kahmann.com/anmeldung „Meine 5er- oder 10er-Karte“ und gibst den Code ein. Für eine Live-Online-Stunde schickst du mir den Code per WhatsApp oder Mail. Ab der ersten Stunde läuft deine Karte ' + g.monate + ' Monate.';
       $('g-fuss').textContent = 'Gültig bis ' + g.gueltigBis + ' · Keine Barauszahlung';
       if (g.eingeloest) { $('ansicht-hinweis').textContent = 'Dieser Gutschein wurde schon eingelöst. Die Karte läuft.'; $('ansicht-hinweis').hidden = false; }
       $('ansicht').hidden = false;
