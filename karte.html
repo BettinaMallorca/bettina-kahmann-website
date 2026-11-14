@@ -71,7 +71,7 @@ li span:last-child{color:var(--text-light);white-space:nowrap}
   function zeigen(d) {
     var genutzt = d.stunden - Math.max(0, d.rest), punkte = '';
     for (var i = 0; i < d.stunden; i++) punkte += '<i class="' + (i < Math.max(0, d.rest) ? 'voll' : '') + '"></i>';
-    var hinweis = d.abgelaufen ? 'Deine Karte ist am ' + esc(d.gueltigBis) + ' abgelaufen. Sprich mich an, wenn noch Stunden offen sind.'
+    var hinweis = d.abgelaufen ? 'Deine Karte ist am ' + esc(d.gueltigBis) + ' abgelaufen. Stunden, die bis dahin nicht genutzt wurden, sind verfallen.'
       : d.rest < 0 ? 'Du hast ' + (-d.rest) + (d.rest === -1 ? ' Stunde' : ' Stunden') + ' mehr genutzt, als auf der Karte waren. Das verrechnen wir mit deiner nächsten Karte.'
       : d.rest === 0 ? 'Deine Karte ist voll. Eine neue Karte bekommst du bei mir, bar in der Stunde. Lieber per PayPal? Dann schreib mir.'
       : d.rest === 1 ? 'Noch eine Stunde auf deiner Karte. Die nächste Karte bezahlst du bei mir bar in der Stunde. Lieber per PayPal? Dann schreib mir.' : '';
