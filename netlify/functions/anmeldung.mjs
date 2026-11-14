@@ -858,6 +858,18 @@ var getDeployStoreRegion = (clientOptions, context) => {
   }
   return REGION_AUTO;
 };
+var getDeployStore = (input = {}, options) => {
+  const context = getEnvironmentContext();
+  const mergedOptions = typeof input === "string" ? { ...options, name: input } : input;
+  const deployID = mergedOptions.deployID ?? context.deployID;
+  if (!deployID) {
+    throw new MissingBlobsEnvironmentError(["deployID"]);
+  }
+  const clientOptions = getClientOptions(mergedOptions, context);
+  clientOptions.region = getDeployStoreRegion(clientOptions, context);
+  const client = new Client(clientOptions);
+  return new Store({ client, deployID, name: mergedOptions.name });
+};
 var getStore = (input, options) => {
   if (typeof input === "string") {
     const contextOverride = options?.siteID && options?.token ? { siteID: options?.siteID, token: options?.token } : void 0;
@@ -907,7 +919,9 @@ var KARTEN_KEY = "karten";
 var KARTEN_LOESCHEN_MONATE = 6;
 var CODE_ZEICHEN = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 var WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
-var store = () => getStore({ name: "wochen-anmeldung", consistency: "strong" });
+var PRODUKTION = true;
+var store = () => PRODUKTION ? getStore({ name: "wochen-anmeldung", consistency: "strong" }) : getDeployStore({ name: "wochen-anmeldung", consistency: "strong" });
+var VORSCHAU_SCHLUESSEL = "vorschau-bettina";
 var json = (data, status = 200) => new Response(JSON.stringify(data), {
   status,
   headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
@@ -1026,7 +1040,8 @@ async function aufraeumen(st) {
   for (const b of blobs) if (b.key.slice(2, 12) < grenze) await st.delete(b.key);
 }
 function istAdmin(req) {
-  const soll = process.env.ANMELDUNG_KEY || (typeof Netlify !== "undefined" ? Netlify.env.get("ANMELDUNG_KEY") : "");
+  let soll = process.env.ANMELDUNG_KEY || (typeof Netlify !== "undefined" ? Netlify.env.get("ANMELDUNG_KEY") : "");
+  if (!PRODUKTION) soll = VORSCHAU_SCHLUESSEL;
   const ist = req.headers.get("x-anmeldung-key") || "";
   return !!soll && soll.length >= 12 && ist === soll;
 }
@@ -1099,7 +1114,9 @@ function karteAdmin(k) {
     buchungen: k.buchungen
   };
 }
-var anmeldung_default = async (req) => {
+var anmeldung_default = async (req, context) => {
+  const ctx = context?.deploy?.context;
+  PRODUKTION = !ctx || ctx === "production";
   const st = store();
   const url = new URL(req.url);
   if (req.method === "GET") {

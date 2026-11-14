@@ -1,6 +1,6 @@
 // Wochen-Anmeldung für die offenen Präsenzstunden.
 // Quelle: _tools/anmeldung/src/anmeldung.mjs, gebündelt nach netlify/functions/anmeldung.mjs
-import { getStore } from '@netlify/blobs';
+import { getStore, getDeployStore } from '@netlify/blobs';
 
 const PLAETZE = 15;
 const FRIST_STUNDEN = 12;
@@ -18,7 +18,13 @@ const KARTEN_LOESCHEN_MONATE = 6; // nach Ablauf der Karte
 const CODE_ZEICHEN = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const WT = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 
-const store = () => getStore({ name: 'wochen-anmeldung', consistency: 'strong' });
+// Nur die echte Website nutzt den gemeinsamen Speicher. Vorschauen bekommen je Deploy einen eigenen,
+// damit Testeinträge nie in den echten Daten landen.
+let PRODUKTION = true;
+const store = () => PRODUKTION
+  ? getStore({ name: 'wochen-anmeldung', consistency: 'strong' })
+  : getDeployStore({ name: 'wochen-anmeldung', consistency: 'strong' });
+const VORSCHAU_SCHLUESSEL = 'vorschau-bettina';
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -133,7 +139,8 @@ async function aufraeumen(st) {
 }
 
 function istAdmin(req) {
-  const soll = process.env.ANMELDUNG_KEY || (typeof Netlify !== 'undefined' ? Netlify.env.get('ANMELDUNG_KEY') : '');
+  let soll = process.env.ANMELDUNG_KEY || (typeof Netlify !== 'undefined' ? Netlify.env.get('ANMELDUNG_KEY') : '');
+  if (!PRODUKTION) soll = VORSCHAU_SCHLUESSEL;
   const ist = req.headers.get('x-anmeldung-key') || '';
   return !!soll && soll.length >= 12 && ist === soll;
 }
@@ -206,7 +213,9 @@ function karteAdmin(k) {
     abgelaufen: k.gueltigBis < heute, rest: rest(k), buchungen: k.buchungen };
 }
 
-export default async (req) => {
+export default async (req, context) => {
+  const ctx = context?.deploy?.context;
+  PRODUKTION = !ctx || ctx === 'production';
   const st = store();
   const url = new URL(req.url);
 
