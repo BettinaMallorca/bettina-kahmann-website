@@ -9,7 +9,7 @@ const AUFBEWAHRUNG_TAGE = 28;
 const STUNDEN = [
   { id: 'di18', tag: 2, start: '18:00', ende: '19:15', titel: 'Hatha meets Yin' },
   { id: 'di1930', tag: 2, start: '19:30', ende: '20:30', titel: 'Yin Yoga' },
-  { id: 'do1815', tag: 4, start: '18:15', ende: '19:30', titel: 'Kraftvolles Hatha Yoga' },
+  { id: 'do1815', tag: 4, start: '18:15', ende: '19:30', titel: 'Hatha Kraft & Stabilität' },
 ];
 // Kurse, die nur angezeigt werden (keine Anmeldung). Termine kommen aus dem Plan.
 const INFO_KURSE = [
