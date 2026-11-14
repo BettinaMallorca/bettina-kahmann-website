@@ -13,7 +13,7 @@ const STUNDEN = [
 ];
 // Kurse, die nur angezeigt werden (keine Anmeldung). Termine kommen aus dem Plan.
 const INFO_KURSE = [
-  { id: 'aroha', titel: 'AROHA', start: '18:00', ende: '18:50', zusatz: 'YAP – YOUR Active Place, Hopershof · Buchung über Fyndery', link: 'https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239', linkText: 'Bei Fyndery buchen' },
+  { id: 'aroha', titel: 'AROHA', start: '18:00', ende: '18:50', zusatz: 'YAP – YOUR Active Place, Höpershof · Buchung über Fyndery', link: 'https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239', linkText: 'Bei Fyndery buchen' },
   { id: 'faszien', titel: 'FaszienFit', start: '09:00', ende: '09:40', zusatz: 'live online', link: '/yoga-studio-online' },
   { id: 'yinonline', titel: 'Yin Yoga Präventionskurs', start: '19:30', ende: '20:30', zusatz: 'live online über Zoom, für die angemeldeten Kursteilnehmenden', link: '/praeventionskurse-online' },
   { id: 'morning', titel: 'Morning Energy Yoga', start: '09:00', zusatz: 'live online', link: '/yoga-studio-online' },

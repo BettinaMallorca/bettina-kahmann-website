@@ -914,7 +914,7 @@ var STUNDEN = [
   { id: "do1815", tag: 4, start: "18:15", ende: "19:30", titel: "Kraftvolles Hatha Yoga" }
 ];
 var INFO_KURSE = [
-  { id: "aroha", titel: "AROHA", start: "18:00", ende: "18:50", zusatz: "YAP \u2013 YOUR Active Place, Hopershof \xB7 Buchung \xFCber Fyndery", link: "https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239", linkText: "Bei Fyndery buchen" },
+  { id: "aroha", titel: "AROHA", start: "18:00", ende: "18:50", zusatz: "YAP \u2013 YOUR Active Place, H\xF6pershof \xB7 Buchung \xFCber Fyndery", link: "https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239", linkText: "Bei Fyndery buchen" },
   { id: "faszien", titel: "FaszienFit", start: "09:00", ende: "09:40", zusatz: "live online", link: "/yoga-studio-online" },
   { id: "yinonline", titel: "Yin Yoga Pr\xE4ventionskurs", start: "19:30", ende: "20:30", zusatz: "live online \xFCber Zoom, f\xFCr die angemeldeten Kursteilnehmenden", link: "/praeventionskurse-online" },
   { id: "morning", titel: "Morning Energy Yoga", start: "09:00", zusatz: "live online", link: "/yoga-studio-online" }
