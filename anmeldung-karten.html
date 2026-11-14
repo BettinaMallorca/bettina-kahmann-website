@@ -59,7 +59,7 @@ details.mini summary{cursor:pointer;color:var(--plum);font-size:.88rem;margin-to
 
   <div id="app" hidden>
     <h2 style="margin-top:6px">Gutscheine</h2>
-    <p class="sub" style="margin-bottom:10px">Neue Bestellungen von bettina-kahmann.com/gutschein landen hier als „offen“. Sobald die Zahlung bei alfima da ist, tippst du auf „Bezahlt, freigeben“ und schickst den Mail-Text an die Käuferin. Der Code wird bei der ersten Anmeldung automatisch zur Karte.</p>
+    <p class="sub" style="margin-bottom:10px">Neue Bestellungen von bettina-kahmann.com/gutschein landen hier als „offen“. Sobald das Geld da ist, über alfima oder bar, tippst du auf „Bezahlt, freigeben“ und schickst den Mail-Text an die Käuferin. Der Code wird bei der ersten Anmeldung automatisch zur Karte.</p>
     <div id="gutscheine"></div>
     <details class="mini box"><summary>Gutschein ohne Bestellung anlegen (zum Beispiel bar bezahlt)</summary>
       <label for="g-fuer">Für wen</label><input id="g-fuer" placeholder="Vorname und Nachname">
@@ -109,7 +109,7 @@ details.mini summary{cursor:pointer;color:var(--plum);font-size:.88rem;margin-to
     if (!liste.length) { el.innerHTML = '<p class="sub">Noch keine Gutscheine.</p>'; return; }
     el.innerHTML = liste.map(function (g) {
       var k = '<div class="box" data-gid="' + g.id + '"><div class="name">' + esc(g.fuer) + '<span class="chip ' + g.status + '">' + NAMEN[g.status] + '</span></div>' +
-        '<div class="meta">' + g.typ + '-Karte · ' + g.preis + ' € · von ' + esc(g.von) + (g.email ? ' · ' + esc(g.email) : '') + ' · bestellt ' + de(g.bestellt) + (g.eingeloest ? ' · eingelöst ' + de(g.eingeloest) : '') + ' · Code ' + g.code + '</div>' +
+        '<div class="meta">' + g.typ + '-Karte · ' + g.preis + ' € ' + (g.zahlart === 'bar' ? 'bar' : 'über alfima') + ' · von ' + esc(g.von) + (g.email ? ' · ' + esc(g.email) : '') + ' · bestellt ' + de(g.bestellt) + (g.eingeloest ? ' · eingelöst ' + de(g.eingeloest) : '') + ' · Code ' + g.code + '</div>' +
         (g.gruss ? '<div class="gruss">„' + esc(g.gruss) + '“</div>' : '') + '<div class="knoepfe">';
       if (g.status === 'offen') k += '<button class="btn voll" data-a="bezahlt">Bezahlt, freigeben</button><button class="btn" data-a="loeschen">Löschen</button>';
       if (g.status === 'bezahlt') k += '<button class="btn voll" data-a="mail">Mail-Text kopieren</button><a class="btn" href="' + link(g) + '" target="_blank" style="text-decoration:none">Ansehen</a><button class="btn" data-a="einloesen">Jetzt einlösen</button><button class="btn" data-a="zurueck">Doch nicht bezahlt</button>';

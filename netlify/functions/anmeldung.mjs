@@ -1159,6 +1159,7 @@ function gutscheinAdmin(g) {
     code: g.code,
     typ: g.typ,
     preis: PREISE[g.typ],
+    zahlart: g.zahlart || "alfima",
     fuer: g.fuer,
     von: g.von,
     email: g.email,
@@ -1371,6 +1372,7 @@ var anmeldung_default = async (req, context) => {
     if (body.website) return json({ ok: true });
     const typ = KARTEN[body.typ] ? body.typ : "";
     const fuer = text(body.fuer, 60), von = text(body.von, 60), email = text(body.email, 120), gruss = text(body.gruss, 160);
+    const zahlart = body.zahlart === "bar" ? "bar" : "alfima";
     if (!typ) return json({ fehler: "Bitte w\xE4hl eine Karte aus." }, 400);
     if (fuer.length < 2) return json({ fehler: "Bitte trag ein, f\xFCr wen der Gutschein ist." }, 400);
     if (von.length < 2) return json({ fehler: "Bitte trag deinen Namen ein." }, 400);
@@ -1378,7 +1380,7 @@ var anmeldung_default = async (req, context) => {
     const r = await aendern(st, KARTEN_KEY, (doc) => {
       if (doc.gutscheine.filter((g) => g.status === "offen").length >= 200) return { fehler: "Gerade sind zu viele Bestellungen offen. Schreib mir bitte direkt." };
       const heute = jetztBerlin().datum;
-      doc.gutscheine.push({ id: zufall(8), code: neuerCode(alleCodes(doc)), typ, fuer, von, email, gruss, status: "offen", bestellt: heute, gueltigBis: gutscheinGueltig(heute) });
+      doc.gutscheine.push({ id: zufall(8), code: neuerCode(alleCodes(doc)), typ, fuer, von, email, gruss, zahlart, status: "offen", bestellt: heute, gueltigBis: gutscheinGueltig(heute) });
       return { ok: true };
     }, ladeKarten);
     return json(r, r.fehler ? 409 : 200);
@@ -1391,7 +1393,7 @@ var anmeldung_default = async (req, context) => {
     let neu;
     const r = await aendern(st, KARTEN_KEY, (doc) => {
       const heute = jetztBerlin().datum;
-      neu = { id: zufall(8), code: neuerCode(alleCodes(doc)), typ, fuer, von, email, gruss, status: "bezahlt", bestellt: heute, bezahlt: heute, gueltigBis: gutscheinGueltig(heute) };
+      neu = { id: zufall(8), code: neuerCode(alleCodes(doc)), typ, fuer, von, email, gruss, zahlart: "bar", status: "bezahlt", bestellt: heute, bezahlt: heute, gueltigBis: gutscheinGueltig(heute) };
       doc.gutscheine.push(neu);
       return { ok: true };
     }, ladeKarten);

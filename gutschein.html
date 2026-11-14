@@ -41,6 +41,12 @@ h1 em{color:var(--plum)}
 .btn:hover,.btn:focus-visible{background:#7a2d5c}
 .btn[disabled]{opacity:.6}
 .fehler{color:#a3322a;font-size:.92rem;margin-top:12px}
+.zahlart{margin-top:18px}
+.zahlart p{font-size:.88rem;font-weight:500;margin-bottom:6px}
+.zahlart label{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;font-size:.95rem}
+.zahlart label:has(input:checked){border-color:var(--plum)}
+.zahlart input{margin-top:5px;accent-color:var(--plum)}
+.zahlart small{display:block;color:var(--text-light);font-size:.84rem}
 .schritte{list-style:none;counter-reset:s;margin:30px 0 0;padding:22px;background:var(--cream-dark);border-radius:16px}
 .schritte li{counter-increment:s;position:relative;padding:0 0 10px 36px;font-size:.95rem}
 .schritte li:last-child{padding-bottom:0}
@@ -97,15 +103,20 @@ h1 em{color:var(--plum)}
       <div class="feld"><label for="gruss">Dein Gruß auf dem Gutschein (freiwillig)</label><textarea id="gruss" name="gruss" maxlength="160" placeholder="Zum Beispiel: Frohe Weihnachten! Gönn dir Zeit für dich."></textarea><div class="zaehler"><span id="zaehler">0</span> / 160</div></div>
       <div class="feld"><label for="von">Dein Name</label><input id="von" name="von" maxlength="60" autocomplete="name"></div>
       <div class="feld"><label for="email">Deine E-Mail-Adresse</label><input id="email" name="email" type="email" maxlength="120" autocomplete="email"></div>
+      <div class="zahlart" role="radiogroup" aria-label="Bezahlung">
+        <p>Wie möchtest du bezahlen?</p>
+        <label><input type="radio" name="zahlart" value="alfima" checked><span>Online über alfima<small>Du wirst gleich zur Bezahlung weitergeleitet.</small></span></label>
+        <label><input type="radio" name="zahlart" value="bar"><span>Bar bei mir<small>Du bringst das Geld in eine meiner Stunden mit oder gibst es mir persönlich.</small></span></label>
+      </div>
       <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
-      <button class="btn" type="submit">Weiter zur Bezahlung</button>
+      <button class="btn" type="submit">Gutschein bestellen</button>
       <p class="fehler" id="fehler" hidden></p>
     </form>
 
     <ol class="schritte">
       <li>Du wählst die Karte und schreibst deinen Gruß.</li>
-      <li>Du bezahlst sicher über alfima.</li>
-      <li>Nach Zahlungseingang schicke ich dir den Gutschein per Mail. Du druckst ihn aus oder leitest ihn weiter.</li>
+      <li>Du bezahlst online über alfima oder bar bei mir.</li>
+      <li>Sobald das Geld da ist, schicke ich dir den Gutschein per Mail. Du druckst ihn aus oder leitest ihn weiter.</li>
     </ol>
     <p class="klein">Der Gutschein gilt drei Jahre bis zum Jahresende. Ab der ersten Stunde läuft die Karte, die 5er-Karte 6 Monate, die 10er-Karte 12 Monate. Gilt für alle offenen Yogastunden, die Termine stehen in der <a href="/kurse">Kursübersicht</a>. Mehr in den <a href="/agb">AGB</a>.</p>
   </section>
@@ -142,7 +153,7 @@ h1 em{color:var(--plum)}
 
 <!-- Benachrichtigung an Bettina über Netlify Forms -->
 <form name="gutschein-bestellung" data-netlify="true" netlify-honeypot="bot-field" hidden>
-  <input name="bot-field"><input name="karte"><input name="fuer"><input name="von"><input name="email"><textarea name="gruss"></textarea>
+  <input name="bot-field"><input name="zahlart"><input name="karte"><input name="fuer"><input name="von"><input name="email"><textarea name="gruss"></textarea>
 </form>
 
 <script>
@@ -177,21 +188,22 @@ h1 em{color:var(--plum)}
   $('form').addEventListener('submit', function (ev) {
     ev.preventDefault();
     var f = ev.target, fe = $('fehler'), btn = f.querySelector('button');
-    var d = { action: 'gutschein_bestellen', typ: (f.querySelector('input[name=typ]:checked') || {}).value, fuer: f.fuer.value, von: f.von.value, email: f.email.value, gruss: f.gruss.value, website: f.website.value };
+    var d = { action: 'gutschein_bestellen', typ: (f.querySelector('input[name=typ]:checked') || {}).value, fuer: f.fuer.value, von: f.von.value, email: f.email.value, gruss: f.gruss.value, zahlart: (f.querySelector('input[name=zahlart]:checked') || {}).value, website: f.website.value };
     fe.hidden = true; btn.disabled = true; btn.textContent = 'Einen Moment …';
     fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(d) })
       .then(function (r) { return r.json(); })
       .then(function (r) {
-        if (!r.ok) { fe.textContent = r.fehler || 'Das hat nicht geklappt.'; fe.hidden = false; btn.disabled = false; btn.textContent = 'Weiter zur Bezahlung'; return; }
-        var body = new URLSearchParams({ 'form-name': 'gutschein-bestellung', karte: d.typ + '-Karte', fuer: d.fuer, von: d.von, email: d.email, gruss: d.gruss }).toString();
+        if (!r.ok) { fe.textContent = r.fehler || 'Das hat nicht geklappt.'; fe.hidden = false; btn.disabled = false; btn.textContent = 'Gutschein bestellen'; return; }
+        var body = new URLSearchParams({ 'form-name': 'gutschein-bestellung', zahlart: d.zahlart === 'bar' ? 'Bar' : 'alfima', karte: d.typ + '-Karte', fuer: d.fuer, von: d.von, email: d.email, gruss: d.gruss }).toString();
         fetch('/', { method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' }, body: body }).catch(function () {}).then(function () {
           $('bestellen').hidden = true; $('danke').hidden = false; window.scrollTo(0, 0);
           var link = ALFIMA[d.typ];
-          if (link) { $('zahlen').href = link; setTimeout(function () { location.href = link; }, 1500); }
+          if (d.zahlart === 'bar') { $('danke-text').textContent = 'Bring die ' + (d.typ === '5er' ? '90' : '160') + ' € in eine meiner Stunden mit oder gib sie mir persönlich. Sobald ich das Geld habe, schicke ich dir den Gutschein per Mail an ' + d.email + '.'; $('zahlen').hidden = true; }
+          else if (link) { $('zahlen').href = link; setTimeout(function () { location.href = link; }, 1500); }
           else { $('danke-text').textContent = 'Ich melde mich bei dir mit den Zahlungsdaten.'; $('zahlen').hidden = true; }
         });
       })
-      .catch(function () { fe.textContent = 'Keine Verbindung. Bitte versuch es noch einmal.'; fe.hidden = false; btn.disabled = false; btn.textContent = 'Weiter zur Bezahlung'; });
+      .catch(function () { fe.textContent = 'Keine Verbindung. Bitte versuch es noch einmal.'; fe.hidden = false; btn.disabled = false; btn.textContent = 'Gutschein bestellen'; });
   });
 })();
 </script>
