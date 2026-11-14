@@ -9,12 +9,12 @@ const AUFBEWAHRUNG_TAGE = 28;
 const STUNDEN = [
   { id: 'di18', tag: 2, start: '18:00', ende: '19:15', titel: 'Hatha meets Yin' },
   { id: 'di1930', tag: 2, start: '19:30', ende: '20:30', titel: 'Yin Yoga' },
-  { id: 'do1815', tag: 4, start: '18:15', ende: '19:30', titel: 'Yoga für Männer & Frauen' },
+  { id: 'do1815', tag: 4, start: '18:15', ende: '19:30', titel: 'Kraftvolles Hatha Yoga' },
 ];
 // Kurse, die nur angezeigt werden (keine Anmeldung). Termine kommen aus dem Plan.
 const INFO_KURSE = [
-  { id: 'aroha', titel: 'AROHA', start: '18:00', zusatz: 'in Präsenz' },
-  { id: 'faszien', titel: 'FaszienFit', start: '09:00', zusatz: 'live online, 30 bis 40 Minuten', link: '/yoga-studio-online' },
+  { id: 'aroha', titel: 'AROHA', start: '18:00', ende: '18:50', zusatz: 'YAP – YOUR Active Place, Hopershof · Buchung über Fyndery', link: 'https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239', linkText: 'Bei Fyndery buchen' },
+  { id: 'faszien', titel: 'FaszienFit', start: '09:00', ende: '09:40', zusatz: 'live online', link: '/yoga-studio-online' },
   { id: 'yinonline', titel: 'Yin Yoga Präventionskurs', start: '19:30', ende: '20:30', zusatz: 'live online über Zoom, für die angemeldeten Kursteilnehmenden', link: '/praeventionskurse-online' },
   { id: 'morning', titel: 'Morning Energy Yoga', start: '09:00', zusatz: 'live online', link: '/yoga-studio-online' },
 ];
@@ -32,6 +32,7 @@ const START_PLAN = {
 };
 let PLAN = START_PLAN;
 const ARTEN = ['Karte', 'KarteHansefit', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
+const ARTEN_ADMIN = ['epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde', 'Fyndery'];
 const KARTEN = { '5er': { stunden: 5, monate: 6 }, '10er': { stunden: 10, monate: 12 } };
 const KARTEN_KEY = 'karten';
 const KARTEN_LOESCHEN_MONATE = 6; // nach Ablauf der Karte
@@ -99,7 +100,7 @@ function vergangeneTermine(tage) {
 }
 function infoTermine() {
   return INFO_KURSE.map((k) => ({
-    titel: k.titel, zeit: k.ende ? `${k.start}–${k.ende}` : k.start, zusatz: k.zusatz, link: k.link || '',
+    titel: k.titel, zeit: k.ende ? `${k.start}–${k.ende}` : k.start, zusatz: k.zusatz, link: k.link || '', linkText: k.linkText || '',
     termine: (PLAN[k.id] || []).filter((d) => kommt(d, k.start)).sort().slice(0, 8).map(datumText),
   })).filter((k) => k.termine.length);
 }
@@ -416,6 +417,29 @@ export default async (req, context) => {
   }
   const key = String(body.key || '');
   if (!/^s\/\d{4}-\d{2}-\d{2}_[a-z0-9]+$/.test(key)) return json({ fehler: 'Unbekannte Stunde.' }, 400);
+  if (body.action === 'eintragen') {
+    // Bettina trägt jemanden selbst ein, auch nachträglich (bis 14 Tage zurück)
+    const t = terminAusKey(key);
+    if (!t || t.datum < plusTage(jetztBerlin().datum, -14)) return json({ fehler: 'Diese Stunde kann nicht mehr geändert werden.' }, 400);
+    let name = String(body.name || '').replace(/\s+/g, ' ').trim().slice(0, 60);
+    let art = String(body.art || '');
+    let karte = null;
+    if (art === 'Karte' || art === 'KarteHansefit') {
+      karte = (await ladeKarten(st)).doc.karten.find((x) => x.id === body.kartenId);
+      if (!karte) return json({ fehler: 'Bitte eine Karte auswählen.' }, 400);
+      name = name || karte.name;
+      art = `${karte.typ}-Karte` + (art === 'KarteHansefit' ? ' + Hansefit/epassi' : '');
+    } else if (!ARTEN_ADMIN.includes(art)) return json({ fehler: 'Bitte die Teilnahmeart wählen.' }, 400);
+    if (name.length < 2) return json({ fehler: 'Bitte einen Namen eintragen.' }, 400);
+    const r = await aendern(st, key, (doc) => {
+      if (karte && doc.eintraege.some((e) => e.kartenId === karte.id)) return { fehler: 'Diese Karte ist für die Stunde schon eingetragen.' };
+      doc.eintraege.push({ id: zufall(8), name, art, ts: new Date().toISOString(), tokenHash: '', vonBettina: true, ...(karte ? { kartenId: karte.id } : {}) });
+      return { ok: true };
+    });
+    if (r.fehler) return json(r, 409);
+    await abrechnen(st).catch(() => {});
+    return json(r);
+  }
   if (body.action === 'ausfall') {
     const r = await aendern(st, key, (doc) => { doc.ausfall = !!body.wert; if (doc.ausfall) doc.bestaetigt = false; return { ok: true }; });
     return json(r, r.fehler ? 409 : 200);

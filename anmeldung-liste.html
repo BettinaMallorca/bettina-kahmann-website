@@ -40,6 +40,11 @@ button{font:inherit;cursor:pointer}
 .ausfall{background:var(--cream-dark);border-radius:8px;padding:6px 10px;font-size:.85rem;margin-top:8px;display:inline-block}
 input{font:inherit;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 12px}
 .fehler{color:#a3322a;font-size:.9rem}
+.eintrag{margin-top:12px;font-size:.9rem}
+.eintrag summary{cursor:pointer;color:var(--plum);font-weight:600}
+.eintrag label{display:block;margin-top:8px;font-size:.85rem}
+.eintrag select,.eintrag input{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:4px 0 8px}
+.eintrag [hidden]{display:none}
 h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5rem;margin:26px 0 10px}
 </style>
 </head>
@@ -66,7 +71,11 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
   function laden() {
     fetch(API + '?admin=1', { headers: { 'x-anmeldung-key': key() }, cache: 'no-store' })
       .then(function (r) { if (r.status === 401) throw 401; return r.json(); })
-      .then(function (d) { login.hidden = true; zeigen(d.termine); })
+      .then(function (d) {
+        login.hidden = true;
+        return fetch(API + '?karten=1', { headers: { 'x-anmeldung-key': key() }, cache: 'no-store' }).then(function (r) { return r.json(); })
+          .then(function (k) { kartenListe = (k.karten || []).filter(function (x) { return !x.abgelaufen; }); zeigen(d.termine); });
+      })
       .catch(function (e) {
         login.hidden = false; inhalt.innerHTML = '';
         if (key()) { var f = document.getElementById('loginfehler'); f.textContent = e === 401 ? 'Der Schlüssel stimmt nicht.' : 'Keine Verbindung.'; f.hidden = false; }
@@ -92,17 +101,32 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
         return '<li' + (e.erlassen ? ' class="erlassen"' : '') + '><span>' + esc(e.name) + ' <span class="art">' + esc(e.art) + '</span></span>' +
           '<button class="mini" data-erlassen="' + e.id + '" data-wert="' + (e.erlassen ? '0' : '1') + '">' + (e.erlassen ? 'Doch berechnen' : 'Nicht berechnen') + '</button></li>';
       }).join('') + '</ol>' : '') +
+      eintragForm() +
       (t.kommend ? '<div class="knoepfe"><button class="btn" data-kopie>Liste kopieren</button>' + (!t.ausfall && platz.length < t.mindest ? '<button class="btn" data-bestaetigt="' + (t.bestaetigt ? '0' : '1') + '">' + (t.bestaetigt ? 'Bestätigung zurücknehmen' : 'Findet trotzdem statt') + '</button>' : '') + '<button class="btn" data-ausfall="' + (t.ausfall ? '0' : '1') + '">' + (t.ausfall ? 'Findet doch statt' : 'Stunde fällt aus') + '</button></div>' : '') +
       '</article>';
   }
 
-  var daten = [];
+  var daten = [], kartenListe = [];
+  var ARTEN = [['Karte', '5er- oder 10er-Karte'], ['KarteHansefit', '10er-Karte mit Hansefit/epassi'], ['epassi/Hansefit', 'Nur Hansefit/epassi'], ['Einzelstunde', 'Einzelkarte'], ['Schnupperstunde', 'Schnupperstunde'], ['Fyndery', 'Fyndery']];
+  function eintragForm() {
+    return '<details class="eintrag"><summary>Person eintragen</summary>' +
+      '<label>Teilnahme<select data-f="art">' + ARTEN.map(function (a) { return '<option value="' + a[0] + '">' + a[1] + '</option>'; }).join('') + '</select></label>' +
+      '<label data-f="kartewahl">Karte<select data-f="karte"><option value="">Bitte wählen</option>' + kartenListe.map(function (k) { return '<option value="' + k.id + '">' + esc(k.name) + ' (' + esc(k.typ) + ', noch ' + k.rest + ')</option>'; }).join('') + '</select></label>' +
+      '<label data-f="namewahl" hidden>Name<input type="text" data-f="name" maxlength="60"></label>' +
+      '<button class="btn voll" data-eintragen>Eintragen</button><p class="fehler" data-f="fehler" hidden></p></details>';
+  }
   function zeigen(termine) {
     daten = termine;
-    var k = termine.filter(function (t) { return t.kommend; }), a = termine.filter(function (t) { return !t.kommend && (t.eintraege.length || t.spaet.length); });
-    inhalt.innerHTML = '<h2>Diese Woche</h2>' + k.map(karte).join('') + (a.length ? '<h2>Letzte zwei Wochen</h2>' + a.map(karte).join('') : '');
+    var k = termine.filter(function (t) { return t.kommend; }), a = termine.filter(function (t) { return !t.kommend; });
+    inhalt.innerHTML = '<h2>Nächste zwei Wochen</h2>' + k.map(karte).join('') + (a.length ? '<h2>Letzte zwei Wochen</h2>' + a.map(karte).join('') : '');
   }
 
+  inhalt.addEventListener('change', function (ev) {
+    if (ev.target.getAttribute('data-f') !== 'art') return;
+    var f = ev.target.closest('.eintrag'), mitKarte = ev.target.value === 'Karte' || ev.target.value === 'KarteHansefit';
+    f.querySelector('[data-f=kartewahl]').hidden = !mitKarte;
+    f.querySelector('[data-f=namewahl]').hidden = mitKarte;
+  });
   inhalt.addEventListener('click', function (ev) {
     var b = ev.target.closest('button'); if (!b) return;
     var key2 = b.closest('.karte').getAttribute('data-key');
@@ -110,6 +134,13 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
     if (b.hasAttribute('data-weg')) {
       if (!confirm('Diesen Eintrag entfernen?')) return;
       post({ action: 'entfernen', key: key2, id: b.getAttribute('data-weg') }).then(laden);
+    }
+    if (b.hasAttribute('data-eintragen')) {
+      var f = b.closest('.eintrag'), fe = f.querySelector('[data-f=fehler]');
+      fe.hidden = true;
+      post({ action: 'eintragen', key: key2, art: f.querySelector('[data-f=art]').value, kartenId: f.querySelector('[data-f=karte]').value, name: f.querySelector('[data-f=name]').value })
+        .then(function (r) { if (r.fehler) { fe.textContent = r.fehler; fe.hidden = false; return; } laden(); });
+      return;
     }
     if (b.hasAttribute('data-bestaetigt')) post({ action: 'bestaetigen', key: key2, wert: b.getAttribute('data-bestaetigt') === '1' }).then(laden);
     if (b.hasAttribute('data-erlassen')) post({ action: 'erlassen', key: key2, id: b.getAttribute('data-erlassen'), wert: b.getAttribute('data-wert') === '1' }).then(laden);

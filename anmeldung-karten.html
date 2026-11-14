@@ -68,6 +68,7 @@ button{font:inherit;cursor:pointer}
     </div>
 
     <h2>Alle Karten</h2>
+    <p style="margin-bottom:10px"><button class="btn" id="export">Als Tabelle herunterladen</button></p>
     <input class="filter" id="filter" placeholder="Name suchen">
     <div id="liste"></div>
   </div>
@@ -136,6 +137,17 @@ button{font:inherit;cursor:pointer}
       });
   });
   document.getElementById('filter').addEventListener('input', zeigen);
+  document.getElementById('export').addEventListener('click', function () {
+    function zelle(v) { v = String(v == null ? '' : v); return /[;"\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+    var zeilen = [['Name', 'Karte', 'Code', 'Stunden', 'Rest', 'Gekauft am', 'Gültig bis', 'Abgelaufen']].concat(karten.map(function (k) {
+      return [k.name, k.typ + '-Karte', k.code, k.stunden, k.rest, de(k.gekauft), de(k.gueltigBis), k.abgelaufen ? 'ja' : 'nein'];
+    }));
+    var csv = '\ufeff' + zeilen.map(function (z) { return z.map(zelle).join(';'); }).join('\r\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'Karten_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+  });
   document.getElementById('n-datum').value = new Date().toISOString().slice(0, 10);
   document.getElementById('los').addEventListener('click', function () {
     try { localStorage.setItem(K, document.getElementById('schluessel').value.trim()); } catch (e) {}
