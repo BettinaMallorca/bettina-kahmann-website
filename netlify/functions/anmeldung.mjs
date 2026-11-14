@@ -916,7 +916,7 @@ var STUNDEN = [
 var INFO_KURSE = [
   { id: "aroha", titel: "AROHA", start: "18:00", ende: "18:50", zusatz: "YAP \u2013 YOUR Active Place, H\xF6pershof", link: "https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239", linkText: "Bei Fyndery buchen" },
   { id: "faszien", titel: "FaszienFit", start: "09:00", ende: "09:40", zusatz: "live online", link: "https://www.fyndery.de/online/kurs/16842/faszienfit-yoga-beweglich-stabil/?ref=7239", linkText: "Bei Fyndery buchen" },
-  { id: "yinonline", titel: "Yin Yoga Pr\xE4ventionskurs", start: "19:30", ende: "20:30", zusatz: "live online \xFCber Zoom", link: "https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239", linkText: "Bei Fyndery buchen" },
+  { id: "yinonline", titel: "Yin Yoga live online", start: "19:30", ende: "20:30", zusatz: "\xFCber Zoom", link: "https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239", linkText: "Bei Fyndery buchen" },
   { id: "morning", titel: "Morning Energy Yoga", start: "09:00", zusatz: "live online", link: "https://www.fyndery.de/online/kurs/16133/morning-energy-yoga-ist-eine-vitalisierende-online-yogastunde/?ref=7239", linkText: "Bei Fyndery buchen" }
 ];
 var ANMELDE_TAGE = 14;
