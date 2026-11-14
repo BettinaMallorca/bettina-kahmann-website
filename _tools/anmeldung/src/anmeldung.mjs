@@ -4,6 +4,7 @@ import { getStore } from '@netlify/blobs';
 
 const PLAETZE = 15;
 const FRIST_STUNDEN = 12;
+const MINDEST = 5;
 const AUFBEWAHRUNG_TAGE = 28;
 const STUNDEN = [
   { id: 'di18', tag: 2, start: '18:00', ende: '19:15', titel: 'Hatha meets Yin' },
@@ -110,6 +111,7 @@ function oeffentlich(t, doc, eigeneIds) {
     zeit: `${t.start}–${t.ende}`, plaetze: PLAETZE,
     angemeldet: Math.min(n, PLAETZE), warteliste: Math.max(0, n - PLAETZE), ausfall: !!doc.ausfall,
     kostenpflichtig: imFristfenster(t), fristStunden: FRIST_STUNDEN,
+    mindest: MINDEST, bestaetigt: !!doc.bestaetigt, findetStatt: !doc.ausfall && (!!doc.bestaetigt || n >= MINDEST),
   };
   if (eigeneIds.length) {
     res.eigene = {};
@@ -146,7 +148,7 @@ export default async (req) => {
         liste.push({
           key: t.key, titel: t.titel, datum: t.datum, datumText: datumText(t.datum), zeit: `${t.start}–${t.ende}`,
           kommend: t.datum >= jetztBerlin().datum && naechsteTermine().some((x) => x.key === t.key),
-          ausfall: !!doc.ausfall, plaetze: PLAETZE,
+          ausfall: !!doc.ausfall, bestaetigt: !!doc.bestaetigt, mindest: MINDEST, plaetze: PLAETZE,
           eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE })),
           spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen })),
         });
@@ -206,7 +208,11 @@ export default async (req) => {
   const key = String(body.key || '');
   if (!/^s\/\d{4}-\d{2}-\d{2}_[a-z0-9]+$/.test(key)) return json({ fehler: 'Unbekannte Stunde.' }, 400);
   if (body.action === 'ausfall') {
-    const r = await aendern(st, key, (doc) => { doc.ausfall = !!body.wert; return { ok: true }; });
+    const r = await aendern(st, key, (doc) => { doc.ausfall = !!body.wert; if (doc.ausfall) doc.bestaetigt = false; return { ok: true }; });
+    return json(r, r.fehler ? 409 : 200);
+  }
+  if (body.action === 'bestaetigen') {
+    const r = await aendern(st, key, (doc) => { doc.bestaetigt = !!body.wert; if (doc.bestaetigt) doc.ausfall = false; return { ok: true }; });
     return json(r, r.fehler ? 409 : 200);
   }
   if (body.action === 'erlassen') {

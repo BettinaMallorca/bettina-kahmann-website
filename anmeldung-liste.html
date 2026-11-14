@@ -35,6 +35,8 @@ button{font:inherit;cursor:pointer}
 .spaet li{color:var(--text)}
 .spaet li.erlassen span:first-child{text-decoration:line-through;color:var(--text-light)}
 .mini{border:0;background:none;color:var(--plum);font-size:.78rem;text-decoration:underline;padding:0 4px}
+.lage{font-size:.85rem;margin:4px 0 6px}
+.lage.ja{color:#2f4a33}.lage.offen{color:var(--terracotta-dark)}
 .ausfall{background:var(--cream-dark);border-radius:8px;padding:6px 10px;font-size:.85rem;margin-top:8px;display:inline-block}
 input{font:inherit;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 12px}
 .fehler{color:#a3322a;font-size:.9rem}
@@ -78,15 +80,18 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
     return '<article class="karte' + (t.kommend ? '' : ' alt') + '" data-key="' + esc(t.key) + '">' +
       '<div class="kopf"><div><div class="tag">' + esc(t.datumText) + ' · ' + esc(t.zeit) + '</div><div class="titel">' + esc(t.titel) + '</div></div>' +
       '<div class="anzahl">' + platz.length + ' von ' + t.plaetze + (wl.length ? ' · ' + wl.length + ' Warteliste' : '') + '</div></div>' +
-      (t.ausfall ? '<div class="ausfall">Als ausgefallen markiert</div>' : '') +
+      (t.ausfall ? '<div class="ausfall">Als ausgefallen markiert</div>'
+        : platz.length >= t.mindest ? '<div class="lage ja">Findet statt, ' + t.mindest + ' Anmeldungen erreicht</div>'
+        : t.bestaetigt ? '<div class="lage ja">Findet statt, von dir bestätigt</div>'
+        : '<div class="lage offen">Noch ' + (t.mindest - platz.length) + ' bis zur Mindestzahl von ' + t.mindest + '</div>') +
       (summe ? '<div class="summe">' + esc(summe) + '</div>' : '') +
       (platz.length ? '<ol>' + platz.map(function (e) { return zeile(e, false); }).join('') + '</ol>' : '<p class="leer">Noch niemand angemeldet.</p>') +
       (wl.length ? '<div class="wltitel">Warteliste</div><ol>' + wl.map(function (e) { return zeile(e, true); }).join('') + '</ol>' : '') +
-      (t.spaet.length ? '<div class="wltitel">Späte Absage, wird berechnet</div><ol class="spaet">' + t.spaet.map(function (e) {
+      (t.spaet.length ? '<div class="wltitel">' + (t.ausfall ? 'Späte Absage, Stunde fiel aus, nichts berechnen' : 'Späte Absage, wird berechnet') + '</div><ol class="spaet">' + t.spaet.map(function (e) {
         return '<li' + (e.erlassen ? ' class="erlassen"' : '') + '><span>' + esc(e.name) + ' <span class="art">' + esc(e.art) + '</span></span>' +
           '<button class="mini" data-erlassen="' + e.id + '" data-wert="' + (e.erlassen ? '0' : '1') + '">' + (e.erlassen ? 'Doch berechnen' : 'Nicht berechnen') + '</button></li>';
       }).join('') + '</ol>' : '') +
-      (t.kommend ? '<div class="knoepfe"><button class="btn" data-kopie>Liste kopieren</button><button class="btn" data-ausfall="' + (t.ausfall ? '0' : '1') + '">' + (t.ausfall ? 'Findet doch statt' : 'Stunde fällt aus') + '</button></div>' : '') +
+      (t.kommend ? '<div class="knoepfe"><button class="btn" data-kopie>Liste kopieren</button>' + (!t.ausfall && platz.length < t.mindest ? '<button class="btn" data-bestaetigt="' + (t.bestaetigt ? '0' : '1') + '">' + (t.bestaetigt ? 'Bestätigung zurücknehmen' : 'Findet trotzdem statt') + '</button>' : '') + '<button class="btn" data-ausfall="' + (t.ausfall ? '0' : '1') + '">' + (t.ausfall ? 'Findet doch statt' : 'Stunde fällt aus') + '</button></div>' : '') +
       '</article>';
   }
 
@@ -105,13 +110,14 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
       if (!confirm('Diesen Eintrag entfernen?')) return;
       post({ action: 'entfernen', key: key2, id: b.getAttribute('data-weg') }).then(laden);
     }
+    if (b.hasAttribute('data-bestaetigt')) post({ action: 'bestaetigen', key: key2, wert: b.getAttribute('data-bestaetigt') === '1' }).then(laden);
     if (b.hasAttribute('data-erlassen')) post({ action: 'erlassen', key: key2, id: b.getAttribute('data-erlassen'), wert: b.getAttribute('data-wert') === '1' }).then(laden);
     if (b.hasAttribute('data-ausfall')) post({ action: 'ausfall', key: key2, wert: b.getAttribute('data-ausfall') === '1' }).then(laden);
     if (b.hasAttribute('data-kopie')) {
       var p = t.eintraege.filter(function (e) { return !e.warteliste; }), w = t.eintraege.filter(function (e) { return e.warteliste; });
       var txt = t.titel + ', ' + t.datumText + ' ' + t.zeit + ' Uhr\n' + p.length + ' von ' + t.plaetze + ' Plätzen\n\n' +
         p.map(function (e, i) { return (i + 1) + '. ' + e.name; }).join('\n') + (w.length ? '\n\nWarteliste:\n' + w.map(function (e, i) { return (i + 1) + '. ' + e.name; }).join('\n') : '') +
-        (function () { var s = t.spaet.filter(function (e) { return !e.erlassen; }); return s.length ? '\n\nSpäte Absage, wird berechnet:\n' + s.map(function (e) { return e.name + ' (' + e.art + ')'; }).join('\n') : ''; })();
+        (function () { var s = t.ausfall ? [] : t.spaet.filter(function (e) { return !e.erlassen; }); return s.length ? '\n\nSpäte Absage, wird berechnet:\n' + s.map(function (e) { return e.name + ' (' + e.art + ')'; }).join('\n') : ''; })();
       navigator.clipboard.writeText(txt).then(function () { b.textContent = 'Kopiert'; setTimeout(function () { b.textContent = 'Liste kopieren'; }, 1500); });
     }
   });

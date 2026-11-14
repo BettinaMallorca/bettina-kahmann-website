@@ -51,6 +51,9 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 .status.aus{background:var(--cream-dark);color:var(--text)}
 .status p+p{margin-top:4px}
 .fehler{color:#a3322a;font-size:.9rem;margin-top:10px}
+.lage{display:inline-block;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:5px 11px;margin-bottom:12px}
+.lage.ja{background:#e8efe8;color:#2f4a33}
+.lage.offen{background:var(--cream-dark);color:var(--terracotta-dark)}
 .klein{font-size:.8rem;color:var(--text-light);margin-top:12px}
 .warn{background:#f6ece4;border-radius:12px;padding:12px 14px;margin-top:10px;font-size:.92rem;color:var(--terracotta-dark)}
 .warn .zeile{margin-top:10px}
@@ -66,7 +69,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   <a class="brand" href="/">Bettina Kahmann<em>beVital InsideOut</em></a>
   <p class="eyebrow">Präsenzstunden · Anmeldung</p>
   <h1>Yoga diese Woche. <em>Bist du dabei?</em></h1>
-  <p class="sub">Trag dich für deine Stunde ein. So weiß ich, wie viele kommen, und dein Platz ist sicher. Pro Stunde gibt es 15 Plätze.</p>
+  <p class="sub">Trag dich für deine Stunde ein. So weiß ich, wie viele kommen, und dein Platz ist sicher. Eine Stunde findet ab 5 Anmeldungen statt, pro Stunde gibt es 15 Plätze.</p>
 
   <div id="liste"><p class="laden">Die Stunden werden geladen …</p></div>
 
@@ -116,14 +119,19 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
         '<div class="kopf"><div><div class="tag">' + esc(t.datumText) + '</div><div class="titel">' + esc(t.titel) + '</div><div class="zeit">' + esc(t.zeit) + ' Uhr</div></div>' +
         (t.ausfall ? '' : '<div class="zahl"><b>' + t.angemeldet + '</b>von ' + t.plaetze + '</div>') + '</div>';
       if (t.ausfall) return h + '<div class="status aus" style="margin-top:14px"><p>Diese Stunde fällt aus. Wir sehen uns beim nächsten Termin.</p></div></article>';
+      var fehlen = Math.max(0, t.mindest - t.angemeldet);
       h += '<div class="balken' + (voll ? ' voll' : '') + '"><i style="width:' + proz + '%"></i></div>';
+      h += t.findetStatt ? '<span class="lage ja">Findet statt</span>'
+        : '<span class="lage offen">Ab ' + t.mindest + ' Anmeldungen · noch ' + fehlen + '</span>';
       if (st) {
         h += st.status === 'platz'
-          ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>'
+          ? (t.findetStatt
+            ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>'
+            : '<div class="status warte"><p>Du bist eingetragen, ' + esc(ich.name.split(' ')[0]) + '. Die Stunde findet statt, sobald ' + t.mindest + ' dabei sind. Es fehl' + (fehlen === 1 ? 't noch 1 Person' : 'en noch ' + fehlen + ' Personen') + '.</p><p>Fällt sie aus, sage ich in der WhatsApp-Gruppe Bescheid.</p></div>')
           : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du automatisch nach. Dein Platz gilt dann verbindlich, auch kurz vor der Stunde. Kannst du nicht, melde dich rechtzeitig von der Warteliste ab.</p></div>';
         var kostet = st.status === 'platz' && t.kostenpflichtig;
         h += '<button class="link" data-ab="' + esc(ich.id) + '"' + (kostet ? ' data-kostet' : '') + '>Abmelden</button>';
-        if (kostet) h += '<div class="warn" hidden><p>Die Stunde beginnt in weniger als 12 Stunden. Wenn du jetzt absagst, wird sie dir trotzdem berechnet.</p>' +
+        if (kostet) h += '<div class="warn" hidden><p>Die Stunde beginnt in weniger als 12 Stunden. Wenn du jetzt absagst, wird sie dir berechnet, falls sie stattfindet.</p>' +
           '<div class="zeile"><button class="btn zweit" data-ab-ok="' + esc(ich.id) + '">Trotzdem absagen</button><button class="link" data-ab-nein>Ich komme doch</button></div></div>';
       } else {
         if (nach) h += '<div class="status ' + (nach === 'spaet' ? 'warte' : 'ok') + '" style="margin-bottom:12px"><p>' + (nach === 'spaet' ? 'Du bist abgemeldet. Weil es weniger als 12 Stunden vor Beginn war, wird die Stunde berechnet.' : 'Du bist abgemeldet. Danke, dass du Bescheid gibst.') + '</p></div>';

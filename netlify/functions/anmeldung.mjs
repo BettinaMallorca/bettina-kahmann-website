@@ -894,6 +894,7 @@ var getStore = (input, options) => {
 // src/anmeldung.mjs
 var PLAETZE = 15;
 var FRIST_STUNDEN = 12;
+var MINDEST = 5;
 var AUFBEWAHRUNG_TAGE = 28;
 var STUNDEN = [
   { id: "di18", tag: 2, start: "18:00", ende: "19:15", titel: "Hatha meets Yin" },
@@ -1002,7 +1003,10 @@ function oeffentlich(t, doc, eigeneIds) {
     warteliste: Math.max(0, n - PLAETZE),
     ausfall: !!doc.ausfall,
     kostenpflichtig: imFristfenster(t),
-    fristStunden: FRIST_STUNDEN
+    fristStunden: FRIST_STUNDEN,
+    mindest: MINDEST,
+    bestaetigt: !!doc.bestaetigt,
+    findetStatt: !doc.ausfall && (!!doc.bestaetigt || n >= MINDEST)
   };
   if (eigeneIds.length) {
     res.eigene = {};
@@ -1040,6 +1044,8 @@ var anmeldung_default = async (req) => {
           zeit: `${t.start}\u2013${t.ende}`,
           kommend: t.datum >= jetztBerlin().datum && naechsteTermine().some((x) => x.key === t.key),
           ausfall: !!doc.ausfall,
+          bestaetigt: !!doc.bestaetigt,
+          mindest: MINDEST,
           plaetze: PLAETZE,
           eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE })),
           spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen }))
@@ -1100,6 +1106,15 @@ var anmeldung_default = async (req) => {
   if (body.action === "ausfall") {
     const r = await aendern(st, key, (doc) => {
       doc.ausfall = !!body.wert;
+      if (doc.ausfall) doc.bestaetigt = false;
+      return { ok: true };
+    });
+    return json(r, r.fehler ? 409 : 200);
+  }
+  if (body.action === "bestaetigen") {
+    const r = await aendern(st, key, (doc) => {
+      doc.bestaetigt = !!body.wert;
+      if (doc.bestaetigt) doc.ausfall = false;
       return { ok: true };
     });
     return json(r, r.fehler ? 409 : 200);
