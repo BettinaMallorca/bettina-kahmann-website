@@ -92,7 +92,8 @@ function naechsteTermine() {
 }
 function spaetereTermine() {
   const bis = plusTage(jetztBerlin().datum, ANMELDE_TAGE);
-  return geplante(STUNDEN).filter((t) => t.datum > bis);
+  const ende = plusTage(jetztBerlin().datum, 28); // weitere Termine nur für die nächsten vier Wochen zeigen
+  return geplante(STUNDEN).filter((t) => t.datum > bis && t.datum <= ende);
 }
 function vergangeneTermine(tage) {
   const von = plusTage(jetztBerlin().datum, -tage);
@@ -216,7 +217,8 @@ async function abrechnen(st) {
     const soll = [];
     if (stattgefunden(doc)) {
       doc.eintraege.slice(0, PLAETZE).forEach((e) => e.kartenId && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: 'Teilnahme' }));
-      doc.spaet.forEach((e) => e.kartenId && !e.erlassen && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: 'Späte Absage' }));
+      // Späte Absage mit 10er-Karte über Hansefit/epassi kostet 2 Stunden, sonst 1
+      doc.spaet.forEach((e) => e.kartenId && !e.erlassen && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: 'Späte Absage', delta: /Hansefit/.test(e.art) ? -2 : -1 }));
     }
     sitzungen.push({ t, soll });
   }
@@ -227,7 +229,7 @@ async function abrechnen(st) {
       for (const { t, soll } of sitzungen) {
         k.buchungen = k.buchungen.filter((b) => b.key !== t.key);
         soll.filter((x) => x.kartenId === k.id).forEach((x) =>
-          k.buchungen.push({ key: t.key, datum: t.datum, titel: t.titel, art: x.art, delta: -1, eintrag: x.eintrag })
+          k.buchungen.push({ key: t.key, datum: t.datum, titel: t.titel, art: x.art, delta: x.delta || -1, eintrag: x.eintrag })
         );
       }
       k.buchungen.sort((a, b) => (a.datum || '').localeCompare(b.datum || ''));

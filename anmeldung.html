@@ -84,7 +84,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   <div id="mehr" class="mehr"></div>
 
   <div class="hinweis">
-    <p>Du kannst doch nicht? Tipp oben bei deiner Stunde auf Abmelden. Der Link erscheint auf dem Handy, mit dem du dich eingetragen hast. Hast du ein anderes Gerät benutzt, schreib mir kurz in der WhatsApp-Gruppe. Dann rückt die erste Person von der Warteliste nach. Bis 12 Stunden vor Beginn ist die Absage kostenfrei. Danach wird die Stunde berechnet, so steht es in den <a href="/agb">AGB</a>. Kommst du über Hansefit, scannst du bei einer späten Absage trotzdem den QR-Code, und die Stunde wird abgezogen.</p>
+    <p>Du kannst doch nicht? Tipp oben bei deiner Stunde auf Abmelden. Der Link erscheint auf dem Handy, mit dem du dich eingetragen hast. Hast du ein anderes Gerät benutzt, schreib mir kurz in der WhatsApp-Gruppe. Dann rückt die erste Person von der Warteliste nach. Bis 12 Stunden vor Beginn ist die Absage kostenfrei. Danach wird die Stunde berechnet, so steht es in den <a href="/agb">AGB</a>. Hast du eine 10er-Karte mit Hansefit oder epassi, werden bei einer späten Absage 2 Stunden von deiner Karte abgezogen. Kommst du nur über Hansefit oder epassi, zahlst du 10 Euro bar bei mir.</p>
     <p>Deinen Namen sehe nur ich. Er wird nach 4 Wochen gelöscht. Mehr dazu in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>
     <p>Wie viele Stunden noch auf deiner Karte sind, siehst du unter <a href="/karte">Mein Kartenstand</a>. Preise und Karten findest du in der <a href="/kurse">Kursübersicht</a>.</p>
   </div>
@@ -96,7 +96,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 (function () {
   var API = '/api/anmeldung';
   var SPEICHER = 'bv-anmeldungen';
-  var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['KarteHansefit', 'Meine 10er-Karte mit Hansefit/epassi'], ['epassi/Hansefit', 'Nur Hansefit/epassi'], ['Einzelstunde', 'Einzelkarte'], ['Schnupperstunde', 'Schnupperstunde']];
+  var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['KarteHansefit', 'Meine 10er-Karte mit Hansefit/epassi'], ['epassi/Hansefit', 'Nur Hansefit/epassi (6 € Zuzahlung)'], ['Einzelstunde', 'Einzelkarte (19 €)'], ['Schnupperstunde', 'Schnupperstunde (einmalig, 10 €)']];
   var kartenHinweis = {};
   var liste = document.getElementById('liste');
   var abgemeldet = {};
