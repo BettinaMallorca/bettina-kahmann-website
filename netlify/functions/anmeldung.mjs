@@ -913,6 +913,24 @@ var STUNDEN = [
   { id: "di1930", tag: 2, start: "19:30", ende: "20:30", titel: "Yin Yoga" },
   { id: "do1815", tag: 4, start: "18:15", ende: "19:30", titel: "Yoga f\xFCr M\xE4nner & Frauen" }
 ];
+var INFO_KURSE = [
+  { id: "aroha", titel: "AROHA", start: "18:00", zusatz: "in Pr\xE4senz" },
+  { id: "faszien", titel: "FaszienFit", start: "09:00", zusatz: "live online, 30 bis 40 Minuten", link: "/yoga-studio-online" },
+  { id: "yinonline", titel: "Yin Yoga Pr\xE4ventionskurs", start: "19:30", ende: "20:30", zusatz: "live online \xFCber Zoom, f\xFCr die angemeldeten Kursteilnehmenden", link: "/praeventionskurse-online" },
+  { id: "morning", titel: "Morning Energy Yoga", start: "09:00", zusatz: "live online", link: "/yoga-studio-online" }
+];
+var ANMELDE_TAGE = 14;
+var PLAN_KEY = "plan";
+var START_PLAN = {
+  di18: ["2026-11-17", "2026-11-24", "2026-12-01", "2026-12-08", "2026-12-15"],
+  di1930: ["2026-11-17", "2026-11-24", "2026-12-01", "2026-12-08", "2026-12-15"],
+  do1815: ["2026-11-19", "2026-12-03", "2026-12-10", "2026-12-17"],
+  aroha: ["2026-11-18", "2026-11-25", "2026-12-02", "2026-12-09", "2026-12-16"],
+  faszien: ["2026-11-24", "2026-12-08"],
+  yinonline: ["2026-11-18", "2026-11-25", "2026-12-02", "2026-12-09", "2026-12-16"],
+  morning: ["2026-11-15", "2026-11-22", "2026-12-06", "2026-12-20", "2026-12-27"]
+};
+var PLAN = START_PLAN;
 var ARTEN = ["Karte", "epassi/Hansefit", "Einzelstunde", "Schnupperstunde"];
 var KARTEN = { "5er": { stunden: 5, monate: 6 }, "10er": { stunden: 10, monate: 12 } };
 var KARTEN_KEY = "karten";
@@ -946,28 +964,40 @@ function plusTage(datum, n) {
   return d.toISOString().slice(0, 10);
 }
 var wochentag = (datum) => (/* @__PURE__ */ new Date(datum + "T12:00:00Z")).getUTCDay();
-function naechsteTermine() {
+async function ladePlan(st) {
+  const r = await st.getWithMetadata(PLAN_KEY, { type: "json" });
+  return { doc: r ? r.data : { termine: JSON.parse(JSON.stringify(START_PLAN)) }, etag: r ? r.etag : null };
+}
+var nachZeit = (a, b) => (a.datum + a.start).localeCompare(b.datum + b.start);
+function kommt(d, start) {
   const { datum, zeit } = jetztBerlin();
+  return d > datum || d === datum && zeit < start;
+}
+function geplante(kurse) {
   const out = [];
-  for (const s of STUNDEN) {
-    for (let i = 0; i < 8; i++) {
-      const d = plusTage(datum, i);
-      if (wochentag(d) !== s.tag) continue;
-      if (i === 0 && zeit >= s.start) continue;
-      out.push({ ...s, datum: d, key: `s/${d}_${s.id}` });
-      break;
-    }
-  }
-  return out.sort((a, b) => (a.datum + a.start).localeCompare(b.datum + b.start));
+  for (const s of kurse) for (const d of PLAN[s.id] || []) out.push({ ...s, datum: d, key: `s/${d}_${s.id}` });
+  return out.sort(nachZeit);
+}
+function naechsteTermine() {
+  const bis = plusTage(jetztBerlin().datum, ANMELDE_TAGE);
+  return geplante(STUNDEN).filter((t) => kommt(t.datum, t.start) && t.datum <= bis);
+}
+function spaetereTermine() {
+  const bis = plusTage(jetztBerlin().datum, ANMELDE_TAGE);
+  return geplante(STUNDEN).filter((t) => t.datum > bis);
 }
 function vergangeneTermine(tage) {
-  const { datum } = jetztBerlin();
-  const out = [];
-  for (let i = 1; i <= tage; i++) {
-    const d = plusTage(datum, -i);
-    for (const s of STUNDEN) if (wochentag(d) === s.tag) out.push({ ...s, datum: d, key: `s/${d}_${s.id}` });
-  }
-  return out;
+  const von = plusTage(jetztBerlin().datum, -tage);
+  return geplante(STUNDEN).filter((t) => !kommt(t.datum, t.start) && t.datum >= von);
+}
+function infoTermine() {
+  return INFO_KURSE.map((k) => ({
+    titel: k.titel,
+    zeit: k.ende ? `${k.start}\u2013${k.ende}` : k.start,
+    zusatz: k.zusatz,
+    link: k.link || "",
+    termine: (PLAN[k.id] || []).filter((d) => kommt(d, k.start)).sort().slice(0, 8).map(datumText)
+  })).filter((k) => k.termine.length);
 }
 function minutenBis(datum, start) {
   const j = jetztBerlin();
@@ -1119,6 +1149,7 @@ var anmeldung_default = async (req, context) => {
   PRODUKTION = !ctx || ctx === "production";
   const st = store();
   const url = new URL(req.url);
+  PLAN = (await ladePlan(st)).doc.termine;
   if (req.method === "GET") {
     if (url.searchParams.get("admin") === "1") {
       if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
@@ -1177,10 +1208,22 @@ var anmeldung_default = async (req, context) => {
         verlauf: k.buchungen.map((b) => ({ datum: b.datum ? datumText(b.datum) : "", titel: b.titel || b.notiz || "Korrektur", art: b.art, delta: b.delta }))
       });
     }
+    if (url.searchParams.get("plan") === "1") {
+      if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
+      const heute = jetztBerlin().datum;
+      return json({ kurse: [...STUNDEN.map((s) => ({ ...s, anmeldung: true })), ...INFO_KURSE.map((s) => ({ ...s, anmeldung: false }))].map((s) => ({
+        id: s.id,
+        titel: s.titel,
+        zeit: s.ende ? `${s.start}\u2013${s.ende}` : s.start,
+        anmeldung: s.anmeldung,
+        termine: (PLAN[s.id] || []).filter((d) => d >= heute).sort().map((d) => ({ datum: d, text: datumText(d) }))
+      })) });
+    }
     const ids = (url.searchParams.get("ids") || "").split(",").filter((x) => /^[a-f0-9]{16}$/.test(x)).slice(0, 20);
     const out = [];
     for (const t of naechsteTermine()) out.push(oeffentlich(t, (await lade(st, t.key)).doc, ids));
-    return json({ termine: out });
+    const spaeter = spaetereTermine().map((t) => ({ datumText: datumText(t.datum), titel: t.titel, zeit: `${t.start}\u2013${t.ende}` }));
+    return json({ termine: out, spaeter, info: infoTermine() });
   }
   if (req.method !== "POST") return json({ fehler: "Methode nicht erlaubt." }, 405);
   let body;
@@ -1284,6 +1327,24 @@ var anmeldung_default = async (req, context) => {
       return n === doc.karten.length ? { fehler: "Karte nicht gefunden." } : { ok: true };
     }, ladeKarten);
     return json(r, r.fehler ? 404 : 200);
+  }
+  if (body.action === "plan_dazu" || body.action === "plan_weg") {
+    const kurs = [...STUNDEN, ...INFO_KURSE].find((x) => x.id === body.id);
+    const d = String(body.datum || "");
+    if (!kurs || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return json({ fehler: "Bitte Kurs und Datum angeben." }, 400);
+    if (body.action === "plan_weg" && STUNDEN.includes(kurs)) {
+      const { doc } = await lade(st, `s/${d}_${kurs.id}`);
+      if (doc.eintraege.length) return json({ fehler: "F\xFCr diesen Termin sind schon Leute eingetragen. Markier die Stunde in der Anmeldeliste als ausgefallen, dann sehen alle, dass sie nicht stattfindet." }, 409);
+    }
+    const grenze = plusTage(jetztBerlin().datum, -30);
+    const r = await aendern(st, PLAN_KEY, (doc) => {
+      const l = new Set(doc.termine[kurs.id] || []);
+      if (body.action === "plan_dazu") l.add(d);
+      else l.delete(d);
+      doc.termine[kurs.id] = [...l].filter((x) => x >= grenze).sort();
+      return { ok: true };
+    }, ladePlan);
+    return json(r, r.fehler ? 409 : 200);
   }
   const key = String(body.key || "");
   if (!/^s\/\d{4}-\d{2}-\d{2}_[a-z0-9]+$/.test(key)) return json({ fehler: "Unbekannte Stunde." }, 400);
