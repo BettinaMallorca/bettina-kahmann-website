@@ -71,8 +71,8 @@ li span:last-child{color:var(--text-light);white-space:nowrap}
     for (var i = 0; i < d.stunden; i++) punkte += '<i class="' + (i < Math.max(0, d.rest) ? 'voll' : '') + '"></i>';
     var hinweis = d.abgelaufen ? 'Deine Karte ist am ' + esc(d.gueltigBis) + ' abgelaufen. Sprich mich an, wenn noch Stunden offen sind.'
       : d.rest < 0 ? 'Du hast ' + (-d.rest) + (d.rest === -1 ? ' Stunde' : ' Stunden') + ' mehr genutzt, als auf der Karte waren. Das verrechnen wir mit deiner nächsten Karte.'
-      : d.rest === 0 ? 'Deine Karte ist aufgebraucht. Bring zur nächsten Stunde bitte eine neue mit.'
-      : d.rest === 1 ? 'Noch eine Stunde. Denk an eine neue Karte.' : '';
+      : d.rest === 0 ? 'Deine Karte ist voll. Eine neue Karte bekommst du bei mir, bar in der Stunde. Lieber per PayPal? Dann schreib mir.'
+      : d.rest === 1 ? 'Noch eine Stunde auf deiner Karte. Die nächste Karte bezahlst du bei mir bar in der Stunde. Lieber per PayPal? Dann schreib mir.' : '';
     erg.innerHTML = '<div class="karte"><div class="typ">' + esc(d.typ) + '-Karte von ' + esc(d.vorname) + '</div>' +
       '<div class="rest">' + d.rest + ' <small>von ' + d.stunden + ' Stunden frei</small></div>' +
       '<div class="punkte" aria-hidden="true">' + punkte + '</div>' +
