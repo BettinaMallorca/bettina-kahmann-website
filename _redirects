@@ -48,3 +48,9 @@
 /kurse/yin-yoga-praevention-wedemark /praeventionskurse-wedemark 301
 /kurse/hatha-yoga-praevention-wedemark /praeventionskurse-wedemark 301
 /home / 301
+
+# Wochen-Anmeldung (ergaenzt am 14.11.2026)
+/anmeldung /anmeldung.html 200
+/anmeldung-liste /anmeldung-liste.html 200
+/netlify/* /404 404!
+/_tools/* /404 404!

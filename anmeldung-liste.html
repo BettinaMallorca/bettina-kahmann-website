@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anmeldeliste · nur für Bettina</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{--cream:#FAF6F1;--cream-dark:#F0E8DE;--terracotta-dark:#8C492E;--plum:#993A74;--sage:#7A9E7E;--text:#3D2B22;--text-light:#8A6E62;--line:#e2d5c8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--text);font-family:'DM Sans',Arial,sans-serif;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:28px 18px 60px}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:2.2rem;margin-bottom:6px}
+.sub{color:var(--text-light);margin-bottom:22px;font-size:.92rem}
+.karte{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.karte.alt{opacity:.7}
+.kopf{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.titel{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.4rem;font-weight:500}
+.tag{font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--terracotta-dark)}
+.anzahl{font-size:.9rem;color:var(--text-light)}
+.summe{font-size:.82rem;color:var(--text-light);margin:6px 0 8px}
+ol{margin:6px 0 0 1.4rem}
+li{padding:5px 0;border-bottom:1px solid var(--cream-dark);display:flex;justify-content:space-between;gap:8px}
+li span.art{color:var(--text-light);font-size:.85rem}
+li.wl{color:var(--terracotta-dark)}
+.wltitel{font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--terracotta-dark);margin-top:10px}
+.leer{color:var(--text-light);font-size:.9rem;margin-top:6px}
+.knoepfe{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--plum);background:transparent;color:var(--plum);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:9px 16px;border-radius:999px}
+.btn:hover{background:var(--cream-dark)}
+.btn.voll{background:var(--plum);color:#fff}
+.x{border:0;background:none;color:var(--text-light);font-size:1.1rem;line-height:1;padding:0 4px}
+.ausfall{background:var(--cream-dark);border-radius:8px;padding:6px 10px;font-size:.85rem;margin-top:8px;display:inline-block}
+input{font:inherit;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 12px}
+.fehler{color:#a3322a;font-size:.9rem}
+h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5rem;margin:26px 0 10px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <h1>Anmeldeliste</h1>
+  <p class="sub">Nur für dich. Öffentlich sichtbar ist auf <a href="/anmeldung">/anmeldung</a> nur die Anzahl.</p>
+  <div id="login" hidden>
+    <label>Schlüssel<input type="password" id="schluessel" autocomplete="current-password"></label>
+    <button class="btn voll" id="los">Öffnen</button>
+    <p class="fehler" id="loginfehler" hidden></p>
+  </div>
+  <div id="inhalt"></div>
+</main>
+<script>
+(function () {
+  var API = '/api/anmeldung', K = 'bv-anm-key';
+  var inhalt = document.getElementById('inhalt'), login = document.getElementById('login');
+  function key() { try { return localStorage.getItem(K) || ''; } catch (e) { return ''; } }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function post(d) { return fetch(API, { method: 'POST', headers: { 'content-type': 'application/json', 'x-anmeldung-key': key() }, body: JSON.stringify(d) }).then(function (r) { return r.json(); }); }
+
+  function laden() {
+    fetch(API + '?admin=1', { headers: { 'x-anmeldung-key': key() }, cache: 'no-store' })
+      .then(function (r) { if (r.status === 401) throw 401; return r.json(); })
+      .then(function (d) { login.hidden = true; zeigen(d.termine); })
+      .catch(function (e) {
+        login.hidden = false; inhalt.innerHTML = '';
+        if (key()) { var f = document.getElementById('loginfehler'); f.textContent = e === 401 ? 'Der Schlüssel stimmt nicht.' : 'Keine Verbindung.'; f.hidden = false; }
+      });
+  }
+
+  function karte(t) {
+    var platz = t.eintraege.filter(function (e) { return !e.warteliste; }), wl = t.eintraege.filter(function (e) { return e.warteliste; });
+    var arten = {}; platz.forEach(function (e) { arten[e.art] = (arten[e.art] || 0) + 1; });
+    var summe = Object.keys(arten).map(function (a) { return a + ': ' + arten[a]; }).join(' · ');
+    function zeile(e, w) { return '<li' + (w ? ' class="wl"' : '') + '><span>' + esc(e.name) + ' <span class="art">' + esc(e.art) + '</span></span>' + (t.kommend ? '<button class="x" title="Entfernen" data-weg="' + e.id + '">×</button>' : '') + '</li>'; }
+    return '<article class="karte' + (t.kommend ? '' : ' alt') + '" data-key="' + esc(t.key) + '">' +
+      '<div class="kopf"><div><div class="tag">' + esc(t.datumText) + ' · ' + esc(t.zeit) + '</div><div class="titel">' + esc(t.titel) + '</div></div>' +
+      '<div class="anzahl">' + platz.length + ' von ' + t.plaetze + (wl.length ? ' · ' + wl.length + ' Warteliste' : '') + '</div></div>' +
+      (t.ausfall ? '<div class="ausfall">Als ausgefallen markiert</div>' : '') +
+      (summe ? '<div class="summe">' + esc(summe) + '</div>' : '') +
+      (platz.length ? '<ol>' + platz.map(function (e) { return zeile(e, false); }).join('') + '</ol>' : '<p class="leer">Noch niemand angemeldet.</p>') +
+      (wl.length ? '<div class="wltitel">Warteliste</div><ol>' + wl.map(function (e) { return zeile(e, true); }).join('') + '</ol>' : '') +
+      (t.kommend ? '<div class="knoepfe"><button class="btn" data-kopie>Liste kopieren</button><button class="btn" data-ausfall="' + (t.ausfall ? '0' : '1') + '">' + (t.ausfall ? 'Findet doch statt' : 'Stunde fällt aus') + '</button></div>' : '') +
+      '</article>';
+  }
+
+  var daten = [];
+  function zeigen(termine) {
+    daten = termine;
+    var k = termine.filter(function (t) { return t.kommend; }), a = termine.filter(function (t) { return !t.kommend && t.eintraege.length; });
+    inhalt.innerHTML = '<h2>Diese Woche</h2>' + k.map(karte).join('') + (a.length ? '<h2>Letzte zwei Wochen</h2>' + a.map(karte).join('') : '');
+  }
+
+  inhalt.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b) return;
+    var key2 = b.closest('.karte').getAttribute('data-key');
+    var t = daten.filter(function (x) { return x.key === key2; })[0];
+    if (b.hasAttribute('data-weg')) {
+      if (!confirm('Diesen Eintrag entfernen?')) return;
+      post({ action: 'entfernen', key: key2, id: b.getAttribute('data-weg') }).then(laden);
+    }
+    if (b.hasAttribute('data-ausfall')) post({ action: 'ausfall', key: key2, wert: b.getAttribute('data-ausfall') === '1' }).then(laden);
+    if (b.hasAttribute('data-kopie')) {
+      var p = t.eintraege.filter(function (e) { return !e.warteliste; }), w = t.eintraege.filter(function (e) { return e.warteliste; });
+      var txt = t.titel + ', ' + t.datumText + ' ' + t.zeit + ' Uhr\n' + p.length + ' von ' + t.plaetze + ' Plätzen\n\n' +
+        p.map(function (e, i) { return (i + 1) + '. ' + e.name; }).join('\n') + (w.length ? '\n\nWarteliste:\n' + w.map(function (e, i) { return (i + 1) + '. ' + e.name; }).join('\n') : '');
+      navigator.clipboard.writeText(txt).then(function () { b.textContent = 'Kopiert'; setTimeout(function () { b.textContent = 'Liste kopieren'; }, 1500); });
+    }
+  });
+
+  document.getElementById('los').addEventListener('click', function () {
+    try { localStorage.setItem(K, document.getElementById('schluessel').value.trim()); } catch (e) {}
+    laden();
+  });
+  laden();
+})();
+</script>
+</body>
+</html>

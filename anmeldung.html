@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yoga diese Woche · Anmeldung · beVital InsideOut</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Trag dich für deine Yogastunde in dieser Woche ein.">
+<meta property="og:title" content="Yoga diese Woche. Bist du dabei?">
+<meta property="og:description" content="Trag dich für deine Stunde ein. 15 Plätze pro Stunde.">
+<meta property="og:image" content="https://bettina-kahmann.com/og-image.jpg">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{--cream:#FAF6F1;--cream-dark:#F0E8DE;--terracotta:#C17B52;--terracotta-dark:#8C492E;--plum:#993A74;--sage:#7A9E7E;--text:#3D2B22;--text-light:#8A6E62;--line:#e2d5c8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--text);font-family:'DM Sans',Arial,sans-serif;font-weight:400;line-height:1.6}
+.wrap{max-width:640px;margin:0 auto;padding:28px 20px 60px}
+.brand{display:block;text-decoration:none;font-family:'Cormorant Garamond',Georgia,serif;color:var(--text);font-size:1.05rem;line-height:1.2;margin-bottom:34px}
+.brand em{display:block;color:var(--plum);font-size:.9rem}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--terracotta-dark);margin-bottom:10px}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(2.2rem,8vw,3rem);line-height:1.08;margin-bottom:14px}
+h1 em{color:var(--plum)}
+.sub{color:var(--text-light);margin-bottom:28px}
+.karte{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 20px 18px;margin-bottom:16px}
+.karte.aus{opacity:.75}
+.kopf{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.tag{font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--terracotta-dark)}
+.titel{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.6rem;font-weight:500;line-height:1.15;margin:2px 0}
+.zeit{color:var(--text-light);font-size:.95rem}
+.zahl{text-align:right;white-space:nowrap;font-size:.85rem;color:var(--text-light)}
+.zahl b{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.9rem;font-weight:500;color:var(--text);line-height:1}
+.balken{height:6px;background:var(--cream-dark);border-radius:9px;margin:14px 0 14px;overflow:hidden}
+.balken i{display:block;height:100%;background:var(--sage);border-radius:9px;transition:width .4s}
+.balken.voll i{background:var(--terracotta)}
+.btn{display:inline-block;border:0;cursor:pointer;background:var(--plum);color:#fff;font-family:inherit;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:13px 26px;border-radius:999px;text-decoration:none}
+.btn:hover,.btn:focus-visible{background:#7a2d5c}
+.btn.zweit{background:transparent;color:var(--plum);border:1px solid var(--plum)}
+.btn.zweit:hover{background:var(--cream-dark)}
+.btn[disabled]{opacity:.6;cursor:default}
+.link{background:none;border:0;color:var(--text-light);text-decoration:underline;font:inherit;font-size:.88rem;cursor:pointer;padding:6px 0}
+form{display:none;margin-top:4px}
+form.offen{display:block}
+label{display:block;font-size:.85rem;font-weight:500;margin:10px 0 5px}
+input[type=text],select{width:100%;font:inherit;font-size:1rem;color:var(--text);background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
+.zeile{display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.status{border-radius:12px;padding:12px 14px;font-size:.95rem;margin-top:4px}
+.status.ok{background:#e8efe8;color:#2f4a33}
+.status.warte{background:#f6ece4;color:var(--terracotta-dark)}
+.status.aus{background:var(--cream-dark);color:var(--text)}
+.status p+p{margin-top:4px}
+.fehler{color:#a3322a;font-size:.9rem;margin-top:10px}
+.hinweis{font-size:.88rem;color:var(--text-light);margin-top:26px}
+.hinweis p+p{margin-top:8px}
+.hinweis a,.fuss a{color:var(--text-light)}
+.laden{color:var(--text-light);padding:30px 0}
+.fuss{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:.8rem;color:var(--text-light);display:flex;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <a class="brand" href="/">Bettina Kahmann<em>beVital InsideOut</em></a>
+  <p class="eyebrow">Präsenzstunden · Anmeldung</p>
+  <h1>Yoga diese Woche. <em>Bist du dabei?</em></h1>
+  <p class="sub">Trag dich für deine Stunde ein. So weiß ich, wie viele kommen, und dein Platz ist sicher. Pro Stunde gibt es 15 Plätze.</p>
+
+  <div id="liste"><p class="laden">Die Stunden werden geladen …</p></div>
+
+  <div class="hinweis">
+    <p>Du kannst doch nicht? Melde dich hier ab. Dann rückt die erste Person von der Warteliste nach.</p>
+    <p>Deinen Namen sehe nur ich. Er wird nach 4 Wochen gelöscht. Mehr dazu in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>
+    <p>Preise und Karten findest du in der <a href="/kurse">Kursübersicht</a>.</p>
+  </div>
+
+  <div class="fuss"><a href="/">bettina-kahmann.com</a><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></div>
+</main>
+
+<script>
+(function () {
+  var API = '/api/anmeldung';
+  var SPEICHER = 'bv-anmeldungen';
+  var ARTEN = ['10er-Karte', '5er-Karte', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
+  var liste = document.getElementById('liste');
+
+  function lies(k, f) { try { return JSON.parse(localStorage.getItem(k)) || f; } catch (e) { return f; } }
+  function schreib(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function meine() { return lies(SPEICHER, []); }
+
+  function laden() {
+    var ids = meine().map(function (m) { return m.id; }).join(',');
+    fetch(API + (ids ? '?ids=' + ids : ''), { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        var aktuell = d.termine.map(function (t) { return t.key; });
+        schreib(SPEICHER, meine().filter(function (m) { return aktuell.indexOf(m.key) > -1; }));
+        zeigen(d.termine);
+      })
+      .catch(function () { liste.innerHTML = '<p class="fehler">Die Anmeldung ist gerade nicht erreichbar. Bitte versuch es später noch einmal oder schreib mir in der WhatsApp-Gruppe.</p>'; });
+  }
+
+  function zeigen(termine) {
+    var name = lies('bv-anm-name', ''), art = lies('bv-anm-art', '');
+    liste.innerHTML = termine.map(function (t) {
+      var ich = meine().filter(function (m) { return m.key === t.key; })[0];
+      var st = ich && t.eigene && t.eigene[ich.id];
+      var voll = t.angemeldet >= t.plaetze;
+      var proz = Math.round(t.angemeldet / t.plaetze * 100);
+      var h = '<article class="karte' + (t.ausfall ? ' aus' : '') + '" data-key="' + esc(t.key) + '">' +
+        '<div class="kopf"><div><div class="tag">' + esc(t.datumText) + '</div><div class="titel">' + esc(t.titel) + '</div><div class="zeit">' + esc(t.zeit) + ' Uhr</div></div>' +
+        (t.ausfall ? '' : '<div class="zahl"><b>' + t.angemeldet + '</b>von ' + t.plaetze + '</div>') + '</div>';
+      if (t.ausfall) return h + '<div class="status aus" style="margin-top:14px"><p>Diese Stunde fällt aus. Wir sehen uns beim nächsten Termin.</p></div></article>';
+      h += '<div class="balken' + (voll ? ' voll' : '') + '"><i style="width:' + proz + '%"></i></div>';
+      if (st) {
+        h += st.status === 'platz'
+          ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>'
+          : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du nach. Schau vor der Stunde noch einmal hier rein.</p></div>';
+        h += '<button class="link" data-ab="' + esc(ich.id) + '">Abmelden</button>';
+      } else {
+        var wl = voll ? (t.warteliste ? t.warteliste + ' auf der Warteliste. ' : '') + 'Die Stunde ist voll.' : (t.plaetze - t.angemeldet) + ' Plätze frei.';
+        h += '<p class="zeit" style="margin-bottom:12px">' + wl + '</p>' +
+          '<button class="btn' + (voll ? ' zweit' : '') + '" data-auf>' + (voll ? 'Auf die Warteliste' : 'Ich komme') + '</button>' +
+          '<form novalidate><label>Dein Name<input type="text" name="name" autocomplete="name" maxlength="60" value="' + esc(name) + '" placeholder="Vorname und Nachname"></label>' +
+          '<label>Wie nimmst du teil?<select name="art"><option value="">Bitte wählen</option>' +
+          ARTEN.map(function (a) { return '<option' + (a === art ? ' selected' : '') + '>' + a + '</option>'; }).join('') + '</select></label>' +
+          '<div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>' +
+          '<div class="zeile"><button class="btn" type="submit">Eintragen</button><button class="link" type="button" data-zu>Abbrechen</button></div><p class="fehler" hidden></p></form>';
+      }
+      return h + '</article>';
+    }).join('');
+  }
+
+  liste.addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b) return;
+    var karte = b.closest('.karte'), key = karte.getAttribute('data-key');
+    if (b.hasAttribute('data-auf')) { b.hidden = true; karte.querySelector('form').classList.add('offen'); karte.querySelector('input[name=name]').focus(); }
+    if (b.hasAttribute('data-zu')) { karte.querySelector('form').classList.remove('offen'); karte.querySelector('[data-auf]').hidden = false; }
+    if (b.hasAttribute('data-ab')) {
+      var ich = meine().filter(function (m) { return m.id === b.getAttribute('data-ab'); })[0];
+      if (!ich) return;
+      b.disabled = true; b.textContent = 'Wird abgemeldet …';
+      fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'abmelden', key: key, id: ich.id, token: ich.token }) })
+        .then(function () { schreib(SPEICHER, meine().filter(function (m) { return m.id !== ich.id; })); laden(); });
+    }
+  });
+
+  liste.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var f = ev.target, karte = f.closest('.karte'), key = karte.getAttribute('data-key');
+    var fehler = f.querySelector('.fehler'), knopf = f.querySelector('button[type=submit]');
+    var daten = { action: 'anmelden', key: key, name: f.name.value.trim(), art: f.art.value, website: f.website.value };
+    if (daten.name.length < 2) { fehler.textContent = 'Bitte trag deinen Namen ein.'; fehler.hidden = false; return; }
+    if (!daten.art) { fehler.textContent = 'Bitte wähl aus, wie du teilnimmst.'; fehler.hidden = false; return; }
+    knopf.disabled = true; knopf.textContent = 'Einen Moment …';
+    fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(daten) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) { fehler.textContent = d.fehler || 'Das hat nicht geklappt.'; fehler.hidden = false; knopf.disabled = false; knopf.textContent = 'Eintragen'; return; }
+        schreib('bv-anm-name', daten.name); schreib('bv-anm-art', daten.art);
+        var m = meine(); m.push({ key: key, id: d.id, token: d.token, name: daten.name }); schreib(SPEICHER, m);
+        laden();
+      })
+      .catch(function () { fehler.textContent = 'Keine Verbindung. Bitte versuch es noch einmal.'; fehler.hidden = false; knopf.disabled = false; knopf.textContent = 'Eintragen'; });
+  });
+
+  laden();
+})();
+</script>
+</body>
+</html>
