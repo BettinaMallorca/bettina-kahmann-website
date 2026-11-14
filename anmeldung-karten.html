@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Karten · nur für Bettina</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{--cream:#FAF6F1;--cream-dark:#F0E8DE;--terracotta-dark:#8C492E;--plum:#993A74;--sage:#7A9E7E;--text:#3D2B22;--text-light:#8A6E62;--line:#e2d5c8}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{background:var(--cream);color:var(--text);font-family:'DM Sans',Arial,sans-serif;line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:28px 18px 60px}
+.nav{font-size:.85rem;margin-bottom:14px}.nav a{color:var(--plum)}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:2.2rem;margin-bottom:6px}
+h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5rem;margin:26px 0 10px}
+.sub{color:var(--text-light);margin-bottom:18px;font-size:.92rem}
+.box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+label{display:block;font-size:.85rem;font-weight:500;margin:8px 0 4px}
+input,select{font:inherit;width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--text)}
+.reihe{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:560px){.reihe{grid-template-columns:1fr 1fr}}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--plum);background:transparent;color:var(--plum);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:9px 16px;border-radius:999px}
+.btn:hover{background:var(--cream-dark)}
+.btn.voll{background:var(--plum);color:#fff}
+.knoepfe{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.fehler{color:#a3322a;font-size:.9rem;margin-top:8px}
+.neu{background:#e8efe8;border-radius:12px;padding:14px;margin-top:12px;font-size:.92rem}
+.neu b{font-size:1.4rem;letter-spacing:.12em}
+.kopf{display:flex;justify-content:space-between;gap:10px;align-items:baseline;cursor:pointer}
+.name{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.35rem;font-weight:500}
+.meta{font-size:.82rem;color:var(--text-light)}
+.zahl{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.7rem;white-space:nowrap}
+.zahl.leer{color:#a3322a}.zahl.knapp{color:var(--terracotta-dark)}
+.details{margin-top:10px;border-top:1px solid var(--cream-dark);padding-top:8px}
+.details ul{list-style:none;font-size:.88rem}
+.details li{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--cream-dark)}
+.filter{margin-bottom:12px}
+.ab{opacity:.6}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="nav"><a href="/anmeldung-liste">← Anmeldeliste</a></p>
+  <h1>Karten</h1>
+  <p class="sub">Nur für dich. Abgezogen wird automatisch, sobald eine Stunde begonnen hat und stattfindet: jede Anmeldung mit Karte und jede späte Absage, die du nicht erlassen hast.</p>
+
+  <div id="login" hidden>
+    <label>Schlüssel<input type="password" id="schluessel" autocomplete="current-password"></label>
+    <div class="knoepfe"><button class="btn voll" id="los">Öffnen</button></div>
+    <p class="fehler" id="loginfehler" hidden></p>
+  </div>
+
+  <div id="app" hidden>
+    <div class="box">
+      <h2 style="margin-top:0">Neue Karte</h2>
+      <label for="n-name">Name</label><input id="n-name" placeholder="Vorname und Nachname">
+      <div class="reihe">
+        <div><label for="n-typ">Karte</label><select id="n-typ"><option value="10er">10er-Karte</option><option value="5er">5er-Karte</option></select></div>
+        <div><label for="n-datum">Gekauft am</label><input id="n-datum" type="date"></div>
+        <div><label for="n-genutzt">Schon genutzt</label><input id="n-genutzt" type="number" min="0" max="10" value="0"></div>
+      </div>
+      <div class="knoepfe"><button class="btn voll" id="anlegen">Karte anlegen</button></div>
+      <p class="fehler" id="neufehler" hidden></p>
+      <div id="neuinfo"></div>
+    </div>
+
+    <h2>Alle Karten</h2>
+    <input class="filter" id="filter" placeholder="Name suchen">
+    <div id="liste"></div>
+  </div>
+</main>
+<script>
+(function () {
+  var API = '/api/anmeldung', K = 'bv-anm-key', karten = [], offen = {};
+  function key() { try { return localStorage.getItem(K) || ''; } catch (e) { return ''; } }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function de(d) { return d ? d.split('-').reverse().join('.') : ''; }
+  function post(d) { return fetch(API, { method: 'POST', headers: { 'content-type': 'application/json', 'x-anmeldung-key': key() }, body: JSON.stringify(d) }).then(function (r) { return r.json(); }); }
+  function nachricht(k) {
+    return 'Hallo ' + k.name.split(' ')[0] + ', deine ' + k.typ + '-Karte ist angelegt. Dein Kartencode: ' + k.code +
+      '\n\nBei der Anmeldung wählst du „Meine 5er- oder 10er-Karte“ und gibst einmal den Code ein. Wie viele Stunden noch frei sind, siehst du hier: bettina-kahmann.com/karte?code=' + k.code;
+  }
+
+  function laden() {
+    fetch(API + '?karten=1', { headers: { 'x-anmeldung-key': key() }, cache: 'no-store' })
+      .then(function (r) { if (r.status === 401) throw 401; return r.json(); })
+      .then(function (d) { document.getElementById('login').hidden = true; document.getElementById('app').hidden = false; karten = d.karten; zeigen(); })
+      .catch(function (e) {
+        document.getElementById('login').hidden = false; document.getElementById('app').hidden = true;
+        if (key()) { var f = document.getElementById('loginfehler'); f.textContent = e === 401 ? 'Der Schlüssel stimmt nicht.' : 'Keine Verbindung.'; f.hidden = false; }
+      });
+  }
+
+  function zeigen() {
+    var q = document.getElementById('filter').value.trim().toLowerCase();
+    var l = karten.filter(function (k) { return !q || k.name.toLowerCase().indexOf(q) > -1; });
+    document.getElementById('liste').innerHTML = l.length ? l.map(function (k) {
+      var cls = k.rest <= 0 ? 'leer' : k.rest <= 1 ? 'knapp' : '';
+      return '<div class="box' + (k.abgelaufen ? ' ab' : '') + '" data-id="' + k.id + '"><div class="kopf" data-auf>' +
+        '<div><div class="name">' + esc(k.name) + '</div><div class="meta">' + esc(k.typ) + '-Karte · Code ' + esc(k.code) + ' · ' + (k.abgelaufen ? 'abgelaufen am ' : 'gültig bis ') + de(k.gueltigBis) + '</div></div>' +
+        '<div class="zahl ' + cls + '">' + k.rest + ' / ' + k.stunden + '</div></div>' +
+        (offen[k.id] ? '<div class="details"><ul>' + (k.buchungen.length ? k.buchungen.slice().reverse().map(function (b) {
+          return '<li><span>' + de(b.datum) + ' · ' + esc(b.titel || b.notiz || '') + (b.art === 'Späte Absage' ? ' (späte Absage)' : '') + '</span><span>' + (b.delta > 0 ? '+' : '') + b.delta + '</span></li>';
+        }).join('') : '<li><span>Noch nichts abgezogen</span><span></span></li>') + '</ul>' +
+        '<div class="knoepfe"><button class="btn" data-minus>− 1 Stunde</button><button class="btn" data-plus>+ 1 Stunde</button><button class="btn" data-msg>Nachricht kopieren</button><button class="btn" data-weg>Löschen</button></div></div>' : '') +
+        '</div>';
+    }).join('') : '<p class="sub">Noch keine Karten angelegt.</p>';
+  }
+
+  document.getElementById('liste').addEventListener('click', function (ev) {
+    var box = ev.target.closest('.box'); if (!box) return;
+    var id = box.getAttribute('data-id'), k = karten.filter(function (x) { return x.id === id; })[0];
+    var b = ev.target.closest('button');
+    if (!b && ev.target.closest('[data-auf]')) { offen[id] = !offen[id]; zeigen(); return; }
+    if (!b) return;
+    if (b.hasAttribute('data-minus')) { var n = prompt('Wofür? (zum Beispiel: Stunde ohne Anmeldung, Fyndery)', 'Stunde ohne Anmeldung'); if (n === null) return; post({ action: 'karte_buchung', kartenId: id, delta: -1, notiz: n }).then(laden); }
+    if (b.hasAttribute('data-plus')) { var p = prompt('Wofür? (zum Beispiel: Korrektur)', 'Korrektur'); if (p === null) return; post({ action: 'karte_buchung', kartenId: id, delta: 1, notiz: p }).then(laden); }
+    if (b.hasAttribute('data-msg')) navigator.clipboard.writeText(nachricht(k)).then(function () { b.textContent = 'Kopiert'; setTimeout(function () { b.textContent = 'Nachricht kopieren'; }, 1500); });
+    if (b.hasAttribute('data-weg') && confirm('Karte von ' + k.name + ' löschen? Der Verlauf geht dabei verloren.')) post({ action: 'karte_loeschen', kartenId: id }).then(laden);
+  });
+
+  document.getElementById('anlegen').addEventListener('click', function () {
+    var fe = document.getElementById('neufehler'); fe.hidden = true;
+    post({ action: 'karte_neu', name: document.getElementById('n-name').value, typ: document.getElementById('n-typ').value,
+      gekauft: document.getElementById('n-datum').value, genutzt: document.getElementById('n-genutzt').value })
+      .then(function (d) {
+        if (!d.ok) { fe.textContent = d.fehler || 'Das hat nicht geklappt.'; fe.hidden = false; return; }
+        var k = d.karte;
+        document.getElementById('neuinfo').innerHTML = '<div class="neu">Karte für ' + esc(k.name) + ' angelegt. Code: <b>' + esc(k.code) + '</b><div class="knoepfe"><button class="btn voll" id="neumsg">Nachricht für WhatsApp kopieren</button></div></div>';
+        document.getElementById('neumsg').onclick = function (e) { navigator.clipboard.writeText(nachricht(k)).then(function () { e.target.textContent = 'Kopiert'; }); };
+        document.getElementById('n-name').value = ''; document.getElementById('n-genutzt').value = 0; document.getElementById('n-datum').value = new Date().toISOString().slice(0, 10);
+        laden();
+      });
+  });
+  document.getElementById('filter').addEventListener('input', zeigen);
+  document.getElementById('n-datum').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('los').addEventListener('click', function () {
+    try { localStorage.setItem(K, document.getElementById('schluessel').value.trim()); } catch (e) {}
+    laden();
+  });
+  laden();
+})();
+</script>
+</body>
+</html>

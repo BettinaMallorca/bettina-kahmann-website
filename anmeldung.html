@@ -13,6 +13,7 @@
 <style>
 :root{--cream:#FAF6F1;--cream-dark:#F0E8DE;--terracotta:#C17B52;--terracotta-dark:#8C492E;--plum:#993A74;--sage:#7A9E7E;--text:#3D2B22;--text-light:#8A6E62;--line:#e2d5c8}
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 body{background:var(--cream);color:var(--text);font-family:'DM Sans',Arial,sans-serif;font-weight:400;line-height:1.6}
 .wrap{max-width:640px;margin:0 auto;padding:28px 20px 60px}
 .brand{display:block;text-decoration:none;font-family:'Cormorant Garamond',Georgia,serif;color:var(--text);font-size:1.05rem;line-height:1.2;margin-bottom:34px}
@@ -76,7 +77,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   <div class="hinweis">
     <p>Du kannst doch nicht? Melde dich hier ab. Dann rückt die erste Person von der Warteliste nach. Bis 12 Stunden vor Beginn ist die Absage kostenfrei. Danach wird die Stunde berechnet, so steht es in den <a href="/agb">AGB</a>.</p>
     <p>Deinen Namen sehe nur ich. Er wird nach 4 Wochen gelöscht. Mehr dazu in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>
-    <p>Preise und Karten findest du in der <a href="/kurse">Kursübersicht</a>.</p>
+    <p>Wie viele Stunden noch auf deiner Karte sind, siehst du unter <a href="/karte">Mein Kartenstand</a>. Preise und Karten findest du in der <a href="/kurse">Kursübersicht</a>.</p>
   </div>
 
   <div class="fuss"><a href="/">bettina-kahmann.com</a><a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></div>
@@ -86,7 +87,8 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 (function () {
   var API = '/api/anmeldung';
   var SPEICHER = 'bv-anmeldungen';
-  var ARTEN = ['10er-Karte', '5er-Karte', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
+  var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['epassi/Hansefit', 'epassi/Hansefit'], ['Einzelstunde', 'Einzelstunde'], ['Schnupperstunde', 'Schnupperstunde']];
+  var kartenHinweis = {};
   var liste = document.getElementById('liste');
   var abgemeldet = {};
 
@@ -108,7 +110,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   }
 
   function zeigen(termine) {
-    var name = lies('bv-anm-name', ''), art = lies('bv-anm-art', '');
+    var name = lies('bv-anm-name', ''), art = lies('bv-anm-art', ''), code = lies('bv-karten-code', '');
     liste.innerHTML = termine.map(function (t) {
       var ich = meine().filter(function (m) { return m.key === t.key; })[0];
       var st = ich && t.eigene && t.eigene[ich.id];
@@ -130,6 +132,8 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
             : '<div class="status warte"><p>Du bist eingetragen, ' + esc(ich.name.split(' ')[0]) + '. Die Stunde findet statt, sobald ' + t.mindest + ' dabei sind. Es fehl' + (fehlen === 1 ? 't noch 1 Person' : 'en noch ' + fehlen + ' Personen') + '.</p><p>Fällt sie aus, sage ich in der WhatsApp-Gruppe Bescheid.</p></div>')
           : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du automatisch nach. Dein Platz gilt dann verbindlich, auch kurz vor der Stunde. Kannst du nicht, melde dich rechtzeitig von der Warteliste ab.</p></div>';
         var kostet = st.status === 'platz' && t.kostenpflichtig;
+        var kh = kartenHinweis[t.key]; delete kartenHinweis[t.key];
+        if (kh) h += '<p class="klein" style="margin-top:8px">' + kh + '</p>';
         h += '<button class="link" data-ab="' + esc(ich.id) + '"' + (kostet ? ' data-kostet' : '') + '>Abmelden</button>';
         if (kostet) h += '<div class="warn" hidden><p>Die Stunde beginnt in weniger als 12 Stunden. Wenn du jetzt absagst, wird sie dir berechnet, falls sie stattfindet.</p>' +
           '<div class="zeile"><button class="btn zweit" data-ab-ok="' + esc(ich.id) + '">Trotzdem absagen</button><button class="link" data-ab-nein>Ich komme doch</button></div></div>';
@@ -140,7 +144,8 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
           '<button class="btn' + (voll ? ' zweit' : '') + '" data-auf>' + (voll ? 'Auf die Warteliste' : 'Ich komme') + '</button>' +
           '<form novalidate><label>Dein Name<input type="text" name="name" autocomplete="name" maxlength="60" value="' + esc(name) + '" placeholder="Vorname und Nachname"></label>' +
           '<label>Wie nimmst du teil?<select name="art"><option value="">Bitte wählen</option>' +
-          ARTEN.map(function (a) { return '<option' + (a === art ? ' selected' : '') + '>' + a + '</option>'; }).join('') + '</select></label>' +
+          ARTEN.map(function (a) { return '<option value="' + a[0] + '"' + (a[0] === art ? ' selected' : '') + '>' + a[1] + '</option>'; }).join('') + '</select></label>' +
+          '<label class="codefeld"' + (art === 'Karte' ? '' : ' hidden') + '>Dein Kartencode<input type="text" name="code" maxlength="8" autocapitalize="characters" autocomplete="off" value="' + esc(code) + '" placeholder="z. B. K7F3QM"></label>' +
           '<div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>' +
           '<div class="zeile"><button class="btn" type="submit">Eintragen</button><button class="link" type="button" data-zu>Abbrechen</button></div><p class="fehler" hidden></p>' +
           '<p class="klein">Deine Anmeldung ist verbindlich. Kostenfrei absagen kannst du bis 12 Stunden vor Beginn.</p></form>';
@@ -167,11 +172,19 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
     }
   });
 
+  liste.addEventListener('change', function (ev) {
+    if (ev.target.name !== 'art') return;
+    var feld = ev.target.closest('form').querySelector('.codefeld');
+    feld.hidden = ev.target.value !== 'Karte';
+    if (!feld.hidden) feld.querySelector('input').focus();
+  });
+
   liste.addEventListener('submit', function (ev) {
     ev.preventDefault();
     var f = ev.target, karte = f.closest('.karte'), key = karte.getAttribute('data-key');
     var fehler = f.querySelector('.fehler'), knopf = f.querySelector('button[type=submit]');
-    var daten = { action: 'anmelden', key: key, name: f.name.value.trim(), art: f.art.value, website: f.website.value };
+    var daten = { action: 'anmelden', key: key, name: f.name.value.trim(), art: f.art.value, code: f.code.value.trim(), website: f.website.value };
+    if (daten.art === 'Karte' && daten.code.replace(/[^A-Za-z0-9]/g, '').length < 6) { fehler.textContent = 'Bitte gib deinen Kartencode ein. Du findest ihn in meiner WhatsApp-Nachricht zu deiner Karte.'; fehler.hidden = false; return; }
     if (daten.name.length < 2) { fehler.textContent = 'Bitte trag deinen Namen ein.'; fehler.hidden = false; return; }
     if (!daten.art) { fehler.textContent = 'Bitte wähl aus, wie du teilnimmst.'; fehler.hidden = false; return; }
     knopf.disabled = true; knopf.textContent = 'Einen Moment …';
@@ -180,6 +193,12 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       .then(function (d) {
         if (!d.ok) { fehler.textContent = d.fehler || 'Das hat nicht geklappt.'; fehler.hidden = false; knopf.disabled = false; knopf.textContent = 'Eintragen'; return; }
         schreib('bv-anm-name', daten.name); schreib('bv-anm-art', daten.art);
+        if (daten.art === 'Karte') {
+          schreib('bv-karten-code', daten.code.toUpperCase());
+          kartenHinweis[key] = d.kartenAbgelaufen ? 'Deine Karte ist abgelaufen. Bring bitte eine neue mit oder sprich mich an.'
+            : d.kartenRest <= 0 ? 'Deine Karte ist aufgebraucht. Bring bitte eine neue mit oder sprich mich an.'
+            : 'Auf deiner Karte sind noch ' + d.kartenRest + (d.kartenRest === 1 ? ' Stunde' : ' Stunden') + '. Diese Stunde wird abgezogen, wenn sie stattgefunden hat.';
+        }
         var m = meine(); m.push({ key: key, id: d.id, token: d.token, name: daten.name }); schreib(SPEICHER, m);
         laden();
       })

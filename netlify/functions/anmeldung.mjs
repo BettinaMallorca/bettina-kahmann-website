@@ -901,7 +901,11 @@ var STUNDEN = [
   { id: "di1930", tag: 2, start: "19:30", ende: "20:30", titel: "Yin Yoga" },
   { id: "do1815", tag: 4, start: "18:15", ende: "19:30", titel: "Yoga f\xFCr M\xE4nner & Frauen" }
 ];
-var ARTEN = ["10er-Karte", "5er-Karte", "epassi/Hansefit", "Einzelstunde", "Schnupperstunde"];
+var ARTEN = ["Karte", "epassi/Hansefit", "Einzelstunde", "Schnupperstunde"];
+var KARTEN = { "5er": { stunden: 5, monate: 6 }, "10er": { stunden: 10, monate: 12 } };
+var KARTEN_KEY = "karten";
+var KARTEN_LOESCHEN_MONATE = 6;
+var CODE_ZEICHEN = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 var WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 var store = () => getStore({ name: "wochen-anmeldung", consistency: "strong" });
 var json = (data, status = 200) => new Response(JSON.stringify(data), {
@@ -972,11 +976,11 @@ async function lade(st, key) {
   doc.spaet = doc.spaet || [];
   return { doc, etag: r ? r.etag : null };
 }
-async function aendern(st, key, fn) {
+async function aendern(st, key, fn, loader = lade) {
   for (let v = 0; v < 6; v++) {
-    const { doc, etag } = await lade(st, key);
+    const { doc, etag } = await loader(st, key);
     const ergebnis = fn(doc);
-    if (ergebnis && ergebnis.fehler) return ergebnis;
+    if (ergebnis && (ergebnis.fehler || ergebnis.unveraendert)) return ergebnis;
     const opt = etag ? { onlyIfMatch: etag } : { onlyIfNew: true };
     const w = await st.setJSON(key, doc, opt);
     if (w.modified) return ergebnis;
@@ -1026,12 +1030,87 @@ function istAdmin(req) {
   const ist = req.headers.get("x-anmeldung-key") || "";
   return !!soll && soll.length >= 12 && ist === soll;
 }
+async function ladeKarten(st) {
+  const r = await st.getWithMetadata(KARTEN_KEY, { type: "json" });
+  return { doc: r ? r.data : { karten: [] }, etag: r ? r.etag : null };
+}
+function plusMonate(datum, n) {
+  const [y, m, d] = datum.split("-").map(Number);
+  const z = new Date(Date.UTC(y, m - 1 + n, d));
+  return z.toISOString().slice(0, 10);
+}
+var rest = (k) => k.stunden + k.buchungen.reduce((a, b) => a + b.delta, 0);
+var neuerCode = (karten) => {
+  for (; ; ) {
+    const c = [...crypto.getRandomValues(new Uint8Array(6))].map((b) => CODE_ZEICHEN[b % CODE_ZEICHEN.length]).join("");
+    if (!karten.some((k) => k.code === c)) return c;
+  }
+};
+var normCode = (c) => String(c || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+var datumDE = (d) => d.split("-").reverse().join(".");
+function stattgefunden(doc) {
+  if (doc.ausfall) return false;
+  if (doc.bestaetigt) return true;
+  const platz = Math.min(doc.eintraege.length, PLAETZE);
+  return platz + doc.spaet.length >= MINDEST;
+}
+var begonnen = (t) => minutenBis(t.datum, t.start) <= 0;
+async function abrechnen(st) {
+  const { blobs } = await st.list({ prefix: "s/" });
+  const sitzungen = [];
+  for (const b of blobs) {
+    const t = terminAusKey(b.key);
+    if (!t || !begonnen(t)) continue;
+    const { doc } = await lade(st, b.key);
+    const soll = [];
+    if (stattgefunden(doc)) {
+      doc.eintraege.slice(0, PLAETZE).forEach((e) => e.kartenId && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: "Teilnahme" }));
+      doc.spaet.forEach((e) => e.kartenId && !e.erlassen && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: "Sp\xE4te Absage" }));
+    }
+    sitzungen.push({ t, soll });
+  }
+  if (!sitzungen.length) return;
+  await aendern(st, KARTEN_KEY, (doc) => {
+    const vorher = JSON.stringify(doc.karten);
+    for (const k of doc.karten) {
+      for (const { t, soll } of sitzungen) {
+        k.buchungen = k.buchungen.filter((b) => b.key !== t.key);
+        soll.filter((x) => x.kartenId === k.id).forEach(
+          (x) => k.buchungen.push({ key: t.key, datum: t.datum, titel: t.titel, art: x.art, delta: -1, eintrag: x.eintrag })
+        );
+      }
+      k.buchungen.sort((a, b) => (a.datum || "").localeCompare(b.datum || ""));
+    }
+    return JSON.stringify(doc.karten) === vorher ? { unveraendert: true } : { ok: true };
+  }, ladeKarten);
+}
+function karteAdmin(k) {
+  const heute = jetztBerlin().datum;
+  return {
+    id: k.id,
+    name: k.name,
+    typ: k.typ,
+    code: k.code,
+    stunden: k.stunden,
+    gekauft: k.gekauft,
+    gueltigBis: k.gueltigBis,
+    abgelaufen: k.gueltigBis < heute,
+    rest: rest(k),
+    buchungen: k.buchungen
+  };
+}
 var anmeldung_default = async (req) => {
   const st = store();
   const url = new URL(req.url);
   if (req.method === "GET") {
     if (url.searchParams.get("admin") === "1") {
       if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
+      await abrechnen(st);
+      const kartenDoc = (await ladeKarten(st)).doc;
+      const restVon = (id) => {
+        const k = id && kartenDoc.karten.find((x) => x.id === id);
+        return k ? rest(k) : null;
+      };
       const termine = [...naechsteTermine(), ...vergangeneTermine(14)];
       const liste = [];
       for (const t of termine) {
@@ -1047,11 +1126,39 @@ var anmeldung_default = async (req) => {
           bestaetigt: !!doc.bestaetigt,
           mindest: MINDEST,
           plaetze: PLAETZE,
-          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE })),
+          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE, kartenRest: restVon(e.kartenId) })),
           spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen }))
         });
       }
       return json({ termine: liste });
+    }
+    if (url.searchParams.get("karten") === "1") {
+      if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
+      await abrechnen(st);
+      const grenze = plusMonate(jetztBerlin().datum, -KARTEN_LOESCHEN_MONATE);
+      await aendern(st, KARTEN_KEY, (doc2) => {
+        doc2.karten = doc2.karten.filter((k) => k.gueltigBis >= grenze);
+        return { ok: true };
+      }, ladeKarten);
+      const { doc } = await ladeKarten(st);
+      return json({ karten: doc.karten.map(karteAdmin).sort((a, b) => a.name.localeCompare(b.name, "de")) });
+    }
+    if (url.searchParams.has("karte")) {
+      const code = normCode(url.searchParams.get("karte"));
+      if (code.length < 6) return json({ fehler: "Bitte gib deinen Kartencode ein." }, 400);
+      await abrechnen(st);
+      const k = (await ladeKarten(st)).doc.karten.find((x) => x.code === code);
+      if (!k) return json({ fehler: "Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich." }, 404);
+      const a = karteAdmin(k);
+      return json({
+        vorname: k.name.split(" ")[0],
+        typ: k.typ,
+        stunden: k.stunden,
+        rest: a.rest,
+        gueltigBis: datumDE(k.gueltigBis),
+        abgelaufen: a.abgelaufen,
+        verlauf: k.buchungen.map((b) => ({ datum: b.datum ? datumText(b.datum) : "", titel: b.titel || b.notiz || "Korrektur", art: b.art, delta: b.delta }))
+      });
     }
     const ids = (url.searchParams.get("ids") || "").split(",").filter((x) => /^[a-f0-9]{16}$/.test(x)).slice(0, 20);
     const out = [];
@@ -1071,20 +1178,34 @@ var anmeldung_default = async (req) => {
     if (!t) return json({ fehler: "F\xFCr diese Stunde ist die Anmeldung geschlossen." }, 400);
     const name = String(body.name || "").replace(/\s+/g, " ").trim().slice(0, 60);
     if (name.length < 2) return json({ fehler: "Bitte trag deinen Namen ein." }, 400);
-    const art = ARTEN.includes(body.art) ? body.art : "";
+    let art = ARTEN.includes(body.art) ? body.art : "";
     if (!art) return json({ fehler: "Bitte w\xE4hl aus, wie du teilnimmst." }, 400);
+    let karte = null;
+    if (art === "Karte") {
+      const code = normCode(body.code);
+      karte = (await ladeKarten(st)).doc.karten.find((x) => x.code === code);
+      if (!karte) return json({ fehler: "Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich in der WhatsApp-Gruppe." }, 400);
+      art = `${karte.typ}-Karte`;
+    }
     const id = zufall(8), token = zufall(16), tokenHash = await sha(token);
     const r = await aendern(st, t.key, (doc) => {
       if (doc.ausfall) return { fehler: "Diese Stunde f\xE4llt aus." };
       if (doc.eintraege.length >= PLAETZE + 30) return { fehler: "Die Warteliste ist voll." };
-      doc.eintraege.push({ id, name, art, ts: (/* @__PURE__ */ new Date()).toISOString(), tokenHash });
+      doc.eintraege.push({ id, name, art, ts: (/* @__PURE__ */ new Date()).toISOString(), tokenHash, ...karte ? { kartenId: karte.id } : {} });
       const i = doc.eintraege.length - 1;
       return i < PLAETZE ? { status: "platz" } : { status: "warteliste", position: i - PLAETZE + 1 };
     });
     if (r.fehler) return json(r, 409);
     if (Math.random() < 0.1) aufraeumen(st).catch(() => {
     });
-    return json({ ok: true, id, token, key: t.key, ...r });
+    let kartenInfo = {};
+    if (karte) {
+      await abrechnen(st).catch(() => {
+      });
+      const k = (await ladeKarten(st)).doc.karten.find((x) => x.id === karte.id);
+      kartenInfo = { kartenRest: rest(k), kartenAbgelaufen: k.gueltigBis < jetztBerlin().datum };
+    }
+    return json({ ok: true, id, token, key: t.key, ...r, ...kartenInfo });
   }
   if (body.action === "abmelden") {
     const tokenHash = await sha(String(body.token || ""));
@@ -1095,12 +1216,55 @@ var anmeldung_default = async (req) => {
       const [e] = doc.eintraege.splice(i, 1);
       const fenster = !!t && imFristfenster(t);
       const spaet = fenster && i < PLAETZE && !doc.ausfall;
-      if (spaet) doc.spaet.push({ id: e.id, name: e.name, art: e.art, abgesagt: (/* @__PURE__ */ new Date()).toISOString() });
+      if (spaet) doc.spaet.push({ id: e.id, name: e.name, art: e.art, abgesagt: (/* @__PURE__ */ new Date()).toISOString(), ...e.kartenId ? { kartenId: e.kartenId } : {} });
       return { ok: true, spaet };
     });
     return json(r, r.fehler ? 404 : 200);
   }
   if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
+  if (body.action === "karte_neu") {
+    const name = String(body.name || "").replace(/\s+/g, " ").trim().slice(0, 60);
+    const typ = KARTEN[body.typ] ? body.typ : "";
+    const gekauft = /^\d{4}-\d{2}-\d{2}$/.test(body.gekauft || "") ? body.gekauft : jetztBerlin().datum;
+    const genutzt = Math.max(0, Math.min(KARTEN[typ]?.stunden || 0, parseInt(body.genutzt, 10) || 0));
+    if (name.length < 2 || !typ) return json({ fehler: "Bitte Name und Kartenart angeben." }, 400);
+    let neu;
+    const r = await aendern(st, KARTEN_KEY, (doc) => {
+      neu = {
+        id: zufall(8),
+        code: neuerCode(doc.karten),
+        name,
+        typ,
+        stunden: KARTEN[typ].stunden,
+        gekauft,
+        gueltigBis: plusMonate(gekauft, KARTEN[typ].monate),
+        buchungen: []
+      };
+      if (genutzt) neu.buchungen.push({ datum: gekauft, notiz: "\xDCbertrag, bereits genutzt", art: "Korrektur", delta: -genutzt });
+      doc.karten.push(neu);
+      return { ok: true };
+    }, ladeKarten);
+    return r.fehler ? json(r, 409) : json({ ok: true, karte: karteAdmin(neu) });
+  }
+  if (body.action === "karte_buchung") {
+    const delta = parseInt(body.delta, 10);
+    if (![-1, 1].includes(delta)) return json({ fehler: "Ung\xFCltige Korrektur." }, 400);
+    const r = await aendern(st, KARTEN_KEY, (doc) => {
+      const k = doc.karten.find((x) => x.id === body.kartenId);
+      if (!k) return { fehler: "Karte nicht gefunden." };
+      k.buchungen.push({ datum: jetztBerlin().datum, notiz: String(body.notiz || "").slice(0, 80) || (delta < 0 ? "Stunde ohne Anmeldung" : "Korrektur"), art: "Korrektur", delta });
+      return { ok: true };
+    }, ladeKarten);
+    return json(r, r.fehler ? 404 : 200);
+  }
+  if (body.action === "karte_loeschen") {
+    const r = await aendern(st, KARTEN_KEY, (doc) => {
+      const n = doc.karten.length;
+      doc.karten = doc.karten.filter((x) => x.id !== body.kartenId);
+      return n === doc.karten.length ? { fehler: "Karte nicht gefunden." } : { ok: true };
+    }, ladeKarten);
+    return json(r, r.fehler ? 404 : 200);
+  }
   const key = String(body.key || "");
   if (!/^s\/\d{4}-\d{2}-\d{2}_[a-z0-9]+$/.test(key)) return json({ fehler: "Unbekannte Stunde." }, 400);
   if (body.action === "ausfall") {
