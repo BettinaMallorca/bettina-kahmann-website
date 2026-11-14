@@ -155,7 +155,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
         h += st.status === 'platz'
           ? (t.findetStatt
             ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>'
-            : '<div class="status warte"><p>Du bist eingetragen, ' + esc(ich.name.split(' ')[0]) + '. Die Stunde findet statt, sobald ' + t.mindest + ' dabei sind. Es fehl' + (fehlen === 1 ? 't noch 1 Person' : 'en noch ' + fehlen + ' Personen') + '.</p><p>Fällt sie aus, sage ich in der WhatsApp-Gruppe Bescheid.</p></div>')
+            : '<div class="status warte"><p>Du bist eingetragen, ' + esc(ich.name.split(' ')[0]) + '. Ab ' + t.mindest + ' Anmeldungen findet die Stunde sicher statt, bisher ' + (t.angemeldet === 1 ? 'ist 1 dabei' : 'sind ' + t.angemeldet + ' dabei') + '.</p><p>Bleibt es bei weniger, sage ich in der WhatsApp-Gruppe Bescheid, ob die Stunde trotzdem stattfindet.</p></div>')
           : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du automatisch nach. Dein Platz gilt dann verbindlich, auch kurz vor der Stunde. Kannst du nicht, melde dich rechtzeitig von der Warteliste ab.</p></div>';
         var kostet = st.status === 'platz' && t.kostenpflichtig;
         var kh = kartenHinweis[t.key]; delete kartenHinweis[t.key];
