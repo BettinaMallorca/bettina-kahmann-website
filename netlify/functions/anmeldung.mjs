@@ -938,6 +938,7 @@ var KARTEN_KEY = "karten";
 var KARTEN_LOESCHEN_MONATE = 6;
 var CODE_ZEICHEN = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 var PREISE = { "5er": 90, "10er": 160 };
+var STICHTAG_VERFALL = "2026-11-15";
 var GUTSCHEIN_OFFEN_TAGE = 30;
 var WT = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 var PRODUKTION = true;
@@ -1279,6 +1280,7 @@ var anmeldung_default = async (req, context) => {
         rest: a.rest,
         gueltigBis: datumDE(k.gueltigBis),
         abgelaufen: a.abgelaufen,
+        uebertrag: k.gekauft < STICHTAG_VERFALL,
         verlauf: k.buchungen.map((b) => ({ datum: b.datum ? datumText(b.datum) : "", titel: b.titel || b.notiz || "Korrektur", art: b.art, delta: b.delta }))
       });
     }

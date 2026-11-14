@@ -71,12 +71,12 @@ li span:last-child{color:var(--text-light);white-space:nowrap}
   function zeigen(d) {
     var genutzt = d.stunden - Math.max(0, d.rest), punkte = '';
     for (var i = 0; i < d.stunden; i++) punkte += '<i class="' + (i < Math.max(0, d.rest) ? 'voll' : '') + '"></i>';
-    var hinweis = d.abgelaufen ? 'Deine Karte ist am ' + esc(d.gueltigBis) + ' abgelaufen. Stunden, die bis dahin nicht genutzt wurden, sind verfallen.'
+    var hinweis = d.abgelaufen ? 'Deine Karte ist am ' + esc(d.gueltigBis) + ' abgelaufen. ' + (d.uebertrag ? 'Stunden, die noch offen sind, rechne ich dir auf deine nächste Karte an.' : 'Stunden, die bis dahin nicht genutzt wurden, sind verfallen.')
       : d.rest < 0 ? 'Du hast ' + (-d.rest) + (d.rest === -1 ? ' Stunde' : ' Stunden') + ' mehr genutzt, als auf der Karte waren. Das verrechnen wir mit deiner nächsten Karte.'
       : d.rest === 0 ? 'Deine Karte ist voll. Eine neue Karte bekommst du bei mir, bar in der Stunde. Lieber per PayPal? Dann schreib mir.'
       : d.rest === 1 ? 'Noch eine Stunde auf deiner Karte. Die nächste Karte bezahlst du bei mir bar in der Stunde. Lieber per PayPal? Dann schreib mir.'
       : (function () { var p = d.gueltigBis.split('.'), tage = Math.ceil((new Date(p[2], p[1] - 1, p[0]) - new Date()) / 864e5);
-          return tage <= 30 ? 'Deine Karte läuft am ' + esc(d.gueltigBis) + ' ab. Stunden, die du bis dahin nicht nutzt, verfallen.' : ''; })();
+          return tage <= 30 && !d.uebertrag ? 'Deine Karte läuft am ' + esc(d.gueltigBis) + ' ab. Stunden, die du bis dahin nicht nutzt, verfallen.' : ''; })();
     erg.innerHTML = '<div class="karte"><div class="typ">' + esc(d.typ) + '-Karte von ' + esc(d.vorname) + '</div>' +
       '<div class="rest">' + d.rest + ' <small>von ' + d.stunden + ' Stunden frei</small></div>' +
       '<div class="punkte" aria-hidden="true">' + punkte + '</div>' +

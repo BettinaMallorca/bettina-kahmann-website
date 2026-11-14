@@ -38,6 +38,8 @@ const KARTEN_KEY = 'karten';
 const KARTEN_LOESCHEN_MONATE = 6; // nach Ablauf der Karte
 const CODE_ZEICHEN = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
 const PREISE = { '5er': 90, '10er': 160 };
+// Karten, die vor diesem Tag gekauft wurden: nicht genutzte Stunden werden auf die nächste Karte angerechnet
+const STICHTAG_VERFALL = '2026-11-15';
 const GUTSCHEIN_OFFEN_TAGE = 30; // unbezahlte Bestellungen werden danach gelöscht
 const WT = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
 
@@ -332,7 +334,7 @@ export default async (req, context) => {
       const k = kd.karten.find((x) => x.code === code);
       if (!k) return json({ fehler: 'Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich.' }, 404);
       const a = karteAdmin(k);
-      return json({ vorname: k.name.split(' ')[0], typ: k.typ, stunden: k.stunden, rest: a.rest, gueltigBis: datumDE(k.gueltigBis), abgelaufen: a.abgelaufen,
+      return json({ vorname: k.name.split(' ')[0], typ: k.typ, stunden: k.stunden, rest: a.rest, gueltigBis: datumDE(k.gueltigBis), abgelaufen: a.abgelaufen, uebertrag: k.gekauft < STICHTAG_VERFALL,
         verlauf: k.buchungen.map((b) => ({ datum: b.datum ? datumText(b.datum) : '', titel: b.titel || b.notiz || 'Korrektur', art: b.art, delta: b.delta })) });
     }
     if (url.searchParams.get('plan') === '1') {
