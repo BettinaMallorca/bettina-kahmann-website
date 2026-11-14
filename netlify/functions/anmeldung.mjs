@@ -1208,6 +1208,7 @@ var anmeldung_default = async (req, context) => {
     const r = await aendern(st, t.key, (doc) => {
       if (doc.ausfall) return { fehler: "Diese Stunde f\xE4llt aus." };
       if (doc.eintraege.length >= PLAETZE + 30) return { fehler: "Die Warteliste ist voll." };
+      if (karte && doc.eintraege.some((e) => e.kartenId === karte.id)) return { fehler: "Mit dieser Karte bist du f\xFCr diese Stunde schon eingetragen." };
       doc.eintraege.push({ id, name, art, ts: (/* @__PURE__ */ new Date()).toISOString(), tokenHash, ...karte ? { kartenId: karte.id } : {} });
       const i = doc.eintraege.length - 1;
       return i < PLAETZE ? { status: "platz" } : { status: "warteliste", position: i - PLAETZE + 1 };
@@ -1225,6 +1226,8 @@ var anmeldung_default = async (req, context) => {
     return json({ ok: true, id, token, key: t.key, ...r, ...kartenInfo });
   }
   if (body.action === "abmelden") {
+    const tb = terminAusKey(String(body.key || ""));
+    if (tb && begonnen(tb)) return json({ fehler: "Die Stunde hat schon begonnen." }, 409);
     const tokenHash = await sha(String(body.token || ""));
     const r = await aendern(st, String(body.key || ""), (doc) => {
       const i = doc.eintraege.findIndex((e2) => e2.id === body.id && e2.tokenHash === tokenHash);
