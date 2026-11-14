@@ -51,6 +51,9 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 .status.aus{background:var(--cream-dark);color:var(--text)}
 .status p+p{margin-top:4px}
 .fehler{color:#a3322a;font-size:.9rem;margin-top:10px}
+.klein{font-size:.8rem;color:var(--text-light);margin-top:12px}
+.warn{background:#f6ece4;border-radius:12px;padding:12px 14px;margin-top:10px;font-size:.92rem;color:var(--terracotta-dark)}
+.warn .zeile{margin-top:10px}
 .hinweis{font-size:.88rem;color:var(--text-light);margin-top:26px}
 .hinweis p+p{margin-top:8px}
 .hinweis a,.fuss a{color:var(--text-light)}
@@ -68,7 +71,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   <div id="liste"><p class="laden">Die Stunden werden geladen …</p></div>
 
   <div class="hinweis">
-    <p>Du kannst doch nicht? Melde dich hier ab. Dann rückt die erste Person von der Warteliste nach.</p>
+    <p>Du kannst doch nicht? Melde dich hier ab. Dann rückt die erste Person von der Warteliste nach. Bis 12 Stunden vor Beginn ist die Absage kostenfrei. Danach wird die Stunde berechnet, so steht es in den <a href="/agb">AGB</a>.</p>
     <p>Deinen Namen sehe nur ich. Er wird nach 4 Wochen gelöscht. Mehr dazu in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>
     <p>Preise und Karten findest du in der <a href="/kurse">Kursübersicht</a>.</p>
   </div>
@@ -82,6 +85,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   var SPEICHER = 'bv-anmeldungen';
   var ARTEN = ['10er-Karte', '5er-Karte', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
   var liste = document.getElementById('liste');
+  var abgemeldet = {};
 
   function lies(k, f) { try { return JSON.parse(localStorage.getItem(k)) || f; } catch (e) { return f; } }
   function schreib(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
@@ -107,6 +111,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       var st = ich && t.eigene && t.eigene[ich.id];
       var voll = t.angemeldet >= t.plaetze;
       var proz = Math.round(t.angemeldet / t.plaetze * 100);
+      var nach = abgemeldet[t.key]; delete abgemeldet[t.key];
       var h = '<article class="karte' + (t.ausfall ? ' aus' : '') + '" data-key="' + esc(t.key) + '">' +
         '<div class="kopf"><div><div class="tag">' + esc(t.datumText) + '</div><div class="titel">' + esc(t.titel) + '</div><div class="zeit">' + esc(t.zeit) + ' Uhr</div></div>' +
         (t.ausfall ? '' : '<div class="zahl"><b>' + t.angemeldet + '</b>von ' + t.plaetze + '</div>') + '</div>';
@@ -116,8 +121,12 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
         h += st.status === 'platz'
           ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>'
           : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du nach. Schau vor der Stunde noch einmal hier rein.</p></div>';
-        h += '<button class="link" data-ab="' + esc(ich.id) + '">Abmelden</button>';
+        var kostet = st.status === 'platz' && t.kostenpflichtig && !st.kostenfrei;
+        h += '<button class="link" data-ab="' + esc(ich.id) + '"' + (kostet ? ' data-kostet' : '') + '>Abmelden</button>';
+        if (kostet) h += '<div class="warn" hidden><p>Die Stunde beginnt in weniger als 12 Stunden. Wenn du jetzt absagst, wird sie dir trotzdem berechnet.</p>' +
+          '<div class="zeile"><button class="btn zweit" data-ab-ok="' + esc(ich.id) + '">Trotzdem absagen</button><button class="link" data-ab-nein>Ich komme doch</button></div></div>';
       } else {
+        if (nach) h += '<div class="status ' + (nach === 'spaet' ? 'warte' : 'ok') + '" style="margin-bottom:12px"><p>' + (nach === 'spaet' ? 'Du bist abgemeldet. Weil es weniger als 12 Stunden vor Beginn war, wird die Stunde berechnet.' : 'Du bist abgemeldet. Danke, dass du Bescheid gibst.') + '</p></div>';
         var wl = voll ? (t.warteliste ? t.warteliste + ' auf der Warteliste. ' : '') + 'Die Stunde ist voll.' : (t.plaetze - t.angemeldet) + ' Plätze frei.';
         h += '<p class="zeit" style="margin-bottom:12px">' + wl + '</p>' +
           '<button class="btn' + (voll ? ' zweit' : '') + '" data-auf>' + (voll ? 'Auf die Warteliste' : 'Ich komme') + '</button>' +
@@ -125,7 +134,8 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
           '<label>Wie nimmst du teil?<select name="art"><option value="">Bitte wählen</option>' +
           ARTEN.map(function (a) { return '<option' + (a === art ? ' selected' : '') + '>' + a + '</option>'; }).join('') + '</select></label>' +
           '<div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>' +
-          '<div class="zeile"><button class="btn" type="submit">Eintragen</button><button class="link" type="button" data-zu>Abbrechen</button></div><p class="fehler" hidden></p></form>';
+          '<div class="zeile"><button class="btn" type="submit">Eintragen</button><button class="link" type="button" data-zu>Abbrechen</button></div><p class="fehler" hidden></p>' +
+          '<p class="klein">Deine Anmeldung ist verbindlich. Kostenfrei absagen kannst du bis 12 Stunden vor Beginn.</p></form>';
       }
       return h + '</article>';
     }).join('');
@@ -136,12 +146,16 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
     var karte = b.closest('.karte'), key = karte.getAttribute('data-key');
     if (b.hasAttribute('data-auf')) { b.hidden = true; karte.querySelector('form').classList.add('offen'); karte.querySelector('input[name=name]').focus(); }
     if (b.hasAttribute('data-zu')) { karte.querySelector('form').classList.remove('offen'); karte.querySelector('[data-auf]').hidden = false; }
-    if (b.hasAttribute('data-ab')) {
-      var ich = meine().filter(function (m) { return m.id === b.getAttribute('data-ab'); })[0];
+    if (b.hasAttribute('data-ab') && b.hasAttribute('data-kostet')) { b.hidden = true; karte.querySelector('.warn').hidden = false; return; }
+    if (b.hasAttribute('data-ab-nein')) { karte.querySelector('.warn').hidden = true; karte.querySelector('[data-ab]').hidden = false; return; }
+    var abId = b.getAttribute('data-ab') || b.getAttribute('data-ab-ok');
+    if (abId) {
+      var ich = meine().filter(function (m) { return m.id === abId; })[0];
       if (!ich) return;
       b.disabled = true; b.textContent = 'Wird abgemeldet …';
       fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'abmelden', key: key, id: ich.id, token: ich.token }) })
-        .then(function () { schreib(SPEICHER, meine().filter(function (m) { return m.id !== ich.id; })); laden(); });
+        .then(function (r) { return r.json(); })
+        .then(function (d) { abgemeldet[key] = d.spaet ? 'spaet' : 'ok'; schreib(SPEICHER, meine().filter(function (m) { return m.id !== ich.id; })); laden(); });
     }
   });
 

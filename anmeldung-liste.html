@@ -32,6 +32,9 @@ button{font:inherit;cursor:pointer}
 .btn:hover{background:var(--cream-dark)}
 .btn.voll{background:var(--plum);color:#fff}
 .x{border:0;background:none;color:var(--text-light);font-size:1.1rem;line-height:1;padding:0 4px}
+.spaet li{color:var(--text)}
+.spaet li.erlassen span:first-child{text-decoration:line-through;color:var(--text-light)}
+.mini{border:0;background:none;color:var(--plum);font-size:.78rem;text-decoration:underline;padding:0 4px}
 .ausfall{background:var(--cream-dark);border-radius:8px;padding:6px 10px;font-size:.85rem;margin-top:8px;display:inline-block}
 input{font:inherit;width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;margin:8px 0 12px}
 .fehler{color:#a3322a;font-size:.9rem}
@@ -79,6 +82,10 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
       (summe ? '<div class="summe">' + esc(summe) + '</div>' : '') +
       (platz.length ? '<ol>' + platz.map(function (e) { return zeile(e, false); }).join('') + '</ol>' : '<p class="leer">Noch niemand angemeldet.</p>') +
       (wl.length ? '<div class="wltitel">Warteliste</div><ol>' + wl.map(function (e) { return zeile(e, true); }).join('') + '</ol>' : '') +
+      (t.spaet.length ? '<div class="wltitel">Späte Absage, wird berechnet</div><ol class="spaet">' + t.spaet.map(function (e) {
+        return '<li' + (e.erlassen ? ' class="erlassen"' : '') + '><span>' + esc(e.name) + ' <span class="art">' + esc(e.art) + '</span></span>' +
+          '<button class="mini" data-erlassen="' + e.id + '" data-wert="' + (e.erlassen ? '0' : '1') + '">' + (e.erlassen ? 'Doch berechnen' : 'Nicht berechnen') + '</button></li>';
+      }).join('') + '</ol>' : '') +
       (t.kommend ? '<div class="knoepfe"><button class="btn" data-kopie>Liste kopieren</button><button class="btn" data-ausfall="' + (t.ausfall ? '0' : '1') + '">' + (t.ausfall ? 'Findet doch statt' : 'Stunde fällt aus') + '</button></div>' : '') +
       '</article>';
   }
@@ -86,7 +93,7 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
   var daten = [];
   function zeigen(termine) {
     daten = termine;
-    var k = termine.filter(function (t) { return t.kommend; }), a = termine.filter(function (t) { return !t.kommend && t.eintraege.length; });
+    var k = termine.filter(function (t) { return t.kommend; }), a = termine.filter(function (t) { return !t.kommend && (t.eintraege.length || t.spaet.length); });
     inhalt.innerHTML = '<h2>Diese Woche</h2>' + k.map(karte).join('') + (a.length ? '<h2>Letzte zwei Wochen</h2>' + a.map(karte).join('') : '');
   }
 
@@ -98,11 +105,13 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
       if (!confirm('Diesen Eintrag entfernen?')) return;
       post({ action: 'entfernen', key: key2, id: b.getAttribute('data-weg') }).then(laden);
     }
+    if (b.hasAttribute('data-erlassen')) post({ action: 'erlassen', key: key2, id: b.getAttribute('data-erlassen'), wert: b.getAttribute('data-wert') === '1' }).then(laden);
     if (b.hasAttribute('data-ausfall')) post({ action: 'ausfall', key: key2, wert: b.getAttribute('data-ausfall') === '1' }).then(laden);
     if (b.hasAttribute('data-kopie')) {
       var p = t.eintraege.filter(function (e) { return !e.warteliste; }), w = t.eintraege.filter(function (e) { return e.warteliste; });
       var txt = t.titel + ', ' + t.datumText + ' ' + t.zeit + ' Uhr\n' + p.length + ' von ' + t.plaetze + ' Plätzen\n\n' +
-        p.map(function (e, i) { return (i + 1) + '. ' + e.name; }).join('\n') + (w.length ? '\n\nWarteliste:\n' + w.map(function (e, i) { return (i + 1) + '. ' + e.name; }).join('\n') : '');
+        p.map(function (e, i) { return (i + 1) + '. ' + e.name; }).join('\n') + (w.length ? '\n\nWarteliste:\n' + w.map(function (e, i) { return (i + 1) + '. ' + e.name; }).join('\n') : '') +
+        (function () { var s = t.spaet.filter(function (e) { return !e.erlassen; }); return s.length ? '\n\nSpäte Absage, wird berechnet:\n' + s.map(function (e) { return e.name + ' (' + e.art + ')'; }).join('\n') : ''; })();
       navigator.clipboard.writeText(txt).then(function () { b.textContent = 'Kopiert'; setTimeout(function () { b.textContent = 'Liste kopieren'; }, 1500); });
     }
   });

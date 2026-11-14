@@ -893,6 +893,7 @@ var getStore = (input, options) => {
 
 // src/anmeldung.mjs
 var PLAETZE = 15;
+var FRIST_STUNDEN = 12;
 var AUFBEWAHRUNG_TAGE = 28;
 var STUNDEN = [
   { id: "di18", tag: 2, start: "18:00", ende: "19:15", titel: "Hatha meets Yin" },
@@ -949,13 +950,26 @@ function vergangeneTermine(tage) {
   }
   return out;
 }
+function minutenBis(datum, start) {
+  const j = jetztBerlin();
+  const ziel = Date.parse(`${datum}T${start}:00Z`), jetzt = Date.parse(`${j.datum}T${j.zeit}:00Z`);
+  return (ziel - jetzt) / 6e4;
+}
+var imFristfenster = (t) => minutenBis(t.datum, t.start) < FRIST_STUNDEN * 60;
+var terminAusKey = (key) => {
+  const m = /^s\/(\d{4}-\d{2}-\d{2})_([a-z0-9]+)$/.exec(key);
+  const s = m && STUNDEN.find((x) => x.id === m[2]);
+  return s ? { ...s, datum: m[1], key } : null;
+};
 var datumText = (d) => {
   const [y, m, t] = d.split("-");
   return `${WT[wochentag(d)]}, ${t}.${m}.`;
 };
 async function lade(st, key) {
   const r = await st.getWithMetadata(key, { type: "json" });
-  return r ? { doc: r.data, etag: r.etag } : { doc: { eintraege: [], ausfall: false }, etag: null };
+  const doc = r ? r.data : { eintraege: [], ausfall: false };
+  doc.spaet = doc.spaet || [];
+  return { doc, etag: r ? r.etag : null };
 }
 async function aendern(st, key, fn) {
   for (let v = 0; v < 6; v++) {
@@ -986,12 +1000,14 @@ function oeffentlich(t, doc, eigeneIds) {
     plaetze: PLAETZE,
     angemeldet: Math.min(n, PLAETZE),
     warteliste: Math.max(0, n - PLAETZE),
-    ausfall: !!doc.ausfall
+    ausfall: !!doc.ausfall,
+    kostenpflichtig: imFristfenster(t),
+    fristStunden: FRIST_STUNDEN
   };
   if (eigeneIds.length) {
     res.eigene = {};
     doc.eintraege.forEach((e, i) => {
-      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < PLAETZE ? { status: "platz" } : { status: "warteliste", position: i - PLAETZE + 1 };
+      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < PLAETZE ? { status: "platz", kostenfrei: !!e.spaetNachgerueckt } : { status: "warteliste", position: i - PLAETZE + 1 };
     });
   }
   return res;
@@ -1025,7 +1041,8 @@ var anmeldung_default = async (req) => {
           kommend: t.datum >= jetztBerlin().datum && naechsteTermine().some((x) => x.key === t.key),
           ausfall: !!doc.ausfall,
           plaetze: PLAETZE,
-          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE }))
+          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE })),
+          spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen }))
         });
       }
       return json({ termine: liste });
@@ -1066,10 +1083,15 @@ var anmeldung_default = async (req) => {
   if (body.action === "abmelden") {
     const tokenHash = await sha(String(body.token || ""));
     const r = await aendern(st, String(body.key || ""), (doc) => {
-      const i = doc.eintraege.findIndex((e) => e.id === body.id && e.tokenHash === tokenHash);
+      const i = doc.eintraege.findIndex((e2) => e2.id === body.id && e2.tokenHash === tokenHash);
       if (i < 0) return { fehler: "Anmeldung nicht gefunden." };
-      doc.eintraege.splice(i, 1);
-      return { ok: true };
+      const t = terminAusKey(String(body.key || ""));
+      const [e] = doc.eintraege.splice(i, 1);
+      const fenster = !!t && imFristfenster(t);
+      const spaet = fenster && i < PLAETZE && !doc.ausfall && !e.spaetNachgerueckt;
+      if (spaet) doc.spaet.push({ id: e.id, name: e.name, art: e.art, abgesagt: (/* @__PURE__ */ new Date()).toISOString() });
+      if (fenster && i < PLAETZE && doc.eintraege.length >= PLAETZE) doc.eintraege[PLAETZE - 1].spaetNachgerueckt = true;
+      return { ok: true, spaet };
     });
     return json(r, r.fehler ? 404 : 200);
   }
@@ -1082,6 +1104,15 @@ var anmeldung_default = async (req) => {
       return { ok: true };
     });
     return json(r, r.fehler ? 409 : 200);
+  }
+  if (body.action === "erlassen") {
+    const r = await aendern(st, key, (doc) => {
+      const e = doc.spaet.find((x) => x.id === body.id);
+      if (!e) return { fehler: "Eintrag nicht gefunden." };
+      e.erlassen = !!body.wert;
+      return { ok: true };
+    });
+    return json(r, r.fehler ? 404 : 200);
   }
   if (body.action === "entfernen") {
     const r = await aendern(st, key, (doc) => {
