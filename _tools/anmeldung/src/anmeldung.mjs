@@ -31,7 +31,7 @@ const START_PLAN = {
   morning: ['2026-11-15', '2026-11-22', '2026-12-06', '2026-12-20', '2026-12-27'],
 };
 let PLAN = START_PLAN;
-const ARTEN = ['Karte', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
+const ARTEN = ['Karte', 'KarteHansefit', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
 const KARTEN = { '5er': { stunden: 5, monate: 6 }, '10er': { stunden: 10, monate: 12 } };
 const KARTEN_KEY = 'karten';
 const KARTEN_LOESCHEN_MONATE = 6; // nach Ablauf der Karte
@@ -317,11 +317,11 @@ export default async (req, context) => {
     let art = ARTEN.includes(body.art) ? body.art : '';
     if (!art) return json({ fehler: 'Bitte wähl aus, wie du teilnimmst.' }, 400);
     let karte = null;
-    if (art === 'Karte') {
+    if (art === 'Karte' || art === 'KarteHansefit') {
       const code = normCode(body.code);
       karte = (await ladeKarten(st)).doc.karten.find((x) => x.code === code);
       if (!karte) return json({ fehler: 'Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich in der WhatsApp-Gruppe.' }, 400);
-      art = `${karte.typ}-Karte`;
+      art = `${karte.typ}-Karte` + (art === 'KarteHansefit' ? ' + Hansefit/epassi' : '');
     }
     const id = zufall(8), token = zufall(16), tokenHash = await sha(token);
     const r = await aendern(st, t.key, (doc) => {
