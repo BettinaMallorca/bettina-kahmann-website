@@ -142,7 +142,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       }).join('') + '</div>';
     }
     if (info.length) {
-      h += '<h2>Meine anderen Kurse</h2><p class="unter">Hier brauchst du dich nicht einzutragen.</p><ul>' + info.map(function (k) {
+      h += '<h2>Meine anderen Kurse</h2><p class="unter">Diesen Kurs buchst du direkt über Fyndery.</p><ul>' + info.map(function (k) {
         return '<li><span class="k">' + esc(k.titel) + '</span>, ' + esc(k.zeit) + ' Uhr<div class="d">' + esc(k.termine.join(' · ')) + '</div><div class="d">' +
           esc(k.zusatz) + (k.link ? ' · <a href="' + esc(k.link) + '"' + (k.link.indexOf('http') === 0 ? ' target="_blank" rel="noopener"' : '') + '>' + esc(k.linkText || 'Mehr dazu') + '</a>' : '') + '</div></li>';
       }).join('') + '</ul>';
