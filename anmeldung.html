@@ -70,6 +70,10 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 .mehr .k{font-weight:600}
 .mehr .d{color:var(--text-light);font-size:.92rem}
 .mehr a{color:var(--plum)}
+.gutschein-box{background:var(--cream-dark);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:26px}
+.gutschein-box .gtitel{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;line-height:1.2;margin-bottom:6px}
+.gutschein-box p{color:var(--text-light);font-size:.95rem;margin-bottom:12px}
+.gutschein-box .gbtn{display:inline-block;background:var(--plum);color:#fff;text-decoration:none;font-size:.82rem;font-weight:600;letter-spacing:.06em;padding:10px 18px;border-radius:24px}
 .online-box{background:#EEF4EF;border:1.5px solid var(--sage);border-radius:16px;padding:18px 20px;margin-top:6px}
 .online-box .tag{display:inline-block;background:var(--sage);color:#fff;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:10px}
 .online-box .kurs{padding:12px 0;border-bottom:1px solid #cfdecf}
@@ -88,6 +92,11 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   <p class="sub">Trag dich für deine Stunde ein. So weiß ich, wie viele kommen, und dein Platz ist sicher. Pro Stunde gibt es 15 Plätze. Ab 5 Anmeldungen findet die Stunde statt. Sind es weniger, sage ich in der WhatsApp-Gruppe Bescheid, ob sie stattfindet.</p>
 
   <div id="liste"><p class="laden">Die Stunden werden geladen …</p></div>
+  <div id="gutschein" class="gutschein-box" hidden>
+    <div class="gtitel">Yoga verschenken</div>
+    <p>Ein Gutschein für eine 5er- oder 10er-Karte ist ein Geschenk, das jede Woche wiederkommt. Er gilt für meine Präsenzstunden und für die Live-online-Stunden.</p>
+    <a class="gbtn" href="/gutschein">Zum Gutschein</a>
+  </div>
   <div id="mehr" class="mehr"></div>
 
   <div class="hinweis">
@@ -104,7 +113,10 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   var API = '/api/anmeldung';
   var SPEICHER = 'bv-anmeldungen';
   var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['KarteHansefit', 'Meine 10er-Karte mit Hansefit/epassi'], ['Kartenkauf vor Ort', 'Ich kaufe vor Ort eine neue Karte'], ['epassi/Hansefit', 'Nur Hansefit/epassi (6 € Zuzahlung)'], ['Einzelstunde', 'Einzelkarte (19 €)'], ['Schnupperstunde', 'Schnupperstunde (einmalig, 10 €)'], ['Schnupperstunde Hansefit/epassi', 'Schnupperstunde mit Hansefit/epassi (ohne Zuzahlung)']];
-  var kartenHinweis = {};
+  var kartenHinweis = {}, frisch = {};
+  // Gutschein-Hinweis bis Heiligabend
+  var WEIHNACHTEN = (function () { var d = new Date(), j = d.getFullYear(); return d <= new Date(j, 11, 24, 23, 59) && d >= new Date(j, 10, 1); })();
+  try { if (WEIHNACHTEN) document.getElementById('gutschein').hidden = false; } catch (e) {}
   var liste = document.getElementById('liste');
   var abgemeldet = {};
 
@@ -183,6 +195,8 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
         var kostet = st.status === 'platz' && t.kostenpflichtig;
         var kh = kartenHinweis[t.key]; delete kartenHinweis[t.key];
         if (kh) h += '<p class="klein" style="margin-top:8px">' + kh + '</p>';
+        if (frisch[t.key] && WEIHNACHTEN) h += '<p class="klein" style="margin-top:8px">Noch ein Weihnachtsgeschenk gesucht? <a href="/gutschein">Yoga lässt sich verschenken.</a></p>';
+        delete frisch[t.key];
         h += '<button class="link" data-ab="' + esc(ich.id) + '"' + (kostet ? ' data-kostet' : '') + '>Abmelden</button>';
         if (kostet) h += '<div class="warn" hidden><p>Die Stunde beginnt in weniger als 12 Stunden. Wenn du jetzt absagst, wird sie dir berechnet, falls sie stattfindet.</p>' +
           '<div class="zeile"><button class="btn zweit" data-ab-ok="' + esc(ich.id) + '">Trotzdem absagen</button><button class="link" data-ab-nein>Ich komme doch</button></div></div>';
@@ -243,7 +257,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.ok) { fehler.textContent = d.fehler || 'Das hat nicht geklappt.'; fehler.hidden = false; knopf.disabled = false; knopf.textContent = 'Eintragen'; return; }
-        schreib('bv-anm-name', daten.name); schreib('bv-anm-art', daten.art);
+        schreib('bv-anm-name', daten.name); schreib('bv-anm-art', daten.art); frisch[key] = true;
         if (daten.art === 'Karte' || daten.art === 'KarteHansefit') {
           schreib('bv-karten-code', daten.code.toUpperCase());
           kartenHinweis[key] = d.kartenAbgelaufen ? 'Deine Karte ist abgelaufen. Du bist trotzdem eingetragen. Sprich mich in der Stunde an.'
