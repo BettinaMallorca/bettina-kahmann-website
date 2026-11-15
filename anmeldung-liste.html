@@ -123,18 +123,25 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
   }
 
   function wochenpost() {
+    var TAGE = { Mo: 'Montag', Di: 'Dienstag', Mi: 'Mittwoch', Do: 'Donnerstag', Fr: 'Freitag', Sa: 'Samstag', So: 'Sonntag' };
     var bis = new Date(); bis.setDate(bis.getDate() + 6);
     var grenze = bis.toISOString().slice(0, 10);
     var w = daten.filter(function (t) { return t.kommend && t.datum <= grenze; });
-    if (!w.length) return 'Diese Woche gibt es keine Präsenzstunden.';
-    return 'Yoga diese Woche:\n' + w.map(function (t) {
-      var n = t.eintraege.filter(function (e) { return !e.warteliste; }).length;
+    if (!w.length) return 'Ihr Lieben,\ndiese Woche gibt es keine Präsenzstunden.\nBettina';
+    var text = 'Ihr Lieben,\ndas ist unsere Yogawoche:\n', tag = '';
+    w.forEach(function (t) {
+      var teile = t.datumText.split(', ');
+      if (t.datum !== tag) { tag = t.datum; text += '\n\ud83e\uddd8\ud83c\udffb\u200d\u2640\ufe0f ' + (TAGE[teile[0]] || teile[0]) + ', ' + teile[1] + '\n'; }
+      var n = t.eintraege.filter(function (e) { return !e.warteliste; }).length, frei = t.plaetze - n;
       var start = t.zeit.split('–')[0], uhr = /:00$/.test(start) ? parseInt(start, 10) + ' Uhr' : start + ' Uhr';
-      var lage = t.ausfall ? 'fällt aus'
-        : (n === 0 ? 'noch keine Anmeldung' : n + ' dabei') +
-          (n >= t.plaetze ? ', voll, Warteliste möglich' : (n >= t.mindest || t.bestaetigt) ? ', findet statt' : '');
-      return t.datumText.replace(',', '') + ', ' + uhr + ' ' + t.titel + ': ' + lage;
-    }).join('\n') + '\n\nEintragen: bettina-kahmann.com/anmeldung';
+      var lage = t.ausfall ? 'fällt diese Woche aus'
+        : n >= t.plaetze ? 'ausgebucht, trag dich auf die Warteliste ein'
+        : (n === 0 ? 'Wer macht den Anfang?' : n + (n === 1 ? ' ist dabei' : ' sind dabei') +
+          ((n >= t.mindest || t.bestaetigt) ? ', die Stunde findet statt' : '') +
+          (frei <= 3 ? ', nur noch ' + frei + (frei === 1 ? ' Platz' : ' Plätze') + ' frei' : ''));
+      text += uhr + ' ' + t.titel + ': ' + lage + '\n';
+    });
+    return text + '\nTragt euch hier ein: bettina-kahmann.com/anmeldung\nIch freu mich auf euch!\nBettina';
   }
   inhalt.addEventListener('change', function (ev) {
     if (ev.target.getAttribute('data-f') !== 'art') return;
