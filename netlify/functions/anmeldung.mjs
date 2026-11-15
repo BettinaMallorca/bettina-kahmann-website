@@ -1205,6 +1205,10 @@ var anmeldung_default = async (req, context) => {
         const k = id && kartenDoc.karten.find((x) => x.id === id);
         return k ? rest(k) : null;
       };
+      const nameVon = (id) => {
+        const k = id && kartenDoc.karten.find((x) => x.id === id);
+        return k ? k.name : null;
+      };
       const termine = [...naechsteTermine(), ...vergangeneTermine(14)];
       const liste = [];
       for (const t of termine) {
@@ -1220,8 +1224,8 @@ var anmeldung_default = async (req, context) => {
           bestaetigt: !!doc.bestaetigt,
           mindest: MINDEST,
           plaetze: PLAETZE,
-          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE, kartenRest: restVon(e.kartenId) })),
-          spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen }))
+          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE, kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId) })),
+          spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, kartenName: nameVon(e.kartenId), art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen }))
         });
       }
       return json({ termine: liste });
@@ -1316,6 +1320,7 @@ var anmeldung_default = async (req, context) => {
     if (!t) return json({ fehler: "F\xFCr diese Stunde ist die Anmeldung geschlossen." }, 400);
     const name = String(body.name || "").replace(/\s+/g, " ").trim().slice(0, 60);
     if (name.length < 2) return json({ fehler: "Bitte trag deinen Namen ein." }, 400);
+    if (!/\S+\s+\S+/.test(name)) return json({ fehler: "Bitte trag deinen Vor- und Nachnamen ein." }, 400);
     let art = ARTEN.includes(body.art) ? body.art : "";
     if (!art) return json({ fehler: "Bitte w\xE4hl aus, wie du teilnimmst." }, 400);
     let karte = null;

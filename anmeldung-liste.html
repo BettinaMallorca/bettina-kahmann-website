@@ -82,11 +82,16 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
       });
   }
 
+  function kn(e) {
+    if (!e.kartenName) return '';
+    var a = String(e.name).toLowerCase().replace(/\s+/g, ' ').trim(), b = String(e.kartenName).toLowerCase().replace(/\s+/g, ' ').trim();
+    return a === b ? '' : ' (Karte: ' + esc(e.kartenName) + ')';
+  }
   function karte(t) {
     var platz = t.eintraege.filter(function (e) { return !e.warteliste; }), wl = t.eintraege.filter(function (e) { return e.warteliste; });
     var arten = {}; platz.forEach(function (e) { arten[e.art] = (arten[e.art] || 0) + 1; });
     var summe = Object.keys(arten).map(function (a) { return a + ': ' + arten[a]; }).join(' · ');
-    function zeile(e, w) { return '<li' + (w ? ' class="wl"' : '') + '><span>' + esc(e.name) + ' <span class="art">' + esc(e.art) + (e.kartenRest !== null && e.kartenRest !== undefined ? ' · noch ' + e.kartenRest : '') + '</span></span>' + (t.kommend ? '<button class="x" title="Entfernen" data-weg="' + e.id + '">×</button>' : '') + '</li>'; }
+    function zeile(e, w) { return '<li' + (w ? ' class="wl"' : '') + '><span>' + esc(e.name) + kn(e) + ' <span class="art">' + esc(e.art) + (e.kartenRest !== null && e.kartenRest !== undefined ? ' · noch ' + e.kartenRest : '') + '</span></span>' + (t.kommend ? '<button class="x" title="Entfernen" data-weg="' + e.id + '">×</button>' : '') + '</li>'; }
     return '<article class="karte' + (t.kommend ? '' : ' alt') + '" data-key="' + esc(t.key) + '">' +
       '<div class="kopf"><div><div class="tag">' + esc(t.datumText) + ' · ' + esc(t.zeit) + '</div><div class="titel">' + esc(t.titel) + '</div></div>' +
       '<div class="anzahl">' + platz.length + ' von ' + t.plaetze + (wl.length ? ' · ' + wl.length + ' Warteliste' : '') + '</div></div>' +
@@ -98,7 +103,7 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
       (platz.length ? '<ol>' + platz.map(function (e) { return zeile(e, false); }).join('') + '</ol>' : '<p class="leer">Noch niemand angemeldet.</p>') +
       (wl.length ? '<div class="wltitel">Warteliste</div><ol>' + wl.map(function (e) { return zeile(e, true); }).join('') + '</ol>' : '') +
       (t.spaet.length ? '<div class="wltitel">' + (t.ausfall ? 'Späte Absage, Stunde fiel aus, nichts berechnen' : 'Späte Absage, wird berechnet') + '</div><ol class="spaet">' + t.spaet.map(function (e) {
-        return '<li' + (e.erlassen ? ' class="erlassen"' : '') + '><span>' + esc(e.name) + ' <span class="art">' + esc(e.art) + '</span></span>' +
+        return '<li' + (e.erlassen ? ' class="erlassen"' : '') + '><span>' + esc(e.name) + kn(e) + ' <span class="art">' + esc(e.art) + '</span></span>' +
           '<button class="mini" data-erlassen="' + e.id + '" data-wert="' + (e.erlassen ? '0' : '1') + '">' + (e.erlassen ? 'Doch berechnen' : 'Nicht berechnen') + '</button></li>';
       }).join('') + '</ol>' : '') +
       eintragForm() +

@@ -213,6 +213,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
     var daten = { action: 'anmelden', key: key, name: f.name.value.trim(), art: f.art.value, code: f.code.value.trim(), website: f.website.value };
     if ((daten.art === 'Karte' || daten.art === 'KarteHansefit') && daten.code.replace(/[^A-Za-z0-9]/g, '').length < 6) { fehler.textContent = 'Bitte gib deinen Kartencode ein. Du findest ihn in meiner WhatsApp-Nachricht zu deiner Karte.'; fehler.hidden = false; return; }
     if (daten.name.length < 2) { fehler.textContent = 'Bitte trag deinen Namen ein.'; fehler.hidden = false; return; }
+    if (!/\S+\s+\S+/.test(daten.name)) { fehler.textContent = 'Bitte trag deinen Vor- und Nachnamen ein.'; fehler.hidden = false; return; }
     if (!daten.art) { fehler.textContent = 'Bitte wähl aus, wie du teilnimmst.'; fehler.hidden = false; return; }
     knopf.disabled = true; knopf.textContent = 'Einen Moment …';
     fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(daten) })
