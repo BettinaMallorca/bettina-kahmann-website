@@ -931,7 +931,9 @@ var START_PLAN = {
   morning: ["2026-11-15", "2026-11-22", "2026-12-06", "2026-12-20", "2026-12-27"]
 };
 var PLAN = START_PLAN;
-var ARTEN = ["Karte", "KarteHansefit", "epassi/Hansefit", "Einzelstunde", "Schnupperstunde"];
+var ARTEN = ["Karte", "KarteHansefit", "Kartenkauf vor Ort", "epassi/Hansefit", "Einzelstunde", "Schnupperstunde"];
+var VOR_ORT = "Kartenkauf vor Ort";
+var gleicherName = (a, b) => String(a).toLowerCase().replace(/\s+/g, " ").trim() === String(b).toLowerCase().replace(/\s+/g, " ").trim();
 var ARTEN_ADMIN = ["epassi/Hansefit", "Einzelstunde", "Schnupperstunde", "Fyndery"];
 var KARTEN = { "5er": { stunden: 5, monate: 6 }, "10er": { stunden: 10, monate: 12 } };
 var KARTEN_KEY = "karten";
@@ -1441,10 +1443,40 @@ var anmeldung_default = async (req, context) => {
         buchungen: []
       };
       if (genutzt) neu.buchungen.push({ datum: gekauft, notiz: "\xDCbertrag, bereits genutzt", art: "Korrektur", delta: -genutzt });
+      const heute = jetztBerlin().datum;
+      for (const alt of doc.karten) {
+        const r0 = rest(alt);
+        if (r0 < 0 && gleicherName(alt.name, name)) {
+          alt.buchungen.push({ datum: heute, notiz: "\xDCbertrag auf neue Karte", art: "Korrektur", delta: -r0 });
+          neu.buchungen.push({ datum: heute, notiz: "\xDCbertrag von alter Karte", art: "Korrektur", delta: r0 });
+        }
+      }
       doc.karten.push(neu);
       return { ok: true };
     }, ladeKarten);
-    return r.fehler ? json(r, 409) : json({ ok: true, karte: karteAdmin(neu) });
+    if (r.fehler) return json(r, 409);
+    const von = plusTage(jetztBerlin().datum, -14);
+    const { blobs } = await st.list({ prefix: "s/" });
+    for (const b of blobs) {
+      const t = terminAusKey(b.key);
+      if (!t || t.datum < von) continue;
+      await aendern(st, b.key, (doc) => {
+        let n = 0;
+        for (const e of [...doc.eintraege, ...doc.spaet]) {
+          if (e.art === VOR_ORT && !e.kartenId && gleicherName(e.name, name)) {
+            e.kartenId = neu.id;
+            e.art = `${typ}-Karte`;
+            n++;
+          }
+        }
+        return n ? { ok: true } : { unveraendert: true };
+      }).catch(() => {
+      });
+    }
+    await abrechnen(st).catch(() => {
+    });
+    const aktuell = (await ladeKarten(st)).doc.karten.find((x) => x.id === neu.id) || neu;
+    return json({ ok: true, karte: karteAdmin(aktuell) });
   }
   if (body.action === "karte_buchung") {
     const delta = parseInt(body.delta, 10);

@@ -96,7 +96,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 (function () {
   var API = '/api/anmeldung';
   var SPEICHER = 'bv-anmeldungen';
-  var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['KarteHansefit', 'Meine 10er-Karte mit Hansefit/epassi'], ['epassi/Hansefit', 'Nur Hansefit/epassi (6 € Zuzahlung)'], ['Einzelstunde', 'Einzelkarte (19 €)'], ['Schnupperstunde', 'Schnupperstunde (einmalig, 10 €)']];
+  var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['KarteHansefit', 'Meine 10er-Karte mit Hansefit/epassi'], ['Kartenkauf vor Ort', 'Ich kaufe vor Ort eine neue Karte'], ['epassi/Hansefit', 'Nur Hansefit/epassi (6 € Zuzahlung)'], ['Einzelstunde', 'Einzelkarte (19 €)'], ['Schnupperstunde', 'Schnupperstunde (einmalig, 10 €)']];
   var kartenHinweis = {};
   var liste = document.getElementById('liste');
   var abgemeldet = {};
@@ -226,6 +226,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
             : 'Auf deiner Karte sind noch ' + d.kartenRest + (d.kartenRest === 1 ? ' Stunde' : ' Stunden') + '. Diese Stunde wird abgezogen, wenn sie stattgefunden hat.';
           if (daten.art === 'KarteHansefit') kartenHinweis[key] += ' Denk in der Stunde an den QR-Code von Hansefit oder epassi.';
         }
+        if (daten.art === 'Kartenkauf vor Ort') kartenHinweis[key] = 'Deine neue Karte bekommst du in der Stunde bei mir. Diese Stunde wird dann von ihr abgezogen, und du bekommst deinen Kartencode.';
         var m = meine(); m.push({ key: key, id: d.id, token: d.token, name: daten.name }); schreib(SPEICHER, m);
         laden();
       })

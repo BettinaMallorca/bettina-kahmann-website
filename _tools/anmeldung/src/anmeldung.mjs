@@ -31,7 +31,9 @@ const START_PLAN = {
   morning: ['2026-11-15', '2026-11-22', '2026-12-06', '2026-12-20', '2026-12-27'],
 };
 let PLAN = START_PLAN;
-const ARTEN = ['Karte', 'KarteHansefit', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
+const ARTEN = ['Karte', 'KarteHansefit', 'Kartenkauf vor Ort', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
+const VOR_ORT = 'Kartenkauf vor Ort';
+const gleicherName = (a, b) => String(a).toLowerCase().replace(/\s+/g, ' ').trim() === String(b).toLowerCase().replace(/\s+/g, ' ').trim();
 const ARTEN_ADMIN = ['epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde', 'Fyndery'];
 const KARTEN = { '5er': { stunden: 5, monate: 6 }, '10er': { stunden: 10, monate: 12 } };
 const KARTEN_KEY = 'karten';
@@ -484,10 +486,36 @@ export default async (req, context) => {
       neu = { id: zufall(8), code: neuerCode(alleCodes(doc)), name, typ, stunden: KARTEN[typ].stunden, gekauft,
         gueltigBis: plusMonate(gekauft, KARTEN[typ].monate), buchungen: [] };
       if (genutzt) neu.buchungen.push({ datum: gekauft, notiz: 'Übertrag, bereits genutzt', art: 'Korrektur', delta: -genutzt });
+      // Minus auf einer alten Karte derselben Person wandert auf die neue Karte
+      const heute = jetztBerlin().datum;
+      for (const alt of doc.karten) {
+        const r0 = rest(alt);
+        if (r0 < 0 && gleicherName(alt.name, name)) {
+          alt.buchungen.push({ datum: heute, notiz: 'Übertrag auf neue Karte', art: 'Korrektur', delta: -r0 });
+          neu.buchungen.push({ datum: heute, notiz: 'Übertrag von alter Karte', art: 'Korrektur', delta: r0 });
+        }
+      }
       doc.karten.push(neu);
       return { ok: true };
     }, ladeKarten);
-    return r.fehler ? json(r, 409) : json({ ok: true, karte: karteAdmin(neu) });
+    if (r.fehler) return json(r, 409);
+    // Anmeldungen „Kartenkauf vor Ort“ mit demselben Namen (14 Tage zurück und kommend) an die neue Karte hängen
+    const von = plusTage(jetztBerlin().datum, -14);
+    const { blobs } = await st.list({ prefix: 's/' });
+    for (const b of blobs) {
+      const t = terminAusKey(b.key);
+      if (!t || t.datum < von) continue;
+      await aendern(st, b.key, (doc) => {
+        let n = 0;
+        for (const e of [...doc.eintraege, ...doc.spaet]) {
+          if (e.art === VOR_ORT && !e.kartenId && gleicherName(e.name, name)) { e.kartenId = neu.id; e.art = `${typ}-Karte`; n++; }
+        }
+        return n ? { ok: true } : { unveraendert: true };
+      }).catch(() => {});
+    }
+    await abrechnen(st).catch(() => {});
+    const aktuell = (await ladeKarten(st)).doc.karten.find((x) => x.id === neu.id) || neu;
+    return json({ ok: true, karte: karteAdmin(aktuell) });
   }
   if (body.action === 'karte_buchung') {
     const delta = parseInt(body.delta, 10);

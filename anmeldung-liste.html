@@ -118,9 +118,24 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
   function zeigen(termine) {
     daten = termine;
     var k = termine.filter(function (t) { return t.kommend; }), a = termine.filter(function (t) { return !t.kommend; });
-    inhalt.innerHTML = '<h2>Nächste zwei Wochen</h2>' + k.map(karte).join('') + (a.length ? '<h2>Letzte zwei Wochen</h2>' + a.map(karte).join('') : '');
+    inhalt.innerHTML = '<p style="margin:6px 0 4px"><button class="btn voll" id="wochenpost">Wochenpost kopieren</button></p><p class="sub" style="margin-bottom:8px">Text mit den Stunden der nächsten 7 Tage für die WhatsApp-Gruppe</p>' +
+      '<h2>Nächste zwei Wochen</h2>' + k.map(karte).join('') + (a.length ? '<h2>Letzte zwei Wochen</h2>' + a.map(karte).join('') : '');
   }
 
+  function wochenpost() {
+    var bis = new Date(); bis.setDate(bis.getDate() + 6);
+    var grenze = bis.toISOString().slice(0, 10);
+    var w = daten.filter(function (t) { return t.kommend && t.datum <= grenze; });
+    if (!w.length) return 'Diese Woche gibt es keine Präsenzstunden.';
+    return 'Yoga diese Woche:\n' + w.map(function (t) {
+      var n = t.eintraege.filter(function (e) { return !e.warteliste; }).length;
+      var start = t.zeit.split('–')[0], uhr = /:00$/.test(start) ? parseInt(start, 10) + ' Uhr' : start + ' Uhr';
+      var lage = t.ausfall ? 'fällt aus'
+        : (n === 0 ? 'noch keine Anmeldung' : n + ' dabei') +
+          (n >= t.plaetze ? ', voll, Warteliste möglich' : (n >= t.mindest || t.bestaetigt) ? ', findet statt' : '');
+      return t.datumText.replace(',', '') + ', ' + uhr + ' ' + t.titel + ': ' + lage;
+    }).join('\n') + '\n\nEintragen: bettina-kahmann.com/anmeldung';
+  }
   inhalt.addEventListener('change', function (ev) {
     if (ev.target.getAttribute('data-f') !== 'art') return;
     var f = ev.target.closest('.eintrag'), mitKarte = ev.target.value === 'Karte' || ev.target.value === 'KarteHansefit';
@@ -129,6 +144,10 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
   });
   inhalt.addEventListener('click', function (ev) {
     var b = ev.target.closest('button'); if (!b) return;
+    if (b.id === 'wochenpost') {
+      navigator.clipboard.writeText(wochenpost()).then(function () { b.textContent = 'Kopiert, jetzt in WhatsApp einfügen'; setTimeout(function () { b.textContent = 'Wochenpost kopieren'; }, 2500); });
+      return;
+    }
     var key2 = b.closest('.karte').getAttribute('data-key');
     var t = daten.filter(function (x) { return x.key === key2; })[0];
     if (b.hasAttribute('data-weg')) {
