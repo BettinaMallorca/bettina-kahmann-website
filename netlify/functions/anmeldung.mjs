@@ -919,7 +919,7 @@ var INFO_KURSE = [
   { id: "yinonline", titel: "Yin Yoga live online", start: "19:30", ende: "20:30", zusatz: "\xFCber Zoom", link: "https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239", linkText: "Bei Fyndery buchen" },
   { id: "morning", titel: "Morning Energy Yoga", start: "09:00", zusatz: "live online", link: "https://www.fyndery.de/online/kurs/16133/morning-energy-yoga-ist-eine-vitalisierende-online-yogastunde/?ref=7239", linkText: "Bei Fyndery buchen" }
 ];
-var ANMELDE_TAGE = 14;
+var ANMELDE_TAGE = 6;
 var PLAN_KEY = "plan";
 var START_PLAN = {
   di18: ["2026-11-17", "2026-11-24", "2026-12-01", "2026-12-08", "2026-12-15"],

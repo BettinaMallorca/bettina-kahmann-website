@@ -18,7 +18,7 @@ const INFO_KURSE = [
   { id: 'yinonline', titel: 'Yin Yoga live online', start: '19:30', ende: '20:30', zusatz: 'über Zoom', link: 'https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239', linkText: 'Bei Fyndery buchen' },
   { id: 'morning', titel: 'Morning Energy Yoga', start: '09:00', zusatz: 'live online', link: 'https://www.fyndery.de/online/kurs/16133/morning-energy-yoga-ist-eine-vitalisierende-online-yogastunde/?ref=7239', linkText: 'Bei Fyndery buchen' },
 ];
-const ANMELDE_TAGE = 14; // so weit im Voraus kann man sich eintragen
+const ANMELDE_TAGE = 6; // eine Woche: jeder Wochentag erscheint nur einmal
 const PLAN_KEY = 'plan';
 // Startplan, solange noch nichts gespeichert ist
 const START_PLAN = {
@@ -91,7 +91,7 @@ function geplante(kurse) {
   for (const s of kurse) for (const d of PLAN[s.id] || []) out.push({ ...s, datum: d, key: `s/${d}_${s.id}` });
   return out.sort(nachZeit);
 }
-// Anmeldung offen: die nächsten 14 Tage, bis Stundenbeginn
+// Anmeldung offen: die nächste Woche, bis Stundenbeginn
 function naechsteTermine() {
   const bis = plusTage(jetztBerlin().datum, ANMELDE_TAGE);
   return geplante(STUNDEN).filter((t) => kommt(t.datum, t.start) && t.datum <= bis);

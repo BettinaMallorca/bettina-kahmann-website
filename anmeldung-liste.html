@@ -119,10 +119,15 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
     daten = termine;
     var k = termine.filter(function (t) { return t.kommend; }), a = termine.filter(function (t) { return !t.kommend; });
     inhalt.innerHTML = '<p style="margin:6px 0 4px"><button class="btn voll" id="wochenpost">Wochenpost kopieren</button></p><p class="sub" style="margin-bottom:8px">Text mit den Stunden der nächsten 7 Tage für die WhatsApp-Gruppe</p>' +
-      '<h2>Nächste zwei Wochen</h2>' + k.map(karte).join('') + (a.length ? '<h2>Letzte zwei Wochen</h2>' + a.map(karte).join('') : '');
+      '<h2>Nächste 7 Tage</h2>' + k.map(karte).join('') + (a.length ? '<h2>Letzte zwei Wochen</h2>' + a.map(karte).join('') : '');
   }
 
   function wochenpost() {
+    var INFO = {
+      'Hatha meets Yin': 'Erst kräftigen, dann lange und ruhig dehnen, für Stärke und Balance.',
+      'Yin Yoga': 'Lang gehaltene Haltungen, die Stress abbauen und dich beweglicher machen.',
+      'Hatha Kraft & Stabilität': 'Kraftvolle Haltungen für einen starken Körper, am Ende ist Zeit zum Entspannen.'
+    };
     var TAGE = { Mo: 'Montag', Di: 'Dienstag', Mi: 'Mittwoch', Do: 'Donnerstag', Fr: 'Freitag', Sa: 'Samstag', So: 'Sonntag' };
     var bis = new Date(); bis.setDate(bis.getDate() + 6);
     var grenze = bis.toISOString().slice(0, 10);
@@ -139,7 +144,7 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
         : (n === 0 ? 'Wer macht den Anfang?' : n + (n === 1 ? ' ist dabei' : ' sind dabei') +
           ((n >= t.mindest || t.bestaetigt) ? ', die Stunde findet statt' : '') +
           (frei <= 3 ? ', nur noch ' + frei + (frei === 1 ? ' Platz' : ' Plätze') + ' frei' : ''));
-      text += uhr + ' ' + t.titel + ': ' + lage + '\n';
+      text += uhr + ' ' + t.titel + ': ' + lage + '\n' + (INFO[t.titel] ? INFO[t.titel] + '\n' : '');
     });
     return text + '\nSeid ihr dabei? Hier könnt ihr euch eintragen:\nbettina-kahmann.com/anmeldung\n\nIch freu mich auf euch!\nBettina';
   }
