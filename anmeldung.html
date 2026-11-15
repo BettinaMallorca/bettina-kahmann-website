@@ -70,6 +70,13 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 .mehr .k{font-weight:600}
 .mehr .d{color:var(--text-light);font-size:.92rem}
 .mehr a{color:var(--plum)}
+.online-box{background:#EEF4EF;border:1.5px solid var(--sage);border-radius:16px;padding:18px 20px;margin-top:6px}
+.online-box .tag{display:inline-block;background:var(--sage);color:#fff;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;border-radius:20px;margin-bottom:10px}
+.online-box .kurs{padding:12px 0;border-bottom:1px solid #cfdecf}
+.online-box .kurs:last-child{border-bottom:0;padding-bottom:0}
+.online-box .k{font-weight:600}
+.online-box .d{color:var(--text-light);font-size:.92rem}
+.online-box a.buchen{display:inline-block;margin-top:8px;background:var(--sage);color:#fff;text-decoration:none;font-size:.82rem;font-weight:600;letter-spacing:.06em;padding:9px 16px;border-radius:24px}
 .fuss{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:.8rem;color:var(--text-light);display:flex;gap:16px;flex-wrap:wrap}
 </style>
 </head>
@@ -125,6 +132,14 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       h += '<h2>Weitere Termine</h2><p class="unter">Die Anmeldung öffnet eine Woche vorher.</p><ul>' + spaeter.map(function (t) {
         return '<li><span class="k">' + esc(t.datumText) + '</span> ' + esc(t.titel) + '<div class="d">' + esc(t.zeit) + ' Uhr</div></li>';
       }).join('') + '</ul>';
+    }
+    var online = info.filter(function (k) { return k.online; });
+    info = info.filter(function (k) { return !k.online; });
+    if (online.length) {
+      h += '<h2>Live online von zu Hause</h2><p class="unter">Mach mit, wo immer du gerade bist. Gebucht wird über Fyndery.</p><div class="online-box"><span class="tag">Live online</span>' + online.map(function (k) {
+        return '<div class="kurs"><span class="k">' + esc(k.titel) + '</span>, ' + esc(k.zeit) + ' Uhr<div class="d">' + esc(k.termine.join(' · ')) + '</div>' +
+          (k.link ? '<a class="buchen" href="' + esc(k.link) + '" target="_blank" rel="noopener">' + esc(k.linkText || 'Mehr dazu') + '</a>' : '') + '</div>';
+      }).join('') + '</div>';
     }
     if (info.length) {
       h += '<h2>Meine anderen Kurse</h2><p class="unter">Hier brauchst du dich nicht einzutragen.</p><ul>' + info.map(function (k) {

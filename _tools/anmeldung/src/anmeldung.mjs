@@ -14,9 +14,9 @@ const STUNDEN = [
 // Kurse, die nur angezeigt werden (keine Anmeldung). Termine kommen aus dem Plan.
 const INFO_KURSE = [
   { id: 'aroha', titel: 'AROHA', start: '18:00', ende: '18:50', zusatz: 'YAP – YOUR Active Place, Höpershof', link: 'https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239', linkText: 'Bei Fyndery buchen' },
-  { id: 'faszien', titel: 'FaszienFit', start: '09:00', ende: '09:40', zusatz: 'live online', link: 'https://www.fyndery.de/online/kurs/16842/faszienfit-yoga-beweglich-stabil/?ref=7239', linkText: 'Bei Fyndery buchen' },
-  { id: 'yinonline', titel: 'Yin Yoga live online', start: '19:30', ende: '20:30', zusatz: 'über Zoom', link: 'https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239', linkText: 'Bei Fyndery buchen' },
-  { id: 'morning', titel: 'Morning Energy Yoga', start: '09:00', zusatz: 'live online', link: 'https://www.fyndery.de/online/kurs/16133/morning-energy-yoga-ist-eine-vitalisierende-online-yogastunde/?ref=7239', linkText: 'Bei Fyndery buchen' },
+  { id: 'faszien', online: true, titel: 'FaszienFit', start: '09:00', ende: '09:40', zusatz: 'live online', link: 'https://www.fyndery.de/online/kurs/16842/faszienfit-yoga-beweglich-stabil/?ref=7239', linkText: 'Bei Fyndery buchen' },
+  { id: 'yinonline', online: true, titel: 'Yin Yoga live online', start: '19:30', ende: '20:30', zusatz: 'über Zoom', link: 'https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239', linkText: 'Bei Fyndery buchen' },
+  { id: 'morning', online: true, titel: 'Morning Energy Yoga', start: '09:00', zusatz: 'live online', link: 'https://www.fyndery.de/online/kurs/16133/morning-energy-yoga-ist-eine-vitalisierende-online-yogastunde/?ref=7239', linkText: 'Bei Fyndery buchen' },
 ];
 const ANMELDE_TAGE = 6; // eine Woche: jeder Wochentag erscheint nur einmal
 const PLAN_KEY = 'plan';
@@ -107,7 +107,7 @@ function vergangeneTermine(tage) {
 }
 function infoTermine() {
   return INFO_KURSE.map((k) => ({
-    titel: k.titel, zeit: k.ende ? `${k.start}–${k.ende}` : k.start, zusatz: k.zusatz, link: k.link || '', linkText: k.linkText || '',
+    online: !!k.online, titel: k.titel, zeit: k.ende ? `${k.start}–${k.ende}` : k.start, zusatz: k.zusatz, link: k.link || '', linkText: k.linkText || '',
     termine: (PLAN[k.id] || []).filter((d) => kommt(d, k.start)).sort().slice(0, 8).map(datumText),
   })).filter((k) => k.termine.length);
 }
