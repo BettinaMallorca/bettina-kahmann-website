@@ -31,10 +31,10 @@ const START_PLAN = {
   morning: ['2026-11-15', '2026-11-22', '2026-12-06', '2026-12-20', '2026-12-27'],
 };
 let PLAN = START_PLAN;
-const ARTEN = ['Karte', 'KarteHansefit', 'Kartenkauf vor Ort', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde'];
+const ARTEN = ['Karte', 'KarteHansefit', 'Kartenkauf vor Ort', 'epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde', 'Schnupperstunde Hansefit/epassi'];
 const VOR_ORT = 'Kartenkauf vor Ort';
 const gleicherName = (a, b) => String(a).toLowerCase().replace(/\s+/g, ' ').trim() === String(b).toLowerCase().replace(/\s+/g, ' ').trim();
-const ARTEN_ADMIN = ['epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde', 'Fyndery'];
+const ARTEN_ADMIN = ['epassi/Hansefit', 'Einzelstunde', 'Schnupperstunde', 'Schnupperstunde Hansefit/epassi', 'Fyndery'];
 const KARTEN = { '5er': { stunden: 5, monate: 6 }, '10er': { stunden: 10, monate: 12 } };
 const KARTEN_KEY = 'karten';
 const KARTEN_LOESCHEN_MONATE = 6; // nach Ablauf der Karte

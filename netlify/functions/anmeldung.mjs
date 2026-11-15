@@ -931,10 +931,10 @@ var START_PLAN = {
   morning: ["2026-11-15", "2026-11-22", "2026-12-06", "2026-12-20", "2026-12-27"]
 };
 var PLAN = START_PLAN;
-var ARTEN = ["Karte", "KarteHansefit", "Kartenkauf vor Ort", "epassi/Hansefit", "Einzelstunde", "Schnupperstunde"];
+var ARTEN = ["Karte", "KarteHansefit", "Kartenkauf vor Ort", "epassi/Hansefit", "Einzelstunde", "Schnupperstunde", "Schnupperstunde Hansefit/epassi"];
 var VOR_ORT = "Kartenkauf vor Ort";
 var gleicherName = (a, b) => String(a).toLowerCase().replace(/\s+/g, " ").trim() === String(b).toLowerCase().replace(/\s+/g, " ").trim();
-var ARTEN_ADMIN = ["epassi/Hansefit", "Einzelstunde", "Schnupperstunde", "Fyndery"];
+var ARTEN_ADMIN = ["epassi/Hansefit", "Einzelstunde", "Schnupperstunde", "Schnupperstunde Hansefit/epassi", "Fyndery"];
 var KARTEN = { "5er": { stunden: 5, monate: 6 }, "10er": { stunden: 10, monate: 12 } };
 var KARTEN_KEY = "karten";
 var KARTEN_LOESCHEN_MONATE = 6;

@@ -103,7 +103,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 (function () {
   var API = '/api/anmeldung';
   var SPEICHER = 'bv-anmeldungen';
-  var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['KarteHansefit', 'Meine 10er-Karte mit Hansefit/epassi'], ['Kartenkauf vor Ort', 'Ich kaufe vor Ort eine neue Karte'], ['epassi/Hansefit', 'Nur Hansefit/epassi (6 € Zuzahlung)'], ['Einzelstunde', 'Einzelkarte (19 €)'], ['Schnupperstunde', 'Schnupperstunde (einmalig, 10 €)']];
+  var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['KarteHansefit', 'Meine 10er-Karte mit Hansefit/epassi'], ['Kartenkauf vor Ort', 'Ich kaufe vor Ort eine neue Karte'], ['epassi/Hansefit', 'Nur Hansefit/epassi (6 € Zuzahlung)'], ['Einzelstunde', 'Einzelkarte (19 €)'], ['Schnupperstunde', 'Schnupperstunde (einmalig, 10 €)'], ['Schnupperstunde Hansefit/epassi', 'Schnupperstunde mit Hansefit/epassi (ohne Zuzahlung)']];
   var kartenHinweis = {};
   var liste = document.getElementById('liste');
   var abgemeldet = {};

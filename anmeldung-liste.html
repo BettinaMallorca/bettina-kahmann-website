@@ -112,7 +112,7 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
   }
 
   var daten = [], kartenListe = [];
-  var ARTEN = [['Karte', '5er- oder 10er-Karte'], ['KarteHansefit', '10er-Karte mit Hansefit/epassi'], ['epassi/Hansefit', 'Nur Hansefit/epassi'], ['Einzelstunde', 'Einzelkarte'], ['Schnupperstunde', 'Schnupperstunde'], ['Fyndery', 'Fyndery']];
+  var ARTEN = [['Karte', '5er- oder 10er-Karte'], ['KarteHansefit', '10er-Karte mit Hansefit/epassi'], ['epassi/Hansefit', 'Nur Hansefit/epassi'], ['Einzelstunde', 'Einzelkarte'], ['Schnupperstunde', 'Schnupperstunde'], ['Schnupperstunde Hansefit/epassi', 'Schnupperstunde mit Hansefit/epassi'], ['Fyndery', 'Fyndery']];
   function eintragForm() {
     return '<details class="eintrag"><summary>Person eintragen</summary>' +
       '<label>Teilnahme<select data-f="art">' + ARTEN.map(function (a) { return '<option value="' + a[0] + '">' + a[1] + '</option>'; }).join('') + '</select></label>' +
