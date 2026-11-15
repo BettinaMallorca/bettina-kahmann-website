@@ -43,6 +43,11 @@ button{font:inherit;cursor:pointer}
 .chip.offen{background:#f6ece4;color:var(--terracotta-dark)}.chip.bezahlt{background:#e8efe8;color:#2f4a33}.chip.eingeloest{background:var(--cream-dark);color:var(--text-light)}
 .gruss{font-style:italic;font-size:.9rem;margin-top:4px}
 details.mini summary{cursor:pointer;color:var(--plum);font-size:.88rem;margin-top:6px}
+  .ablauf { background: #fff; border-left: 4px solid #C17B52; border-radius: 6px; padding: 12px 16px; margin: 18px 0; }
+  .ablauf h2 { margin-top: 0; }
+  .ablauf .zeile { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 8px 0; border-top: 1px solid #eadfd3; }
+  .ablauf .zeile:first-of-type { border-top: 0; }
+  .ablauf .wa { background: #25D366; color: #fff; border-color: #25D366; text-decoration: none; }
 </style>
 </head>
 <body>
@@ -84,6 +89,8 @@ details.mini summary{cursor:pointer;color:var(--plum);font-size:.88rem;margin-to
       <p class="fehler" id="neufehler" hidden></p>
       <div id="neuinfo"></div>
     </div>
+
+    <div id="ablauf"></div>
 
     <h2>Alle Karten</h2>
     <p style="margin-bottom:10px"><button class="btn" id="export">Als Tabelle herunterladen</button></p>
@@ -161,7 +168,32 @@ details.mini summary{cursor:pointer;color:var(--plum);font-size:.88rem;margin-to
       });
   }
 
+  // Karten, die in den nächsten 14 Tagen ablaufen und noch offene Stunden haben
+  function erinnerung(k) {
+    var neu = k.gekauft >= '2026-11-15';
+    return 'Hallo ' + k.name.split(' ')[0] + ', deine ' + k.typ + '-Karte läuft am ' + de(k.gueltigBis) + ' ab. Du hast noch ' + k.rest + (k.rest === 1 ? ' Stunde' : ' Stunden') + ' offen. ' +
+      (neu ? 'Stunden, die du bis dahin nicht nutzt, verfallen. Melde dich gern gleich für die nächsten Termine an: bettina-kahmann.com/anmeldung' : 'Die offenen Stunden rechne ich dir auf deine nächste Karte an.') +
+      '\n\nDeinen Kartenstand siehst du hier: bettina-kahmann.com/karte?code=' + k.code + '\n\nLiebe Grüße, Bettina';
+  }
+  function ablaufListe() {
+    var h = new Date(), g = new Date(); g.setDate(g.getDate() + 14);
+    var heute = h.toISOString().slice(0, 10), grenze = g.toISOString().slice(0, 10);
+    var l = karten.filter(function (k) { return !k.abgelaufen && k.rest > 0 && k.gueltigBis >= heute && k.gueltigBis <= grenze; })
+      .sort(function (a, b) { return a.gueltigBis.localeCompare(b.gueltigBis); });
+    document.getElementById('ablauf').innerHTML = l.length ? '<div class="ablauf"><h2>Läuft bald ab</h2><p class="sub">Diese Karten laufen in den nächsten 14 Tagen ab und haben noch offene Stunden. Schick eine kurze Erinnerung.</p>' +
+      l.map(function (k) {
+        return '<div class="zeile" data-id="' + k.id + '"><div><div class="name">' + esc(k.name) + '</div><div class="meta">' + esc(k.typ) + '-Karte · ' + k.rest + ' offen · läuft ab am ' + de(k.gueltigBis) + '</div></div>' +
+          '<div class="knoepfe"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(erinnerung(k)) + '">WhatsApp</a><button class="btn" data-erinn="' + k.id + '">Text kopieren</button></div></div>';
+      }).join('') + '</div>' : '';
+  }
+  document.getElementById('ablauf').addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-erinn]'); if (!b) return;
+    var k = karten.filter(function (x) { return x.id === b.getAttribute('data-erinn'); })[0];
+    navigator.clipboard.writeText(erinnerung(k)).then(function () { b.textContent = 'Kopiert'; setTimeout(function () { b.textContent = 'Text kopieren'; }, 1500); });
+  });
+
   function zeigen() {
+    ablaufListe();
     var q = document.getElementById('filter').value.trim().toLowerCase();
     var l = karten.filter(function (k) { return !q || k.name.toLowerCase().indexOf(q) > -1; });
     document.getElementById('liste').innerHTML = l.length ? l.map(function (k) {
