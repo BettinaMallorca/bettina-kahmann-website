@@ -151,7 +151,7 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
           (frei <= 3 ? ', nur noch ' + frei + (frei === 1 ? ' Platz' : ' Plätze') + ' frei' : ''));
       text += uhr + ' ' + t.titel + ': ' + lage + '\n' + (INFO[t.titel] ? INFO[t.titel] + '\n' : '');
     });
-    return text + '\nSeid ihr dabei? Hier könnt ihr euch eintragen:\nbettina-kahmann.com/anmeldung\n\nIch freu mich auf euch!\nBettina';
+    return text + '\nSeid ihr dabei? Hier könnt ihr euch eintragen:\nbettina-kahmann.com/anmeldung?gruppe\n\nIch freu mich auf euch!\nBettina';
   }
   inhalt.addEventListener('change', function (ev) {
     if (ev.target.getAttribute('data-f') !== 'art') return;

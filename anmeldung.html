@@ -108,6 +108,13 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   var liste = document.getElementById('liste');
   var abgemeldet = {};
 
+  // Zahlen sehen nur die Gruppe (Link mit ?gruppe) und wer schon mit Karte eingetragen war
+  var GRUPPE = (function () {
+    try {
+      if (/[?&]gruppe/.test(location.search)) localStorage.setItem('bv-gruppe', '1');
+      return localStorage.getItem('bv-gruppe') === '1' || !!localStorage.getItem('bv-karten-code');
+    } catch (e) { return /[?&]gruppe/.test(location.search); }
+  })();
   function lies(k, f) { try { return JSON.parse(localStorage.getItem(k)) || f; } catch (e) { return f; } }
   function schreib(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -160,17 +167,18 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       var nach = abgemeldet[t.key]; delete abgemeldet[t.key];
       var h = '<article class="karte' + (t.ausfall ? ' aus' : '') + '" data-key="' + esc(t.key) + '">' +
         '<div class="kopf"><div><div class="tag">' + esc(t.datumText) + '</div><div class="titel">' + esc(t.titel) + '</div><div class="zeit">' + esc(t.zeit) + ' Uhr</div></div>' +
-        (t.ausfall ? '' : '<div class="zahl"><b>' + t.angemeldet + '</b>dabei</div>') + '</div>';
+        (t.ausfall || !GRUPPE ? '' : '<div class="zahl"><b>' + t.angemeldet + '</b>dabei</div>') + '</div>';
       if (t.ausfall) return h + '<div class="status aus" style="margin-top:14px"><p>Diese Stunde fällt aus. Wir sehen uns beim nächsten Termin.</p></div></article>';
       var fehlen = Math.max(0, t.mindest - t.angemeldet);
-      h += '<div class="balken' + (voll ? ' voll' : '') + '"><i style="width:' + proz + '%"></i></div>';
+      if (GRUPPE) h += '<div class="balken' + (voll ? ' voll' : '') + '"><i style="width:' + proz + '%"></i></div>';
       h += t.findetStatt ? '<span class="lage ja">Findet statt</span>'
-        : '<span class="lage offen">Ab ' + t.mindest + ' Anmeldungen · noch ' + fehlen + '</span>';
+        : GRUPPE ? '<span class="lage offen">Ab ' + t.mindest + ' Anmeldungen · noch ' + fehlen + '</span>'
+        : '<span class="lage offen">' + (voll ? 'Ausgebucht' : 'Noch Plätze frei') + '</span>';
       if (st) {
         h += st.status === 'platz'
           ? (t.findetStatt
             ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>'
-            : '<div class="status warte"><p>Du bist eingetragen, ' + esc(ich.name.split(' ')[0]) + '. Ab ' + t.mindest + ' Anmeldungen findet die Stunde sicher statt, bisher ' + (t.angemeldet === 1 ? 'ist 1 dabei' : 'sind ' + t.angemeldet + ' dabei') + '.</p><p>Bleibt es bei weniger, sage ich in der WhatsApp-Gruppe Bescheid, ob die Stunde trotzdem stattfindet.</p></div>')
+            : '<div class="status warte"><p>Du bist eingetragen, ' + esc(ich.name.split(' ')[0]) + '. Ab ' + t.mindest + ' Anmeldungen findet die Stunde sicher statt' + (GRUPPE ? ', bisher ' + (t.angemeldet === 1 ? 'ist 1 dabei' : 'sind ' + t.angemeldet + ' dabei') : '') + '.</p><p>Bleibt es bei weniger, sage ich in der WhatsApp-Gruppe Bescheid, ob die Stunde trotzdem stattfindet.</p></div>')
           : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du automatisch nach. Dein Platz gilt dann verbindlich, auch kurz vor der Stunde. Kannst du nicht, melde dich rechtzeitig von der Warteliste ab.</p></div>';
         var kostet = st.status === 'platz' && t.kostenpflichtig;
         var kh = kartenHinweis[t.key]; delete kartenHinweis[t.key];
