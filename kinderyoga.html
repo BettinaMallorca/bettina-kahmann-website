@@ -339,7 +339,7 @@ footer .legal-links{font-size:.78rem!important}
         <li>21.01., 28.01., 04.02., 11.02. und 18.02.2027</li>
         <li>Sport- und Tanzhaus, Kuckucksweg 90, Wedemark-Elze</li>
         <li>85 € pro Kind für alle 5 Termine, Geschwisterkind 75 €</li>
-        <li>Mit Hansefit 12 € Ermäßigung</li>
+        <li>Mit Hansefit 12 € günstiger: einmal vor Ort den QR-Code scannen</li>
         <li>5 bis 8 Kinder pro Gruppe</li>
       </ul>
     </aside>
@@ -392,6 +392,7 @@ footer .legal-links{font-size:.78rem!important}
     <p class="detail-copy">Nach Ihrer Anmeldung bekommen Sie von mir eine Bestätigung mit der Bankverbindung. Erst mit dem Zahlungseingang ist der Platz fest.</p>
     <form class="ky-form" name="kinderyoga" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/danke-kinderyoga.html">
       <input type="hidden" name="form-name" value="kinderyoga">
+      <input type="hidden" name="subject" data-remove-prefix value="Neue Anmeldung Kinderyoga">
       <p style="display:none"><label>Nicht ausfüllen: <input name="bot-field"></label></p>
       <fieldset>
         <legend>Ihre Angaben</legend>
@@ -421,7 +422,7 @@ footer .legal-links{font-size:.78rem!important}
         <legend>Wichtig für mich</legend>
         <label for="ky-abholen">Wer holt das Kind ab? *</label>
         <input id="ky-abholen" type="text" name="abholen" required>
-        <label class="ky-check"><input type="checkbox" name="hansefit" value="ja"><span>Ich bin Hansefit-Mitglied und bekomme 12 € Ermäßigung. Den Nachweis bringe ich zum ersten Termin mit.</span></label>
+        <label class="ky-check"><input type="checkbox" name="hansefit" value="ja"><span>Ich bin Hansefit-Mitglied. Ich scanne beim ersten Termin einmal den QR-Code vor Ort und zahle 12 € weniger.</span></label>
         <label for="ky-gesundheit">Gesundheitliche Hinweise, zum Beispiel Asthma oder Allergien</label>
         <textarea id="ky-gesundheit" name="gesundheit"></textarea>
         <label class="ky-check"><input type="checkbox" name="fotos" value="ja"><span>Ich bin einverstanden, dass im Kurs Fotos gemacht werden, auf denen mein Kind zu sehen ist. Ich frage vor jeder Veröffentlichung noch einmal nach.</span></label>
