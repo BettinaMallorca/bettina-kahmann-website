@@ -277,7 +277,8 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
         if (daten.art === 'Karte' || daten.art === 'KarteHansefit') {
           schreib('bv-karten-code', daten.code.toUpperCase());
           kartenHinweis[key] = d.kartenAbgelaufen ? 'Deine Karte ist abgelaufen. Du bist trotzdem eingetragen. Sprich mich in der Stunde an.'
-            : d.kartenRest <= 0 ? 'Deine Karte ist voll. Du bist trotzdem eingetragen. Eine neue Karte bekommst du bei mir, bar in der Stunde. Lieber per PayPal? Dann schreib mir.'
+            : d.kartenRest < (d.verbindlich ? 0 : 1) ? 'Deine Karte ist voll. Du bist trotzdem eingetragen. Eine neue Karte bekommst du bei mir, bar in der Stunde. Lieber per PayPal? Dann schreib mir.'
+            : d.verbindlich ? 'Die Stunde für diesen Abend ist schon von deiner Karte abgezogen. Jetzt sind noch ' + d.kartenRest + (d.kartenRest === 1 ? ' Stunde' : ' Stunden') + ' darauf.'
             : 'Auf deiner Karte sind noch ' + d.kartenRest + (d.kartenRest === 1 ? ' Stunde' : ' Stunden') + '. Diese Stunde wird abgezogen, wenn sie stattgefunden hat.';
           if (daten.art === 'KarteHansefit') kartenHinweis[key] += ' Denk in der Stunde an den QR-Code von Hansefit oder epassi.';
         }

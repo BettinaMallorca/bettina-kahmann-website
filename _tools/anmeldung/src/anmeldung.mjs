@@ -228,7 +228,8 @@ async function abrechnen(st) {
   const sitzungen = [];
   for (const b of blobs) {
     const t = terminAusKey(b.key);
-    if (!t || !begonnen(t)) continue;
+    // Verbindliche Sonderabende werden schon bei der Anmeldung abgebucht
+    if (!t || (!t.verbindlich && !begonnen(t))) continue;
     const { doc } = await lade(st, b.key);
     const soll = [];
     if (stattgefunden(doc)) {
@@ -415,7 +416,7 @@ export default async (req, context) => {
       const k = (await ladeKarten(st)).doc.karten.find((x) => x.id === karte.id);
       kartenInfo = { kartenRest: rest(k), kartenAbgelaufen: k.gueltigBis < jetztBerlin().datum };
     }
-    return json({ ok: true, id, token, key: t.key, ...r, ...kartenInfo });
+    return json({ ok: true, id, token, key: t.key, ...r, ...kartenInfo, verbindlich: !!t.verbindlich && r.status === 'platz' });
   }
 
   if (body.action === 'abmelden') {
