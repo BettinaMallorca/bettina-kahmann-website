@@ -81,6 +81,11 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 .online-box .k{font-weight:600}
 .online-box .d{color:var(--text-light);font-size:.92rem}
 .online-box a.buchen{display:inline-block;margin-top:8px;background:var(--sage);color:#fff;text-decoration:none;font-size:.82rem;font-weight:600;letter-spacing:.06em;padding:9px 16px;border-radius:24px}
+.karte.sonder{border:1.5px solid var(--terracotta);background:#fffaf5}
+.sonder .eyebrow{margin:0 0 4px}
+.sonder .text{font-size:.95rem;margin:12px 0}
+.sonder .text p+p{margin-top:8px}
+.sonder .text a,.sonder .klein a{color:var(--plum)}
 .fuss{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:.8rem;color:var(--text-light);display:flex;gap:16px;flex-wrap:wrap}
 </style>
 </head>
@@ -113,6 +118,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   var API = '/api/anmeldung';
   var SPEICHER = 'bv-anmeldungen';
   var ARTEN = [['Karte', 'Meine 5er- oder 10er-Karte'], ['KarteHansefit', 'Meine 10er-Karte mit Hansefit/epassi'], ['Kartenkauf vor Ort', 'Ich kaufe vor Ort eine neue Karte'], ['epassi/Hansefit', 'Nur Hansefit/epassi (6 € Zuzahlung)'], ['Einzelstunde', 'Einzelkarte (19 €)'], ['Schnupperstunde', 'Schnupperstunde (einmalig, 10 €)'], ['Schnupperstunde Hansefit/epassi', 'Schnupperstunde mit Hansefit/epassi (ohne Zuzahlung)']];
+  var ARTEN_SONDER = { 'Karte': 'Meine 5er- oder 10er-Karte (plus 5 € Zuzahlung)', 'KarteHansefit': 'Meine 10er-Karte mit Hansefit/epassi (9 € Zuzahlung)', 'Kartenkauf vor Ort': 'Ich kaufe bei dir eine neue Karte (plus 5 € Zuzahlung)' };
   var kartenHinweis = {}, frisch = {};
   // Gutschein-Hinweis bis Heiligabend
   var WEIHNACHTEN = (function () { var d = new Date(), j = d.getFullYear(); return d <= new Date(j, 11, 24, 23, 59) && d >= new Date(j, 10, 1); })();
@@ -177,11 +183,14 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       var voll = t.angemeldet >= t.plaetze;
       var proz = Math.round(t.angemeldet / t.plaetze * 100);
       var nach = abgemeldet[t.key]; delete abgemeldet[t.key];
-      var h = '<article class="karte' + (t.ausfall ? ' aus' : '') + '" data-key="' + esc(t.key) + '">' +
-        '<div class="kopf"><div><div class="tag">' + esc(t.datumText) + '</div><div class="titel">' + esc(t.titel) + '</div><div class="zeit">' + esc(t.zeit) + ' Uhr</div></div>' +
+      var h = '<article class="karte' + (t.ausfall ? ' aus' : '') + (t.verbindlich ? ' sonder' : '') + '" data-key="' + esc(t.key) + '">' +
+        '<div class="kopf"><div>' + (t.verbindlich ? '<p class="eyebrow">Besonderer Abend · statt der Dienstagsstunden</p>' : '') + '<div class="tag">' + esc(t.datumText) + '</div><div class="titel">' + esc(t.titel) + '</div><div class="zeit">' + esc(t.zeit) + ' Uhr</div></div>' +
         (t.ausfall || !GRUPPE ? '' : '<div class="zahl"><b>' + t.angemeldet + '</b>dabei</div>') + '</div>';
       if (t.ausfall) return h + '<div class="status aus" style="margin-top:14px"><p>Diese Stunde fällt aus. Wir sehen uns beim nächsten Termin.</p></div></article>';
       var fehlen = Math.max(0, t.mindest - t.angemeldet);
+      if (t.verbindlich) h += '<div class="text"><p>Yoga, geführtes Schreiben und ein Loslassritual zum Jahresende. Danach begleite ich dich mit einer Mail durch jede der zwölf Rauhnächte. <a href="/rauhnaechte">Mehr zum Abend</a></p>' +
+        '<p>Mit deiner Karte zahlst du deine Stunde plus 5 €. Mit 10er-Karte und Hansefit oder epassi zahlst du 9 € dazu. Die Zuzahlung bringst du mir vorab bar in eine der nächsten Stunden mit.</p>' +
+        '<p>Die Anmeldung ist verbindlich. Abmelden geht hier nicht. Wenn du nicht kommen kannst, darfst du deinen Platz an jemand anderen weitergeben.</p></div>';
       if (GRUPPE) h += '<div class="balken' + (voll ? ' voll' : '') + '"><i style="width:' + proz + '%"></i></div>';
       h += t.findetStatt ? '<span class="lage ja">Findet statt</span>'
         : GRUPPE ? '<span class="lage offen">Ab ' + t.mindest + ' Anmeldungen · noch ' + fehlen + '</span>'
@@ -189,15 +198,19 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       if (st) {
         h += st.status === 'platz'
           ? (t.findetStatt
-            ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>'
+            ? (t.verbindlich
+              ? '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Deine Anmeldung ist verbindlich.</p><p>Bitte bring mir die Zuzahlung vorab bar in eine der nächsten Stunden mit.</p></div>'
+              : '<div class="status ok"><p>Du bist dabei, ' + esc(ich.name.split(' ')[0]) + '. Bis ' + esc(t.datumText.split(',')[0]) + '!</p></div>')
             : '<div class="status warte"><p>Du bist eingetragen, ' + esc(ich.name.split(' ')[0]) + '. Ab ' + t.mindest + ' Anmeldungen findet die Stunde sicher statt' + (GRUPPE ? ', bisher ' + (t.angemeldet === 1 ? 'ist 1 dabei' : 'sind ' + t.angemeldet + ' dabei') : '') + '.</p><p>Bleibt es bei weniger, sage ich in der WhatsApp-Gruppe Bescheid, ob die Stunde trotzdem stattfindet.</p></div>')
-          : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du automatisch nach. Dein Platz gilt dann verbindlich, auch kurz vor der Stunde. Kannst du nicht, melde dich rechtzeitig von der Warteliste ab.</p></div>';
+          : t.verbindlich
+            ? '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Wird ein Platz frei, sage ich dir Bescheid. Bitte zahl erst, wenn du nachgerückt bist.</p></div>'
+            : '<div class="status warte"><p>Du stehst auf Platz ' + st.position + ' der Warteliste.</p><p>Sagt jemand ab, rückst du automatisch nach. Dein Platz gilt dann verbindlich, auch kurz vor der Stunde. Kannst du nicht, melde dich rechtzeitig von der Warteliste ab.</p></div>';
         var kostet = st.status === 'platz' && t.kostenpflichtig;
         var kh = kartenHinweis[t.key]; delete kartenHinweis[t.key];
         if (kh) h += '<p class="klein" style="margin-top:8px">' + kh + '</p>';
         if (frisch[t.key] && WEIHNACHTEN) h += '<p class="klein" style="margin-top:8px">Noch ein Weihnachtsgeschenk gesucht? <a href="/gutschein">Yoga lässt sich verschenken.</a></p>';
         delete frisch[t.key];
-        h += '<button class="link" data-ab="' + esc(ich.id) + '"' + (kostet ? ' data-kostet' : '') + '>Abmelden</button>';
+        if (!(t.verbindlich && st.status === 'platz')) h += '<button class="link" data-ab="' + esc(ich.id) + '"' + (kostet ? ' data-kostet' : '') + '>' + (t.verbindlich ? 'Von der Warteliste abmelden' : 'Abmelden') + '</button>';
         if (kostet) h += '<div class="warn" hidden><p>Die Stunde beginnt in weniger als 12 Stunden. Wenn du jetzt absagst, wird sie dir berechnet, falls sie stattfindet.</p>' +
           '<div class="zeile"><button class="btn zweit" data-ab-ok="' + esc(ich.id) + '">Trotzdem absagen</button><button class="link" data-ab-nein>Ich komme doch</button></div></div>';
       } else {
@@ -208,11 +221,13 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
           '<button class="btn' + (voll ? ' zweit' : '') + '" data-auf>' + (voll ? 'Auf die Warteliste' : 'Ich komme') + '</button>' +
           '<form novalidate><label>Dein Name<input type="text" name="name" autocomplete="name" maxlength="60" value="' + esc(name) + '" placeholder="Vorname und Nachname"></label>' +
           '<label>Wie nimmst du teil?<select name="art"><option value="">Bitte wählen</option>' +
-          ARTEN.map(function (a) { return '<option value="' + a[0] + '"' + (a[0] === art ? ' selected' : '') + '>' + a[1] + '</option>'; }).join('') + '</select></label>' +
+          (t.arten ? t.arten.map(function (a) { return [a, ARTEN_SONDER[a] || a]; }) : ARTEN).map(function (a) { return '<option value="' + a[0] + '"' + (a[0] === art ? ' selected' : '') + '>' + a[1] + '</option>'; }).join('') + '</select></label>' +
+          (t.arten ? '<p class="klein" style="margin-top:6px">Du kommst nur über Hansefit oder epassi? Dann buchst du über <a href="/rauhnaechte">bettina-kahmann.com/rauhnaechte</a> mit dem Code hansefit12.</p>' : '') +
           '<label class="codefeld"' + (art === 'Karte' || art === 'KarteHansefit' ? '' : ' hidden') + '>Dein Kartencode<input type="text" name="code" maxlength="8" autocapitalize="characters" autocomplete="off" value="' + esc(code) + '" placeholder="z. B. K7F3QM"></label>' +
+          (t.verbindlich ? '<label>Deine E-Mail-Adresse<input type="text" name="email" inputmode="email" autocomplete="email" maxlength="120" value="' + esc(lies('bv-anm-email', '')) + '" placeholder="Für die Mails durch die Rauhnächte"></label>' : '') +
           '<div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>' +
           '<p class="klein">Mit deiner Anmeldung gelten meine <a href="/agb" target="_blank">AGB</a>.</p><div class="zeile"><button class="btn" type="submit">Eintragen</button><button class="link" type="button" data-zu>Abbrechen</button></div><p class="fehler" hidden></p>' +
-          '<p class="klein">Deine Anmeldung ist verbindlich. Kostenfrei absagen kannst du bis 12 Stunden vor Beginn.</p></form>';
+          '<p class="klein">' + (t.verbindlich ? 'Deine Anmeldung ist verbindlich. Eine Abmeldung ist nicht möglich. Die Zuzahlung zahlst du vorab bar bei mir.' : 'Deine Anmeldung ist verbindlich. Kostenfrei absagen kannst du bis 12 Stunden vor Beginn.') + '</p></form>';
       }
       return h + '</article>';
     }).join('');
@@ -232,7 +247,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       b.disabled = true; b.textContent = 'Wird abgemeldet …';
       fetch(API, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ action: 'abmelden', key: key, id: ich.id, token: ich.token }) })
         .then(function (r) { return r.json(); })
-        .then(function (d) { abgemeldet[key] = d.spaet ? 'spaet' : 'ok'; schreib(SPEICHER, meine().filter(function (m) { return m.id !== ich.id; })); laden(); });
+        .then(function (d) { if (d.fehler) { alert(d.fehler); laden(); return; } abgemeldet[key] = d.spaet ? 'spaet' : 'ok'; schreib(SPEICHER, meine().filter(function (m) { return m.id !== ich.id; })); laden(); });
     }
   });
 
@@ -247,7 +262,8 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
     ev.preventDefault();
     var f = ev.target, karte = f.closest('.karte'), key = karte.getAttribute('data-key');
     var fehler = f.querySelector('.fehler'), knopf = f.querySelector('button[type=submit]');
-    var daten = { action: 'anmelden', key: key, name: f.name.value.trim(), art: f.art.value, code: f.code.value.trim(), website: f.website.value };
+    var daten = { action: 'anmelden', key: key, name: f.name.value.trim(), art: f.art.value, code: f.code.value.trim(), website: f.website.value, email: f.email ? f.email.value.trim() : '' };
+    if (f.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(daten.email)) { fehler.textContent = 'Bitte trag deine E-Mail-Adresse ein. Dorthin schicke ich dir die Begleitung durch die Rauhnächte.'; fehler.hidden = false; return; }
     if ((daten.art === 'Karte' || daten.art === 'KarteHansefit') && daten.code.replace(/[^A-Za-z0-9]/g, '').length < 6) { fehler.textContent = 'Bitte gib deinen Kartencode ein. Du findest ihn in meiner WhatsApp-Nachricht zu deiner Karte.'; fehler.hidden = false; return; }
     if (daten.name.length < 2) { fehler.textContent = 'Bitte trag deinen Namen ein.'; fehler.hidden = false; return; }
     if (!/\S+\s+\S+/.test(daten.name)) { fehler.textContent = 'Bitte trag deinen Vor- und Nachnamen ein.'; fehler.hidden = false; return; }
@@ -257,7 +273,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (!d.ok) { fehler.textContent = d.fehler || 'Das hat nicht geklappt.'; fehler.hidden = false; knopf.disabled = false; knopf.textContent = 'Eintragen'; return; }
-        schreib('bv-anm-name', daten.name); schreib('bv-anm-art', daten.art); frisch[key] = true;
+        schreib('bv-anm-name', daten.name); schreib('bv-anm-art', daten.art); if (daten.email) schreib('bv-anm-email', daten.email); frisch[key] = true;
         if (daten.art === 'Karte' || daten.art === 'KarteHansefit') {
           schreib('bv-karten-code', daten.code.toUpperCase());
           kartenHinweis[key] = d.kartenAbgelaufen ? 'Deine Karte ist abgelaufen. Du bist trotzdem eingetragen. Sprich mich in der Stunde an.'

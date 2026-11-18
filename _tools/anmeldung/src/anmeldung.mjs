@@ -10,7 +10,12 @@ const STUNDEN = [
   { id: 'di18', tag: 2, start: '18:00', ende: '19:15', titel: 'Hatha meets Yin' },
   { id: 'di1930', tag: 2, start: '19:30', ende: '20:30', titel: 'Yin Yoga' },
   { id: 'do1815', tag: 4, start: '18:15', ende: '19:30', titel: 'Hatha Kraft & Stabilität' },
+  // Sonderabend: eigenes Datum, Anmeldung ab sofort, verbindlich (keine Abmeldung), Zuzahlung bar im Voraus.
+  // Ersetzt an diesem Tag die normalen Dienstagsstunden.
+  { id: 'rn1512', tag: 2, start: '18:30', ende: '20:00', titel: 'Rauhnächte-Abend', daten: ['2026-12-15'], verbindlich: true,
+    arten: ['Karte', 'KarteHansefit', 'Kartenkauf vor Ort'], ersetzt: ['di18', 'di1930'] },
 ];
+const VERBINDLICH_HINWEIS = 'Deine Anmeldung für diesen Abend ist verbindlich. Wenn du nicht kommen kannst, darfst du deinen Platz an jemand anderen weitergeben. Schreib mir dann kurz, wer kommt.';
 // Kurse, die nur angezeigt werden (keine Anmeldung). Termine kommen aus dem Plan.
 const INFO_KURSE = [
   { id: 'aroha', titel: 'AROHA', start: '18:00', ende: '18:50', zusatz: 'YAP – YOUR Active Place, Höpershof', link: 'https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239', linkText: 'Bei Fyndery buchen' },
@@ -88,18 +93,19 @@ function kommt(d, start) {
 }
 function geplante(kurse) {
   const out = [];
-  for (const s of kurse) for (const d of PLAN[s.id] || []) out.push({ ...s, datum: d, key: `s/${d}_${s.id}` });
+  const ersetzt = (id, d) => kurse.some((x) => x.daten && x.daten.includes(d) && (x.ersetzt || []).includes(id));
+  for (const s of kurse) for (const d of s.daten || PLAN[s.id] || []) if (!ersetzt(s.id, d)) out.push({ ...s, datum: d, key: `s/${d}_${s.id}` });
   return out.sort(nachZeit);
 }
 // Anmeldung offen: die nächste Woche, bis Stundenbeginn
 function naechsteTermine() {
   const bis = plusTage(jetztBerlin().datum, ANMELDE_TAGE);
-  return geplante(STUNDEN).filter((t) => kommt(t.datum, t.start) && t.datum <= bis);
+  return geplante(STUNDEN).filter((t) => kommt(t.datum, t.start) && (t.daten || t.datum <= bis));
 }
 function spaetereTermine() {
   const bis = plusTage(jetztBerlin().datum, ANMELDE_TAGE);
   const ende = plusTage(jetztBerlin().datum, 28); // weitere Termine nur für die nächsten vier Wochen zeigen
-  return geplante(STUNDEN).filter((t) => t.datum > bis && t.datum <= ende);
+  return geplante(STUNDEN).filter((t) => !t.daten && t.datum > bis && t.datum <= ende);
 }
 function vergangeneTermine(tage) {
   const von = plusTage(jetztBerlin().datum, -tage);
@@ -159,8 +165,9 @@ function oeffentlich(t, doc, eigeneIds) {
     key: t.key, id: t.id, titel: t.titel, datum: t.datum, datumText: datumText(t.datum),
     zeit: `${t.start}–${t.ende}`, plaetze: PLAETZE,
     angemeldet: Math.min(n, PLAETZE), warteliste: Math.max(0, n - PLAETZE), ausfall: !!doc.ausfall,
-    kostenpflichtig: imFristfenster(t), fristStunden: FRIST_STUNDEN,
-    mindest: MINDEST, bestaetigt: !!doc.bestaetigt, findetStatt: !doc.ausfall && (!!doc.bestaetigt || n >= MINDEST),
+    kostenpflichtig: !t.verbindlich && imFristfenster(t), fristStunden: FRIST_STUNDEN,
+    mindest: MINDEST, bestaetigt: !!doc.bestaetigt, findetStatt: !doc.ausfall && (!!t.verbindlich || !!doc.bestaetigt || n >= MINDEST),
+    verbindlich: !!t.verbindlich, arten: t.arten || null,
   };
   if (eigeneIds.length) {
     res.eigene = {};
@@ -291,7 +298,8 @@ export default async (req, context) => {
           key: t.key, titel: t.titel, datum: t.datum, datumText: datumText(t.datum), zeit: `${t.start}–${t.ende}`,
           kommend: t.datum >= jetztBerlin().datum && naechsteTermine().some((x) => x.key === t.key),
           ausfall: !!doc.ausfall, bestaetigt: !!doc.bestaetigt, mindest: MINDEST, plaetze: PLAETZE,
-          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE, kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId) })),
+          verbindlich: !!t.verbindlich,
+          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE, kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId), email: e.email || '', bezahlt: !!e.bezahlt })),
           spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, kartenName: nameVon(e.kartenId), art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen })),
         });
       }
@@ -343,7 +351,7 @@ export default async (req, context) => {
     if (url.searchParams.get('plan') === '1') {
       if (!istAdmin(req)) return json({ fehler: 'Schlüssel stimmt nicht.' }, 401);
       const heute = jetztBerlin().datum;
-      return json({ kurse: [...STUNDEN.map((s) => ({ ...s, anmeldung: true })), ...INFO_KURSE.map((s) => ({ ...s, anmeldung: false }))].map((s) => ({
+      return json({ kurse: [...STUNDEN.filter((s) => !s.daten).map((s) => ({ ...s, anmeldung: true })), ...INFO_KURSE.map((s) => ({ ...s, anmeldung: false }))].map((s) => ({
         id: s.id, titel: s.titel, zeit: s.ende ? `${s.start}–${s.ende}` : s.start, anmeldung: s.anmeldung,
         termine: (PLAN[s.id] || []).filter((d) => d >= heute).sort().map((d) => ({ datum: d, text: datumText(d) })),
       })) });
@@ -368,6 +376,9 @@ export default async (req, context) => {
     if (!/\S+\s+\S+/.test(name)) return json({ fehler: 'Bitte trag deinen Vor- und Nachnamen ein.' }, 400);
     let art = ARTEN.includes(body.art) ? body.art : '';
     if (!art) return json({ fehler: 'Bitte wähl aus, wie du teilnimmst.' }, 400);
+    if (t.arten && !t.arten.includes(art)) return json({ fehler: 'Für diesen Abend meldest du dich hier mit deiner Karte an. Kommst du nur über Hansefit oder epassi, buchst du über bettina-kahmann.com/rauhnaechte mit dem Code hansefit12.' }, 400);
+    const email = t.verbindlich ? text(body.email, 120) : '';
+    if (t.verbindlich && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ fehler: 'Bitte trag deine E-Mail-Adresse ein. Dorthin schicke ich dir die Begleitung durch die Rauhnächte.' }, 400);
     let karte = null;
     if (art === 'Karte' || art === 'KarteHansefit') {
       const code = normCode(body.code);
@@ -391,7 +402,7 @@ export default async (req, context) => {
       if (doc.ausfall) return { fehler: 'Diese Stunde fällt aus.' };
       if (doc.eintraege.length >= PLAETZE + 30) return { fehler: 'Die Warteliste ist voll.' };
       if (karte && doc.eintraege.some((e) => e.kartenId === karte.id)) return { fehler: 'Mit dieser Karte bist du für diese Stunde schon eingetragen.' };
-      doc.eintraege.push({ id, name, art, ts: new Date().toISOString(), tokenHash, ...(karte ? { kartenId: karte.id } : {}) });
+      doc.eintraege.push({ id, name, art, ts: new Date().toISOString(), tokenHash, ...(email ? { email } : {}), ...(karte ? { kartenId: karte.id } : {}) });
       const i = doc.eintraege.length - 1;
       return i < PLAETZE ? { status: 'platz' } : { status: 'warteliste', position: i - PLAETZE + 1 };
     });
@@ -414,6 +425,7 @@ export default async (req, context) => {
       const i = doc.eintraege.findIndex((e) => e.id === body.id && e.tokenHash === tokenHash);
       if (i < 0) return { fehler: 'Anmeldung nicht gefunden.' };
       const t = terminAusKey(String(body.key || ''));
+      if (tb && tb.verbindlich && i < PLAETZE) return { fehler: VERBINDLICH_HINWEIS, verbindlich: true };
       const [e] = doc.eintraege.splice(i, 1);
       // Späte Absage: nur wer einen Platz hatte, nicht bei ausgefallener Stunde
       const fenster = !!t && imFristfenster(t);
@@ -422,7 +434,7 @@ export default async (req, context) => {
       if (spaet) doc.spaet.push({ id: e.id, name: e.name, art: e.art, abgesagt: new Date().toISOString(), ...(e.kartenId ? { kartenId: e.kartenId } : {}) });
       return { ok: true, spaet };
     });
-    return json(r, r.fehler ? 404 : 200);
+    return json(r, r.fehler ? (r.verbindlich ? 409 : 404) : 200);
   }
 
   if (body.action === 'gutschein_bestellen') {
@@ -587,6 +599,15 @@ export default async (req, context) => {
   if (body.action === 'bestaetigen') {
     const r = await aendern(st, key, (doc) => { doc.bestaetigt = !!body.wert; if (doc.bestaetigt) doc.ausfall = false; return { ok: true }; });
     return json(r, r.fehler ? 409 : 200);
+  }
+  if (body.action === 'bezahlt') {
+    const r = await aendern(st, key, (doc) => {
+      const e = doc.eintraege.find((x) => x.id === body.id);
+      if (!e) return { fehler: 'Eintrag nicht gefunden.' };
+      e.bezahlt = !!body.wert;
+      return { ok: true };
+    });
+    return json(r, r.fehler ? 404 : 200);
   }
   if (body.action === 'erlassen') {
     const r = await aendern(st, key, (doc) => {
