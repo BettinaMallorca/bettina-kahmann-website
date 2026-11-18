@@ -61,3 +61,6 @@
 /gutschein /gutschein.html 200
 /netlify/* /404 404!
 /_tools/* /404 404!
+
+# Workshops
+/rauhnaechte /workshops/rauhnaechte 301
