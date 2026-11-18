@@ -439,6 +439,12 @@ footer .legal-links a{color:rgba(250,246,241,.55)!important}
 .pko-quote{border-left:3px solid var(--terra);padding:.2rem 0 .2rem 1.3rem;margin:1.8rem 0}
 .pko-quote p{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.45rem;line-height:1.35;color:var(--terra-d);margin:0 0 .5rem}
 .pko-quote span{font-size:.85rem;color:var(--muted)}
+.pko-voices{display:grid;grid-template-columns:1.4fr 1fr;gap:2.5rem;align-items:start}
+.pko-voice{background:#fff;border-radius:18px;padding:2rem 2.2rem;border:1px solid rgba(140,73,46,.12);margin:0}
+.pko-voice p{font-size:1.02rem;line-height:1.7;margin:0 0 .9rem}
+.pko-voice p.big{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.5rem;line-height:1.3;color:var(--terra-d)}
+.pko-voice .by{display:block;font-style:normal;font-size:.85rem;color:var(--muted);font-weight:500}
+@media(max-width:860px){.pko-voices{grid-template-columns:1fr;gap:1.2rem}.pko-voice{padding:1.5rem 1.4rem}}
 .pko-cta{text-align:center}
 .pko-cta p{max-width:600px;margin-left:auto;margin-right:auto}
 .pko-sticky{display:none}
@@ -565,13 +571,28 @@ body{padding-bottom:0}
 <h2>Deine Kursleiterin: Bettina Kahmann</h2>
 <p>Ich bin Bettina, Yogalehrerin aus der Wedemark bei Hannover. Seit 30 Jahren unterrichte ich Bewegung: erst Callanetics und Pilates, dann Faszientraining, AROHA und Yoga. Meine Hatha-Yoga-Ausbildung habe ich mit 500 Stunden nach AYA-Standard abgeschlossen, dazu kommt die Ausbildung als Yin-Yoga-Lehrerin. Meine Präventionskurse in Hatha und Yin Yoga sind von der ZPP zertifiziert, vor Ort in Elze und live online.</p>
 <p>In meinen Stunden geht es nicht um Leistung. Es geht darum, dass du merkst, was in deinem Körper passiert, wenn du langsamer atmest. Dein Körper kennt den Weg in die Entspannung, du musst ihm nur die Zeit geben.</p>
-<div class="pko-quote"><p>„Mein erster Kurs – aber gewiss nicht mein letzter.“</p><span>Anne, Teilnehmerin im Hatha-Yoga-Präventionskurs</span></div>
 <a class="pko-link" href="/ueber-mich">Mehr über mich</a>
 </div>
 </div>
 </section>
 
-<section class="pko-sec pko-cta" id="buchen">
+<section class="pko-sec" aria-labelledby="pko-voices-h">
+<div class="pko-wrap">
+<h2 id="pko-voices-h">Das sagen Teilnehmerinnen</h2>
+<div class="pko-voices">
+<blockquote class="pko-voice">
+<p>„Eine kleine Auszeit aus dem Alltag mit großer positiver Wirkung auf meinen Körper - das war für mich der Präventionskurs ‚Hatha Yoga‘. Ich war überrascht wie schnell mein Körper viele verschiedene Übungen verinnerlicht und wie viel Freude ich daran habe! Die beruhigende, angenehme Stimme und liebevolle Art von Bettina tragen da definitiv zu bei. Ich kann den Kurs zu 100% von Herzen weiterempfehlen. Die nächsten Yogastunden bei Bettina sind schon gebucht :-) Die Atemübungen aus dem Kurs habe ich bereits in meinen Alltag integriert - total klasse!“</p>
+<cite class="by">Katharina Schmidt, Teilnehmerin im Hatha-Yoga-Präventionskurs</cite>
+</blockquote>
+<blockquote class="pko-voice">
+<p class="big">„Mein erster Kurs – aber gewiss nicht mein letzter.“</p>
+<cite class="by">Anne, Teilnehmerin im Hatha-Yoga-Präventionskurs</cite>
+</blockquote>
+</div>
+</div>
+</section>
+
+<section class="pko-sec alt pko-cta" id="buchen">
 <div class="pko-narrow">
 <h2>Melde dich jetzt an</h2>
 <p>Der Live-Kurs hat höchstens 15 Plätze, damit ich jede Teilnehmerin im Blick behalte. Mit deiner Buchung über alfima ist dein Platz fest reserviert.</p>
