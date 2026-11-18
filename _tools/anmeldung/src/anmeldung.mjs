@@ -3,6 +3,7 @@
 import { getStore, getDeployStore } from '@netlify/blobs';
 
 const PLAETZE = 15;
+const plaetzeVon = (t) => (t && t.plaetze) || PLAETZE;
 const FRIST_STUNDEN = 12;
 const MINDEST = 5;
 const AUFBEWAHRUNG_TAGE = 28;
@@ -12,7 +13,7 @@ const STUNDEN = [
   { id: 'do1815', tag: 4, start: '18:15', ende: '19:30', titel: 'Hatha Kraft & Stabilität' },
   // Sonderabend: eigenes Datum, Anmeldung ab sofort, verbindlich (keine Abmeldung), Zuzahlung bar im Voraus.
   // Ersetzt an diesem Tag die normalen Dienstagsstunden.
-  { id: 'rn1512', tag: 2, start: '18:30', ende: '20:00', titel: 'Rauhnächte-Abend', daten: ['2026-12-15'], verbindlich: true,
+  { id: 'rn1512', tag: 2, start: '18:30', ende: '20:00', titel: 'Rauhnächte-Abend', daten: ['2026-12-15'], verbindlich: true, plaetze: 18,
     arten: ['Karte', 'KarteHansefit', 'Kartenkauf vor Ort'], ersetzt: ['di18', 'di1930'] },
 ];
 const VERBINDLICH_HINWEIS = 'Deine Anmeldung für diesen Abend ist verbindlich. Wenn du nicht kommen kannst, darfst du deinen Platz an jemand anderen weitergeben. Schreib mir dann kurz, wer kommt.';
@@ -163,8 +164,8 @@ function oeffentlich(t, doc, eigeneIds) {
   const n = doc.eintraege.length;
   const res = {
     key: t.key, id: t.id, titel: t.titel, datum: t.datum, datumText: datumText(t.datum),
-    zeit: `${t.start}–${t.ende}`, plaetze: PLAETZE,
-    angemeldet: Math.min(n, PLAETZE), warteliste: Math.max(0, n - PLAETZE), ausfall: !!doc.ausfall,
+    zeit: `${t.start}–${t.ende}`, plaetze: plaetzeVon(t),
+    angemeldet: Math.min(n, plaetzeVon(t)), warteliste: Math.max(0, n - plaetzeVon(t)), ausfall: !!doc.ausfall,
     kostenpflichtig: !t.verbindlich && imFristfenster(t), fristStunden: FRIST_STUNDEN,
     mindest: MINDEST, bestaetigt: !!doc.bestaetigt, findetStatt: !doc.ausfall && (!!t.verbindlich || !!doc.bestaetigt || n >= MINDEST),
     verbindlich: !!t.verbindlich, arten: t.arten || null,
@@ -172,7 +173,7 @@ function oeffentlich(t, doc, eigeneIds) {
   if (eigeneIds.length) {
     res.eigene = {};
     doc.eintraege.forEach((e, i) => {
-      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < PLAETZE ? { status: 'platz' } : { status: 'warteliste', position: i - PLAETZE + 1 };
+      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < plaetzeVon(t) ? { status: 'platz' } : { status: 'warteliste', position: i - plaetzeVon(t) + 1 };
     });
   }
   return res;
@@ -231,7 +232,7 @@ async function abrechnen(st) {
     const { doc } = await lade(st, b.key);
     const soll = [];
     if (stattgefunden(doc)) {
-      doc.eintraege.slice(0, PLAETZE).forEach((e) => e.kartenId && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: 'Teilnahme' }));
+      doc.eintraege.slice(0, plaetzeVon(t)).forEach((e) => e.kartenId && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: 'Teilnahme' }));
       // Späte Absage mit 10er-Karte über Hansefit/epassi kostet 2 Stunden, sonst 1
       doc.spaet.forEach((e) => e.kartenId && !e.erlassen && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: 'Späte Absage', delta: /Hansefit/.test(e.art) ? -2 : -1 }));
     }
@@ -297,9 +298,9 @@ export default async (req, context) => {
         liste.push({
           key: t.key, titel: t.titel, datum: t.datum, datumText: datumText(t.datum), zeit: `${t.start}–${t.ende}`,
           kommend: t.datum >= jetztBerlin().datum && naechsteTermine().some((x) => x.key === t.key),
-          ausfall: !!doc.ausfall, bestaetigt: !!doc.bestaetigt, mindest: MINDEST, plaetze: PLAETZE,
+          ausfall: !!doc.ausfall, bestaetigt: !!doc.bestaetigt, mindest: MINDEST, plaetze: plaetzeVon(t),
           verbindlich: !!t.verbindlich,
-          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE, kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId), email: e.email || '', bezahlt: !!e.bezahlt })),
+          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= plaetzeVon(t), kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId), email: e.email || '', bezahlt: !!e.bezahlt })),
           spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, kartenName: nameVon(e.kartenId), art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen })),
         });
       }
@@ -400,11 +401,11 @@ export default async (req, context) => {
     const id = zufall(8), token = zufall(16), tokenHash = await sha(token);
     const r = await aendern(st, t.key, (doc) => {
       if (doc.ausfall) return { fehler: 'Diese Stunde fällt aus.' };
-      if (doc.eintraege.length >= PLAETZE + 30) return { fehler: 'Die Warteliste ist voll.' };
+      if (doc.eintraege.length >= plaetzeVon(t) + 30) return { fehler: 'Die Warteliste ist voll.' };
       if (karte && doc.eintraege.some((e) => e.kartenId === karte.id)) return { fehler: 'Mit dieser Karte bist du für diese Stunde schon eingetragen.' };
       doc.eintraege.push({ id, name, art, ts: new Date().toISOString(), tokenHash, ...(email ? { email } : {}), ...(karte ? { kartenId: karte.id } : {}) });
       const i = doc.eintraege.length - 1;
-      return i < PLAETZE ? { status: 'platz' } : { status: 'warteliste', position: i - PLAETZE + 1 };
+      return i < plaetzeVon(t) ? { status: 'platz' } : { status: 'warteliste', position: i - plaetzeVon(t) + 1 };
     });
     if (r.fehler) return json(r, 409);
     if (Math.random() < 0.1) aufraeumen(st).catch(() => {});
@@ -425,12 +426,12 @@ export default async (req, context) => {
       const i = doc.eintraege.findIndex((e) => e.id === body.id && e.tokenHash === tokenHash);
       if (i < 0) return { fehler: 'Anmeldung nicht gefunden.' };
       const t = terminAusKey(String(body.key || ''));
-      if (tb && tb.verbindlich && i < PLAETZE) return { fehler: VERBINDLICH_HINWEIS, verbindlich: true };
+      if (tb && tb.verbindlich && i < plaetzeVon(tb)) return { fehler: VERBINDLICH_HINWEIS, verbindlich: true };
       const [e] = doc.eintraege.splice(i, 1);
       // Späte Absage: nur wer einen Platz hatte, nicht bei ausgefallener Stunde
       const fenster = !!t && imFristfenster(t);
       // Auch wer im Fristfenster nachgerückt ist, sagt kostenpflichtig ab
-      const spaet = fenster && i < PLAETZE && !doc.ausfall;
+      const spaet = fenster && i < plaetzeVon(t) && !doc.ausfall;
       if (spaet) doc.spaet.push({ id: e.id, name: e.name, art: e.art, abgesagt: new Date().toISOString(), ...(e.kartenId ? { kartenId: e.kartenId } : {}) });
       return { ok: true, spaet };
     });

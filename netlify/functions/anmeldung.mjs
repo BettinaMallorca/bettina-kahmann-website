@@ -905,6 +905,7 @@ var getStore = (input, options) => {
 
 // src/anmeldung.mjs
 var PLAETZE = 15;
+var plaetzeVon = (t) => t && t.plaetze || PLAETZE;
 var FRIST_STUNDEN = 12;
 var MINDEST = 5;
 var AUFBEWAHRUNG_TAGE = 28;
@@ -922,6 +923,7 @@ var STUNDEN = [
     titel: "Rauhn\xE4chte-Abend",
     daten: ["2026-12-15"],
     verbindlich: true,
+    plaetze: 18,
     arten: ["Karte", "KarteHansefit", "Kartenkauf vor Ort"],
     ersetzt: ["di18", "di1930"]
   }
@@ -1070,9 +1072,9 @@ function oeffentlich(t, doc, eigeneIds) {
     datum: t.datum,
     datumText: datumText(t.datum),
     zeit: `${t.start}\u2013${t.ende}`,
-    plaetze: PLAETZE,
-    angemeldet: Math.min(n, PLAETZE),
-    warteliste: Math.max(0, n - PLAETZE),
+    plaetze: plaetzeVon(t),
+    angemeldet: Math.min(n, plaetzeVon(t)),
+    warteliste: Math.max(0, n - plaetzeVon(t)),
     ausfall: !!doc.ausfall,
     kostenpflichtig: !t.verbindlich && imFristfenster(t),
     fristStunden: FRIST_STUNDEN,
@@ -1085,7 +1087,7 @@ function oeffentlich(t, doc, eigeneIds) {
   if (eigeneIds.length) {
     res.eigene = {};
     doc.eintraege.forEach((e, i) => {
-      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < PLAETZE ? { status: "platz" } : { status: "warteliste", position: i - PLAETZE + 1 };
+      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < plaetzeVon(t) ? { status: "platz" } : { status: "warteliste", position: i - plaetzeVon(t) + 1 };
     });
   }
   return res;
@@ -1134,7 +1136,7 @@ async function abrechnen(st) {
     const { doc } = await lade(st, b.key);
     const soll = [];
     if (stattgefunden(doc)) {
-      doc.eintraege.slice(0, PLAETZE).forEach((e) => e.kartenId && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: "Teilnahme" }));
+      doc.eintraege.slice(0, plaetzeVon(t)).forEach((e) => e.kartenId && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: "Teilnahme" }));
       doc.spaet.forEach((e) => e.kartenId && !e.erlassen && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: "Sp\xE4te Absage", delta: /Hansefit/.test(e.art) ? -2 : -1 }));
     }
     sitzungen.push({ t, soll });
@@ -1241,9 +1243,9 @@ var anmeldung_default = async (req, context) => {
           ausfall: !!doc.ausfall,
           bestaetigt: !!doc.bestaetigt,
           mindest: MINDEST,
-          plaetze: PLAETZE,
+          plaetze: plaetzeVon(t),
           verbindlich: !!t.verbindlich,
-          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= PLAETZE, kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId), email: e.email || "", bezahlt: !!e.bezahlt })),
+          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= plaetzeVon(t), kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId), email: e.email || "", bezahlt: !!e.bezahlt })),
           spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, kartenName: nameVon(e.kartenId), art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen }))
         });
       }
@@ -1365,11 +1367,11 @@ var anmeldung_default = async (req, context) => {
     const id = zufall(8), token = zufall(16), tokenHash = await sha(token);
     const r = await aendern(st, t.key, (doc) => {
       if (doc.ausfall) return { fehler: "Diese Stunde f\xE4llt aus." };
-      if (doc.eintraege.length >= PLAETZE + 30) return { fehler: "Die Warteliste ist voll." };
+      if (doc.eintraege.length >= plaetzeVon(t) + 30) return { fehler: "Die Warteliste ist voll." };
       if (karte && doc.eintraege.some((e) => e.kartenId === karte.id)) return { fehler: "Mit dieser Karte bist du f\xFCr diese Stunde schon eingetragen." };
       doc.eintraege.push({ id, name, art, ts: (/* @__PURE__ */ new Date()).toISOString(), tokenHash, ...email ? { email } : {}, ...karte ? { kartenId: karte.id } : {} });
       const i = doc.eintraege.length - 1;
-      return i < PLAETZE ? { status: "platz" } : { status: "warteliste", position: i - PLAETZE + 1 };
+      return i < plaetzeVon(t) ? { status: "platz" } : { status: "warteliste", position: i - plaetzeVon(t) + 1 };
     });
     if (r.fehler) return json(r, 409);
     if (Math.random() < 0.1) aufraeumen(st).catch(() => {
@@ -1391,10 +1393,10 @@ var anmeldung_default = async (req, context) => {
       const i = doc.eintraege.findIndex((e2) => e2.id === body.id && e2.tokenHash === tokenHash);
       if (i < 0) return { fehler: "Anmeldung nicht gefunden." };
       const t = terminAusKey(String(body.key || ""));
-      if (tb && tb.verbindlich && i < PLAETZE) return { fehler: VERBINDLICH_HINWEIS, verbindlich: true };
+      if (tb && tb.verbindlich && i < plaetzeVon(tb)) return { fehler: VERBINDLICH_HINWEIS, verbindlich: true };
       const [e] = doc.eintraege.splice(i, 1);
       const fenster = !!t && imFristfenster(t);
-      const spaet = fenster && i < PLAETZE && !doc.ausfall;
+      const spaet = fenster && i < plaetzeVon(t) && !doc.ausfall;
       if (spaet) doc.spaet.push({ id: e.id, name: e.name, art: e.art, abgesagt: (/* @__PURE__ */ new Date()).toISOString(), ...e.kartenId ? { kartenId: e.kartenId } : {} });
       return { ok: true, spaet };
     });
