@@ -944,6 +944,17 @@ var INFO_KURSE = [
   { id: "aroha", titel: "AROHA", start: "18:00", ende: "18:50", zusatz: "YAP \u2013 YOUR Active Place, H\xF6pershof", link: "https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239", linkText: "Bei Fyndery buchen" },
   { id: "faszien", online: true, titel: "FaszienFit", start: "09:00", ende: "09:40", zusatz: "live online", link: "https://www.fyndery.de/online/kurs/16842/faszienfit-yoga-beweglich-stabil/?ref=7239", linkText: "Bei Fyndery buchen" },
   { id: "yinonline", online: true, titel: "Yin Yoga live online", start: "19:30", ende: "20:30", zusatz: "\xFCber Zoom", link: "https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239", linkText: "Bei Fyndery buchen" },
+  {
+    id: "praevonline",
+    online: true,
+    titel: "Pr\xE4ventionskurs Hatha Yoga",
+    start: "09:00",
+    ende: "10:00",
+    zusatz: "live online",
+    fest: { von: "2027-01-17", bis: "2027-03-07", text: "Sonntags, 17.01. bis 07.03.2027 \xB7 8 Termine \xB7 160 \u20AC" },
+    link: "https://alfima.com/bettinakahmann/hatha-yoga-praeventionskurs-online",
+    linkText: "Zum Pr\xE4ventionskurs"
+  },
   { id: "morning", online: true, titel: "Morning Energy Yoga", start: "09:00", zusatz: "live online", link: "https://www.fyndery.de/online/kurs/16133/morning-energy-yoga-ist-eine-vitalisierende-online-yogastunde/?ref=7239", linkText: "Bei Fyndery buchen" }
 ];
 var ANMELDE_TAGE = 6;
@@ -1033,7 +1044,7 @@ function infoTermine() {
     zusatz: k.zusatz,
     link: k.link || "",
     linkText: k.linkText || "",
-    termine: (PLAN[k.id] || []).filter((d) => kommt(d, k.start)).sort().slice(0, 8).map(datumText)
+    termine: k.fest ? kommt(k.fest.bis, k.start) ? [k.fest.text] : [] : (PLAN[k.id] || []).filter((d) => kommt(d, k.start)).sort().slice(0, 8).map(datumText)
   })).filter((k) => k.termine.length);
 }
 function minutenBis(datum, start) {
@@ -1342,7 +1353,7 @@ var anmeldung_default = async (req, context) => {
     if (url.searchParams.get("plan") === "1") {
       if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
       const heute = jetztBerlin().datum;
-      return json({ kurse: [...STUNDEN.filter((s) => !s.daten).map((s) => ({ ...s, anmeldung: true })), ...INFO_KURSE.map((s) => ({ ...s, anmeldung: false }))].map((s) => ({
+      return json({ kurse: [...STUNDEN.filter((s) => !s.daten).map((s) => ({ ...s, anmeldung: true })), ...INFO_KURSE.filter((s) => !s.fest).map((s) => ({ ...s, anmeldung: false }))].map((s) => ({
         id: s.id,
         titel: s.titel,
         zeit: s.ende ? `${s.start}\u2013${s.ende}` : s.start,

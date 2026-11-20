@@ -176,7 +176,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
     var online = info.filter(function (k) { return k.online; });
     info = info.filter(function (k) { return !k.online; });
     if (online.length) {
-      h += '<h2>Live online von zu Hause</h2><p class="unter">Mach mit, wo immer du gerade bist. Gebucht wird über Fyndery.</p><div class="online-box"><span class="tag">Live online</span>' + online.map(function (k) {
+      h += '<h2>Live online von zu Hause</h2><p class="unter">Mach mit, wo immer du gerade bist.</p><div class="online-box"><span class="tag">Live online</span>' + online.map(function (k) {
         return '<div class="kurs"><span class="k">' + esc(k.titel) + '</span>, ' + esc(k.zeit) + ' Uhr<div class="d">' + esc(k.termine.join(' · ')) + '</div>' +
           (k.link ? '<a class="buchen" href="' + esc(k.link) + '" target="_blank" rel="noopener">' + esc(k.linkText || 'Mehr dazu') + '</a>' : '') + '</div>';
       }).join('') + '</div>';

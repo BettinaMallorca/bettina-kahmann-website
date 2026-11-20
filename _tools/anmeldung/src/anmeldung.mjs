@@ -36,6 +36,8 @@ const INFO_KURSE = [
   { id: 'aroha', titel: 'AROHA', start: '18:00', ende: '18:50', zusatz: 'YAP – YOUR Active Place, Höpershof', link: 'https://www.fyndery.de/wedemark/kurs/40994/effektiver-gesundheitskurs-fuer-straffere-muskeln-und-innere-balance/?ref=7239', linkText: 'Bei Fyndery buchen' },
   { id: 'faszien', online: true, titel: 'FaszienFit', start: '09:00', ende: '09:40', zusatz: 'live online', link: 'https://www.fyndery.de/online/kurs/16842/faszienfit-yoga-beweglich-stabil/?ref=7239', linkText: 'Bei Fyndery buchen' },
   { id: 'yinonline', online: true, titel: 'Yin Yoga live online', start: '19:30', ende: '20:30', zusatz: 'über Zoom', link: 'https://www.fyndery.de/online/kurs/6261/yin-yoga-live-online/?ref=7239', linkText: 'Bei Fyndery buchen' },
+  { id: 'praevonline', online: true, titel: 'Präventionskurs Hatha Yoga', start: '09:00', ende: '10:00', zusatz: 'live online', fest: { von: '2027-01-17', bis: '2027-03-07', text: 'Sonntags, 17.01. bis 07.03.2027 · 8 Termine · 160 €' },
+    link: 'https://alfima.com/bettinakahmann/hatha-yoga-praeventionskurs-online', linkText: 'Zum Präventionskurs' },
   { id: 'morning', online: true, titel: 'Morning Energy Yoga', start: '09:00', zusatz: 'live online', link: 'https://www.fyndery.de/online/kurs/16133/morning-energy-yoga-ist-eine-vitalisierende-online-yogastunde/?ref=7239', linkText: 'Bei Fyndery buchen' },
 ];
 const ANMELDE_TAGE = 6; // eine Woche: jeder Wochentag erscheint nur einmal
@@ -129,7 +131,7 @@ function vergangeneTermine(tage) {
 function infoTermine() {
   return INFO_KURSE.map((k) => ({
     online: !!k.online, titel: k.titel, zeit: k.ende ? `${k.start}–${k.ende}` : k.start, zusatz: k.zusatz, link: k.link || '', linkText: k.linkText || '',
-    termine: (PLAN[k.id] || []).filter((d) => kommt(d, k.start)).sort().slice(0, 8).map(datumText),
+    termine: k.fest ? (kommt(k.fest.bis, k.start) ? [k.fest.text] : []) : (PLAN[k.id] || []).filter((d) => kommt(d, k.start)).sort().slice(0, 8).map(datumText),
   })).filter((k) => k.termine.length);
 }
 function minutenBis(datum, start) {
@@ -383,7 +385,7 @@ export default async (req, context) => {
     if (url.searchParams.get('plan') === '1') {
       if (!istAdmin(req)) return json({ fehler: 'Schlüssel stimmt nicht.' }, 401);
       const heute = jetztBerlin().datum;
-      return json({ kurse: [...STUNDEN.filter((s) => !s.daten).map((s) => ({ ...s, anmeldung: true })), ...INFO_KURSE.map((s) => ({ ...s, anmeldung: false }))].map((s) => ({
+      return json({ kurse: [...STUNDEN.filter((s) => !s.daten).map((s) => ({ ...s, anmeldung: true })), ...INFO_KURSE.filter((s) => !s.fest).map((s) => ({ ...s, anmeldung: false }))].map((s) => ({
         id: s.id, titel: s.titel, zeit: s.ende ? `${s.start}–${s.ende}` : s.start, anmeldung: s.anmeldung,
         termine: (PLAN[s.id] || []).filter((d) => d >= heute).sort().map((d) => ({ datum: d, text: datumText(d) })),
         ...(PRAEVENTION[s.id] ? { praevention: { titel: PRAEVENTION[s.id].titel, von: datumDE(PRAEVENTION[s.id].von), bis: datumDE(PRAEVENTION[s.id].bis), anzahl: KURS[s.id] || 0, plaetze: plaetzeVon(s) } } : {}),
