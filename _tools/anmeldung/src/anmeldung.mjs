@@ -297,7 +297,21 @@ export default async (req, context) => {
   PRODUKTION = !ctx || ctx === 'production';
   const st = store();
   const url = new URL(req.url);
-  const planDoc = (await ladePlan(st)).doc;
+  let planDoc = (await ladePlan(st)).doc;
+  // Einmalig: die acht Kurstermine der Präventionskurse in den Plan übernehmen
+  if (!planDoc.praeventionTermine) {
+    await aendern(st, PLAN_KEY, (doc) => {
+      if (doc.praeventionTermine) return { unveraendert: true };
+      for (const [id, p] of Object.entries(PRAEVENTION)) {
+        const l = new Set(doc.termine[id] || []);
+        for (let d = p.von; d <= p.bis; d = plusTage(d, 7)) l.add(d);
+        doc.termine[id] = [...l].sort();
+      }
+      doc.praeventionTermine = true;
+      return { ok: true };
+    }, ladePlan);
+    planDoc = (await ladePlan(st)).doc;
+  }
   PLAN = planDoc.termine;
   KURS = planDoc.praevention || {};
 
