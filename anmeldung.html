@@ -85,6 +85,9 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
 .sonder .eyebrow{margin:0 0 4px}
 .sonder .text{font-size:.95rem;margin:12px 0}
 .sonder .text p+p{margin-top:8px}
+.praev-box{margin:0 0 22px}
+.praev-box p{margin-top:6px}
+.kursgruppe{font-size:.9rem;color:var(--text-light);margin-top:8px}
 .sonder .text a,.sonder .klein a{color:var(--plum)}
 .fuss{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:.8rem;color:var(--text-light);display:flex;gap:16px;flex-wrap:wrap}
 </style>
@@ -96,6 +99,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
   <h1>Yoga diese Woche. <em>Bist du dabei?</em></h1>
   <p class="sub">Trag dich für deine Stunde ein. So weiß ich, wie viele kommen, und dein Platz ist sicher. Pro Stunde gibt es 15 Plätze. Ab 5 Anmeldungen findet die Stunde statt. Sind es weniger, sage ich in der WhatsApp-Gruppe Bescheid, ob sie stattfindet.</p>
 
+  <div id="praev" class="online-box praev-box" hidden></div>
   <div id="liste"><p class="laden">Die Stunden werden geladen …</p></div>
   <div id="gutschein" class="gutschein-box" hidden>
     <div class="gtitel">Yoga verschenken</div>
@@ -147,8 +151,19 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
         schreib(SPEICHER, meine().filter(function (m) { return aktuell.indexOf(m.key) > -1; }));
         zeigen(d.termine);
         mehr(d.spaeter || [], d.info || []);
+        praev(d.praevention || [], d.praeventionLink);
       })
       .catch(function () { liste.innerHTML = '<p class="fehler">Die Anmeldung ist gerade nicht erreichbar. Bitte versuch es später noch einmal oder schreib mir in der WhatsApp-Gruppe.</p>'; });
+  }
+
+  function praev(kurse, link) {
+    var box = document.getElementById('praev');
+    if (!kurse.length) { box.hidden = true; return; }
+    box.innerHTML = '<span class="tag">Präventionskurse ab ' + esc(kurse[0].von.slice(0, 6)) + '</span>' +
+      kurse.map(function (k) { return '<div class="kurs"><span class="k">' + esc(k.titel) + '</span>, ' + esc(k.tag) + ' ' + esc(k.zeit) + ' Uhr<div class="d">' + esc(k.von) + ' bis ' + esc(k.bis) + ' · 8 Termine · ' + k.preis + ' €</div></div>'; }).join('') +
+      '<p>Deine Krankenkasse erstattet dir einen großen Teil, wenn du bei mindestens 80 % der Termine dabei bist. Du übst mit in der Dienstagsgruppe und hast deinen Platz an allen acht Abenden sicher.</p>' +
+      '<a class="buchen" href="' + esc(link) + '">Zum Präventionskurs anmelden</a>';
+    box.hidden = false;
   }
 
   function mehr(spaeter, info) {
@@ -191,6 +206,7 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
       if (t.verbindlich) h += '<div class="text"><p>Yoga, geführtes Schreiben und ein Loslassritual zum Jahresende. Danach begleite ich dich mit einer Mail durch jede der zwölf Rauhnächte. <a href="/rauhnaechte">Mehr zum Abend</a></p>' +
         '<p>Mit deiner Karte zahlst du deine Stunde plus 5 €. Mit 10er-Karte und Hansefit oder epassi zahlst du 9 € dazu. Die Zuzahlung bringst du mir vorab bar in eine der nächsten Stunden mit.</p>' +
         '<p>Die Anmeldung ist verbindlich. Abmelden geht hier nicht. Wenn du nicht kommen kannst, darfst du deinen Platz an jemand anderen weitergeben.</p></div>';
+      if (t.kurs) h += '<p class="kursgruppe">Die Gruppe aus dem Präventionskurs ist mit dabei.</p>';
       if (GRUPPE) h += '<div class="balken' + (voll ? ' voll' : '') + '"><i style="width:' + proz + '%"></i></div>';
       h += t.findetStatt ? '<span class="lage ja">Findet statt</span>'
         : GRUPPE ? '<span class="lage offen">Ab ' + t.mindest + ' Anmeldungen · noch ' + fehlen + '</span>'

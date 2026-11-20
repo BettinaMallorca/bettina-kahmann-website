@@ -906,6 +906,17 @@ var getStore = (input, options) => {
 // src/anmeldung.mjs
 var PLAETZE = 15;
 var plaetzeVon = (t) => t && t.plaetze || PLAETZE;
+var PRAEVENTION = {
+  di18: { titel: "Hatha Yoga", von: "2027-01-19", bis: "2027-03-09", preis: 160 },
+  di1930: { titel: "Yin Yoga", von: "2027-01-19", bis: "2027-03-09", preis: 160 }
+};
+var PRAEVENTION_LINK = "/praeventionskurse-wedemark#anmeldung";
+var KURS = {};
+var kursVon = (t) => {
+  const p = t && PRAEVENTION[t.id];
+  return p && t.datum >= p.von && t.datum <= p.bis ? Math.min(KURS[t.id] || 0, plaetzeVon(t)) : 0;
+};
+var frei = (t) => Math.max(0, plaetzeVon(t) - kursVon(t));
 var FRIST_STUNDEN = 12;
 var MINDEST = 5;
 var AUFBEWAHRUNG_TAGE = 28;
@@ -1073,21 +1084,22 @@ function oeffentlich(t, doc, eigeneIds) {
     datumText: datumText(t.datum),
     zeit: `${t.start}\u2013${t.ende}`,
     plaetze: plaetzeVon(t),
-    angemeldet: Math.min(n, plaetzeVon(t)),
-    warteliste: Math.max(0, n - plaetzeVon(t)),
+    angemeldet: Math.min(n + kursVon(t), plaetzeVon(t)),
+    warteliste: Math.max(0, n - frei(t)),
+    kurs: kursVon(t),
     ausfall: !!doc.ausfall,
     kostenpflichtig: !t.verbindlich && imFristfenster(t),
     fristStunden: FRIST_STUNDEN,
     mindest: MINDEST,
     bestaetigt: !!doc.bestaetigt,
-    findetStatt: !doc.ausfall && (!!t.verbindlich || !!doc.bestaetigt || n >= MINDEST),
+    findetStatt: !doc.ausfall && (!!t.verbindlich || !!doc.bestaetigt || n + kursVon(t) >= MINDEST),
     verbindlich: !!t.verbindlich,
     arten: t.arten || null
   };
   if (eigeneIds.length) {
     res.eigene = {};
     doc.eintraege.forEach((e, i) => {
-      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < plaetzeVon(t) ? { status: "platz" } : { status: "warteliste", position: i - plaetzeVon(t) + 1 };
+      if (eigeneIds.includes(e.id)) res.eigene[e.id] = i < frei(t) ? { status: "platz" } : { status: "warteliste", position: i - frei(t) + 1 };
     });
   }
   return res;
@@ -1136,7 +1148,7 @@ async function abrechnen(st) {
     const { doc } = await lade(st, b.key);
     const soll = [];
     if (stattgefunden(doc)) {
-      doc.eintraege.slice(0, plaetzeVon(t)).forEach((e) => e.kartenId && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: "Teilnahme" }));
+      doc.eintraege.slice(0, frei(t)).forEach((e) => e.kartenId && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: "Teilnahme" }));
       doc.spaet.forEach((e) => e.kartenId && !e.erlassen && soll.push({ kartenId: e.kartenId, eintrag: e.id, art: "Sp\xE4te Absage", delta: /Hansefit/.test(e.art) ? -2 : -1 }));
     }
     sitzungen.push({ t, soll });
@@ -1215,7 +1227,9 @@ var anmeldung_default = async (req, context) => {
   PRODUKTION = !ctx || ctx === "production";
   const st = store();
   const url = new URL(req.url);
-  PLAN = (await ladePlan(st)).doc.termine;
+  const planDoc = (await ladePlan(st)).doc;
+  PLAN = planDoc.termine;
+  KURS = planDoc.praevention || {};
   if (req.method === "GET") {
     if (url.searchParams.get("admin") === "1") {
       if (!istAdmin(req)) return json({ fehler: "Schl\xFCssel stimmt nicht." }, 401);
@@ -1244,8 +1258,9 @@ var anmeldung_default = async (req, context) => {
           bestaetigt: !!doc.bestaetigt,
           mindest: MINDEST,
           plaetze: plaetzeVon(t),
+          kurs: kursVon(t),
           verbindlich: !!t.verbindlich,
-          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= plaetzeVon(t), kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId), email: e.email || "", bezahlt: !!e.bezahlt })),
+          eintraege: doc.eintraege.map((e, i) => ({ id: e.id, name: e.name, art: e.art, ts: e.ts, warteliste: i >= frei(t), kartenRest: restVon(e.kartenId), kartenName: nameVon(e.kartenId), email: e.email || "", bezahlt: !!e.bezahlt })),
           spaet: doc.spaet.map((e) => ({ id: e.id, name: e.name, kartenName: nameVon(e.kartenId), art: e.art, abgesagt: e.abgesagt, erlassen: !!e.erlassen }))
         });
       }
@@ -1319,14 +1334,20 @@ var anmeldung_default = async (req, context) => {
         titel: s.titel,
         zeit: s.ende ? `${s.start}\u2013${s.ende}` : s.start,
         anmeldung: s.anmeldung,
-        termine: (PLAN[s.id] || []).filter((d) => d >= heute).sort().map((d) => ({ datum: d, text: datumText(d) }))
+        termine: (PLAN[s.id] || []).filter((d) => d >= heute).sort().map((d) => ({ datum: d, text: datumText(d) })),
+        ...PRAEVENTION[s.id] ? { praevention: { titel: PRAEVENTION[s.id].titel, von: datumDE(PRAEVENTION[s.id].von), bis: datumDE(PRAEVENTION[s.id].bis), anzahl: KURS[s.id] || 0, plaetze: plaetzeVon(s) } } : {}
       })) });
     }
     const ids = (url.searchParams.get("ids") || "").split(",").filter((x) => /^[a-f0-9]{16}$/.test(x)).slice(0, 20);
     const out = [];
     for (const t of naechsteTermine()) out.push(oeffentlich(t, (await lade(st, t.key)).doc, ids));
     const spaeter = spaetereTermine().map((t) => ({ datumText: datumText(t.datum), titel: t.titel, zeit: `${t.start}\u2013${t.ende}` }));
-    return json({ termine: out, spaeter, info: infoTermine() });
+    const heuteP = jetztBerlin().datum;
+    const praevention = Object.entries(PRAEVENTION).filter(([, p]) => heuteP < p.von).map(([id, p]) => {
+      const s = STUNDEN.find((x) => x.id === id);
+      return { titel: p.titel, tag: WT[wochentag(p.von)], zeit: `${s.start}\u2013${s.ende}`, von: datumDE(p.von), bis: datumDE(p.bis), preis: p.preis };
+    });
+    return json({ termine: out, spaeter, info: infoTermine(), praevention, praeventionLink: PRAEVENTION_LINK });
   }
   if (req.method !== "POST") return json({ fehler: "Methode nicht erlaubt." }, 405);
   let body;
@@ -1371,7 +1392,7 @@ var anmeldung_default = async (req, context) => {
       if (karte && doc.eintraege.some((e) => e.kartenId === karte.id)) return { fehler: "Mit dieser Karte bist du f\xFCr diese Stunde schon eingetragen." };
       doc.eintraege.push({ id, name, art, ts: (/* @__PURE__ */ new Date()).toISOString(), tokenHash, ...email ? { email } : {}, ...karte ? { kartenId: karte.id } : {} });
       const i = doc.eintraege.length - 1;
-      return i < plaetzeVon(t) ? { status: "platz" } : { status: "warteliste", position: i - plaetzeVon(t) + 1 };
+      return i < frei(t) ? { status: "platz" } : { status: "warteliste", position: i - frei(t) + 1 };
     });
     if (r.fehler) return json(r, 409);
     if (Math.random() < 0.1) aufraeumen(st).catch(() => {
@@ -1393,10 +1414,10 @@ var anmeldung_default = async (req, context) => {
       const i = doc.eintraege.findIndex((e2) => e2.id === body.id && e2.tokenHash === tokenHash);
       if (i < 0) return { fehler: "Anmeldung nicht gefunden." };
       const t = terminAusKey(String(body.key || ""));
-      if (tb && tb.verbindlich && i < plaetzeVon(tb)) return { fehler: VERBINDLICH_HINWEIS, verbindlich: true };
+      if (tb && tb.verbindlich && i < frei(tb)) return { fehler: VERBINDLICH_HINWEIS, verbindlich: true };
       const [e] = doc.eintraege.splice(i, 1);
       const fenster = !!t && imFristfenster(t);
-      const spaet = fenster && i < plaetzeVon(t) && !doc.ausfall;
+      const spaet = fenster && i < frei(t) && !doc.ausfall;
       if (spaet) doc.spaet.push({ id: e.id, name: e.name, art: e.art, abgesagt: (/* @__PURE__ */ new Date()).toISOString(), ...e.kartenId ? { kartenId: e.kartenId } : {} });
       return { ok: true, spaet };
     });
@@ -1526,6 +1547,17 @@ var anmeldung_default = async (req, context) => {
       return n === doc.karten.length ? { fehler: "Karte nicht gefunden." } : { ok: true };
     }, ladeKarten);
     return json(r, r.fehler ? 404 : 200);
+  }
+  if (body.action === "plan_kurs") {
+    const p = PRAEVENTION[body.id];
+    const anzahl = Number(body.anzahl);
+    if (!p || !Number.isInteger(anzahl) || anzahl < 0 || anzahl > PLAETZE) return json({ fehler: `Bitte eine Zahl von 0 bis ${PLAETZE} eintragen.` }, 400);
+    const r = await aendern(st, PLAN_KEY, (doc) => {
+      doc.praevention = doc.praevention || {};
+      doc.praevention[body.id] = anzahl;
+      return { ok: true };
+    }, ladePlan);
+    return json(r, r.fehler ? 409 : 200);
   }
   if (body.action === "plan_dazu" || body.action === "plan_weg") {
     const kurs = [...STUNDEN, ...INFO_KURSE].find((x) => x.id === body.id);

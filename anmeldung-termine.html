@@ -46,6 +46,8 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
 .kurs li{padding:6px 0}
 .dazu{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
 .dazu input{width:auto;margin:0;padding:8px 10px}
+.praev{background:#EEF4EF;border:1px solid var(--sage);border-radius:10px;padding:12px 14px;margin-top:12px;font-size:.92rem}
+.praev .dazu input{width:80px}
 .typ{font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-light)}
 </style>
 </head>
@@ -86,6 +88,9 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
         (k.termine.length ? '<ul>' + k.termine.map(function (t) {
           return '<li><span>' + esc(t.text) + '</span><button class="x" title="Termin löschen" data-weg="' + t.datum + '">×</button></li>';
         }).join('') + '</ul>' : '<p class="leer">Keine Termine eingetragen.</p>') +
+        (k.praevention ? '<div class="praev">Präventionskurs ' + esc(k.praevention.titel) + ', ' + esc(k.praevention.von) + '–' + esc(k.praevention.bis) +
+          '<br>Gebuchte Kursteilnehmende eintragen. An den Kursterminen sind dann für Karten noch ' + (k.praevention.plaetze - k.praevention.anzahl) + ' von ' + k.praevention.plaetze + ' Plätzen frei.' +
+          '<div class="dazu"><input type="number" min="0" max="' + k.praevention.plaetze + '" value="' + k.praevention.anzahl + '" data-anzahl><button class="btn" data-kurs>Speichern</button></div></div>' : '') +
         '<div class="dazu"><input type="date"><button class="btn" data-dazu>Termin dazu</button></div><p class="fehler" hidden></p></div>';
     }).join('');
   }
@@ -94,6 +99,13 @@ h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:1.5r
     var b = ev.target.closest('button'); if (!b) return;
     var box = b.closest('.kurs'), id = box.getAttribute('data-id'), fe = box.querySelector('.fehler');
     fe.hidden = true;
+    if (b.hasAttribute('data-kurs')) {
+      post({ action: 'plan_kurs', id: id, anzahl: Number(box.querySelector('[data-anzahl]').value) }).then(function (r) {
+        if (r.fehler) { fe.textContent = r.fehler; fe.hidden = false; return; }
+        laden();
+      });
+      return;
+    }
     var d = b.hasAttribute('data-weg') ? { action: 'plan_weg', id: id, datum: b.getAttribute('data-weg') }
       : { action: 'plan_dazu', id: id, datum: box.querySelector('input[type=date]').value };
     if (!d.datum) { fe.textContent = 'Bitte ein Datum wählen.'; fe.hidden = false; return; }
