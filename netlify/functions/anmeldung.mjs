@@ -1150,11 +1150,30 @@ function stattgefunden(doc) {
   return !doc.ausfall;
 }
 var begonnen = (t) => minutenBis(t.datum, t.start) <= 0;
+function karteZumNamen(karten, name, datum) {
+  return karten.filter((k) => gleicherName(k.name, name) && k.gekauft <= datum && k.gueltigBis >= datum).sort((a, b) => b.gekauft.localeCompare(a.gekauft))[0] || null;
+}
 async function abrechnen(st) {
   const { blobs } = await st.list({ prefix: "s/" });
   const sitzungen = [];
+  const alleKarten = (await ladeKarten(st)).doc.karten;
   for (const b of blobs) {
     const t = terminAusKey(b.key);
+    if (t) {
+      await aendern(st, b.key, (doc2) => {
+        let n = 0;
+        for (const e of [...doc2.eintraege, ...doc2.spaet]) {
+          const k = e.art === VOR_ORT && !e.kartenId && karteZumNamen(alleKarten, e.name, t.datum);
+          if (k) {
+            e.kartenId = k.id;
+            e.art = `${k.typ}-Karte`;
+            n++;
+          }
+        }
+        return n ? { ok: true } : { unveraendert: true };
+      }).catch(() => {
+      });
+    }
     if (!t || !t.verbindlich && !begonnen(t)) continue;
     const { doc } = await lade(st, b.key);
     const soll = [];
@@ -1393,6 +1412,10 @@ var anmeldung_default = async (req, context) => {
     const email = t.verbindlich ? text(body.email, 120) : "";
     if (t.verbindlich && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ fehler: "Bitte trag deine E-Mail-Adresse ein. Dorthin schicke ich dir die Begleitung durch die Rauhn\xE4chte." }, 400);
     let karte = null;
+    if (art === VOR_ORT) {
+      karte = karteZumNamen((await ladeKarten(st)).doc.karten, name, t.datum);
+      if (karte) art = `${karte.typ}-Karte`;
+    }
     if (art === "Karte" || art === "KarteHansefit") {
       const code = normCode(body.code);
       karte = (await ladeKarten(st)).doc.karten.find((x) => x.code === code);

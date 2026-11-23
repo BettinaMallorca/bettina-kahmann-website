@@ -236,14 +236,31 @@ function stattgefunden(doc) {
   return !doc.ausfall;
 }
 const begonnen = (t) => minutenBis(t.datum, t.start) <= 0;
+// Gültige Karte mit genau diesem Namen am Tag der Stunde (die zuletzt gekaufte)
+function karteZumNamen(karten, name, datum) {
+  return karten.filter((k) => gleicherName(k.name, name) && k.gekauft <= datum && k.gueltigBis >= datum)
+    .sort((a, b) => b.gekauft.localeCompare(a.gekauft))[0] || null;
+}
 
 // Bucht vergangene Stunden auf die Karten. Läuft wiederholbar: Buchungen einer Stunde
 // werden neu berechnet, solange die Stunde gespeichert ist (28 Tage).
 async function abrechnen(st) {
   const { blobs } = await st.list({ prefix: 's/' });
   const sitzungen = [];
+  const alleKarten = (await ladeKarten(st)).doc.karten;
   for (const b of blobs) {
     const t = terminAusKey(b.key);
+    // „Kartenkauf vor Ort“ obwohl es schon eine Karte mit diesem Namen gibt: auf die Karte buchen
+    if (t) {
+      await aendern(st, b.key, (doc) => {
+        let n = 0;
+        for (const e of [...doc.eintraege, ...doc.spaet]) {
+          const k = e.art === VOR_ORT && !e.kartenId && karteZumNamen(alleKarten, e.name, t.datum);
+          if (k) { e.kartenId = k.id; e.art = `${k.typ}-Karte`; n++; }
+        }
+        return n ? { ok: true } : { unveraendert: true };
+      }).catch(() => {});
+    }
     // Verbindliche Sonderabende werden schon bei der Anmeldung abgebucht
     if (!t || (!t.verbindlich && !begonnen(t))) continue;
     const { doc } = await lade(st, b.key);
@@ -421,6 +438,10 @@ export default async (req, context) => {
     const email = t.verbindlich ? text(body.email, 120) : '';
     if (t.verbindlich && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ fehler: 'Bitte trag deine E-Mail-Adresse ein. Dorthin schicke ich dir die Begleitung durch die Rauhnächte.' }, 400);
     let karte = null;
+    if (art === VOR_ORT) {
+      karte = karteZumNamen((await ladeKarten(st)).doc.karten, name, t.datum);
+      if (karte) art = `${karte.typ}-Karte`;
+    }
     if (art === 'Karte' || art === 'KarteHansefit') {
       const code = normCode(body.code);
       karte = (await ladeKarten(st)).doc.karten.find((x) => x.code === code);
