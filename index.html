@@ -858,8 +858,28 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 <img alt="Bettina Kahmann – Yoga &amp; Nervensystem" src="/bettina-yoga-tanzhaltung-hero.jpg" width="987" height="1216"/>
 </div>
 </section>
-<!-- PK-LEISTE: Text bei jedem neuen Online-Präventionskurs anpassen -->
-<a href="/praeventionskurse-online" class="pk-leiste" style="display:block;text-decoration:none;background:#993A74;color:#fff;padding:1rem 6vw;text-align:center;font-family:'DM Sans',Arial,sans-serif;font-size:.98rem;line-height:1.5">Neu ab 17. Januar 2027: Hatha Yoga als zertifizierter Präventionskurs live online, sonntags 9 Uhr. Viele Krankenkassen bezuschussen den Kurs. <span style="font-weight:600;text-decoration:underline;white-space:nowrap">Zum Online-Präventionskurs</span></a>
+<!-- PK-LEISTE: bei jeder neuen Präventionskurs-Runde Termine anpassen -->
+<style id="pk-leiste-css">
+.pk-leiste{background:#993A74;color:#fff;padding:1.6rem 6vw 1.7rem;text-align:center;font-family:'DM Sans',Arial,sans-serif}
+.pk-leiste .pk-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.55rem;line-height:1.2;margin:0 0 .3rem}
+.pk-leiste .pk-sub{font-size:.95rem;line-height:1.5;opacity:.9;margin:0 0 1.1rem}
+.pk-leiste .pk-list{list-style:none;margin:0 auto;padding:0;max-width:560px;text-align:left}
+.pk-leiste .pk-list a{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.85rem 0;border-top:1px solid rgba(255,255,255,.25);color:#fff;text-decoration:none;font-size:.95rem;line-height:1.45}
+.pk-leiste .pk-list li:last-child a{border-bottom:1px solid rgba(255,255,255,.25)}
+.pk-leiste .pk-list span.pk-when{display:block;font-size:.82rem;opacity:.85}
+.pk-leiste .pk-list b{font-weight:600}
+.pk-leiste .pk-arrow{flex-shrink:0;font-size:1.1rem}
+.pk-leiste .pk-list a:hover b,.pk-leiste .pk-list a:focus-visible b{text-decoration:underline}
+</style>
+<div class="pk-leiste">
+<p class="pk-title">Neue Präventionskurse ab Januar</p>
+<p class="pk-sub">Acht Wochen, zertifiziert nach §20 SGB V. Viele Krankenkassen bezuschussen die Kurse.</p>
+<ul class="pk-list">
+<li><a href="/praeventionskurse-online"><span><b>Hatha Yoga live online</b><span class="pk-when">sonntags 9 Uhr, ab 17. Januar · per Zoom</span></span><span class="pk-arrow">→</span></a></li>
+<li><a href="/praeventionskurse-wedemark"><span><b>Hatha Yoga vor Ort</b><span class="pk-when">dienstags 18 Uhr, ab 19. Januar · Sport- und Tanzhaus Elze</span></span><span class="pk-arrow">→</span></a></li>
+<li><a href="/praeventionskurse-wedemark"><span><b>Yin Yoga vor Ort</b><span class="pk-when">dienstags 19:30 Uhr, ab 19. Januar · Sport- und Tanzhaus Elze</span></span><span class="pk-arrow">→</span></a></li>
+</ul>
+</div>
 <!-- ══════════════════════════════════
      STATS
 ══════════════════════════════════ -->
