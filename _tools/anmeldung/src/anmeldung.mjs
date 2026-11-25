@@ -437,7 +437,7 @@ export default async (req, context) => {
     if (t.arten && !t.arten.includes(art)) return json({ fehler: 'Für diesen Abend meldest du dich hier mit deiner Karte an. Kommst du nur über Hansefit oder epassi, buchst du über bettina-kahmann.com/rauhnaechte mit dem Code hansefit12.' }, 400);
     const email = t.verbindlich ? text(body.email, 120) : '';
     if (t.verbindlich && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return json({ fehler: 'Bitte trag deine E-Mail-Adresse ein. Dorthin schicke ich dir die Begleitung durch die Rauhnächte.' }, 400);
-    let karte = null;
+    let karte = null, neuerCode = '';
     if (art === VOR_ORT) {
       karte = karteZumNamen((await ladeKarten(st)).doc.karten, name, t.datum);
       if (karte) art = `${karte.typ}-Karte`;
@@ -457,6 +457,11 @@ export default async (req, context) => {
         karte = r.karte || null;
       }
       if (!karte) return json({ fehler: 'Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich in der WhatsApp-Gruppe.' }, 400);
+      // Alter Code, Karte abgelaufen oder voll: auf eine neuere gültige Karte mit demselben Namen buchen
+      if (karte.gueltigBis < t.datum || rest(karte) <= 0) {
+        const n = karteZumNamen((await ladeKarten(st)).doc.karten, karte.name, t.datum);
+        if (n && n.id !== karte.id && n.gekauft >= karte.gekauft && rest(n) > 0) { karte = n; neuerCode = n.code; }
+      }
       art = `${karte.typ}-Karte` + (art === 'KarteHansefit' ? ' + Hansefit/epassi' : '');
     }
     const id = zufall(8), token = zufall(16), tokenHash = await sha(token);
@@ -476,7 +481,7 @@ export default async (req, context) => {
       const k = (await ladeKarten(st)).doc.karten.find((x) => x.id === karte.id);
       kartenInfo = { kartenRest: rest(k), kartenAbgelaufen: k.gueltigBis < jetztBerlin().datum };
     }
-    return json({ ok: true, id, token, key: t.key, ...r, ...kartenInfo, verbindlich: !!t.verbindlich && r.status === 'platz' });
+    return json({ ok: true, id, token, key: t.key, ...r, ...kartenInfo, ...(neuerCode ? { neuerCode } : {}), verbindlich: !!t.verbindlich && r.status === 'platz' });
   }
 
   if (body.action === 'abmelden') {

@@ -291,11 +291,12 @@ input:focus,select:focus{outline:2px solid var(--sage);outline-offset:1px}
         if (!d.ok) { fehler.textContent = d.fehler || 'Das hat nicht geklappt.'; fehler.hidden = false; knopf.disabled = false; knopf.textContent = 'Eintragen'; return; }
         schreib('bv-anm-name', daten.name); schreib('bv-anm-art', daten.art); if (daten.email) schreib('bv-anm-email', daten.email); frisch[key] = true;
         if (daten.art === 'Karte' || daten.art === 'KarteHansefit') {
-          schreib('bv-karten-code', daten.code.toUpperCase());
+          schreib('bv-karten-code', (d.neuerCode || daten.code).toUpperCase());
           kartenHinweis[key] = d.kartenAbgelaufen ? 'Deine Karte ist abgelaufen. Du bist trotzdem eingetragen. Sprich mich in der Stunde an.'
             : d.kartenRest < (d.verbindlich ? 0 : 1) ? 'Deine Karte ist voll. Du bist trotzdem eingetragen. Eine neue Karte bekommst du bei mir, bar in der Stunde. Lieber per PayPal? Dann schreib mir.'
             : d.verbindlich ? 'Die Stunde für diesen Abend ist schon von deiner Karte abgezogen. Jetzt sind noch ' + d.kartenRest + (d.kartenRest === 1 ? ' Stunde' : ' Stunden') + ' darauf.'
             : 'Auf deiner Karte sind noch ' + d.kartenRest + (d.kartenRest === 1 ? ' Stunde' : ' Stunden') + '. Diese Stunde wird abgezogen, wenn sie stattgefunden hat.';
+          if (d.neuerCode) kartenHinweis[key] = 'Ich habe dich auf deine neue Karte gebucht. ' + kartenHinweis[key];
           if (daten.art === 'KarteHansefit') kartenHinweis[key] += ' Denk in der Stunde an den QR-Code von Hansefit oder epassi.';
         }
         if (daten.art === 'Kartenkauf vor Ort') kartenHinweis[key] = 'Deine neue Karte bekommst du in der Stunde bei mir. Diese Stunde wird dann von ihr abgezogen, und du bekommst deinen Kartencode.';
