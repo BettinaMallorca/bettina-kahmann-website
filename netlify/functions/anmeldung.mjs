@@ -1355,10 +1355,19 @@ var anmeldung_default = async (req, context) => {
       const kd = (await ladeKarten(st)).doc;
       const gs = kd.gutscheine.find((x) => x.code === code && x.status === "bezahlt");
       if (gs) return json({ gutschein: true, vorname: gs.fuer.split(" ")[0], typ: gs.typ, stunden: KARTEN[gs.typ].stunden, monate: KARTEN[gs.typ].monate, gueltigBis: datumDE(gs.gueltigBis) });
-      const k = kd.karten.find((x) => x.code === code);
+      let k = kd.karten.find((x) => x.code === code);
       if (!k) return json({ fehler: "Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich." }, 404);
+      let neuerCode2 = "";
+      if (karteAdmin(k).abgelaufen || rest(k) <= 0) {
+        const n = karteZumNamen(kd.karten, k.name, jetztBerlin().datum);
+        if (n && n.id !== k.id && n.gekauft >= k.gekauft) {
+          k = n;
+          neuerCode2 = n.code;
+        }
+      }
       const a = karteAdmin(k);
       return json({
+        ...neuerCode2 ? { neuerCode: neuerCode2 } : {},
         vorname: k.name.split(" ")[0],
         typ: k.typ,
         stunden: k.stunden,

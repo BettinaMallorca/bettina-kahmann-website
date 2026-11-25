@@ -92,8 +92,10 @@ li span:last-child{color:var(--text-light);white-space:nowrap}
       .then(function (r) { return r.json(); })
       .then(function (d) {
         if (d.fehler) { fehler.textContent = d.fehler; fehler.hidden = false; return; }
+        if (d.neuerCode) { code = d.neuerCode; feld.value = code; }
         try { localStorage.setItem('bv-karten-code', JSON.stringify(code.toUpperCase())); } catch (e) {}
         zeigen(d);
+        if (d.neuerCode) erg.insertAdjacentHTML('afterbegin', '<div class="hinweis">Das ist deine neue Karte. Dein neuer Code: ' + esc(d.neuerCode) + '</div>');
       })
       .catch(function () { fehler.textContent = 'Keine Verbindung. Bitte versuch es noch einmal.'; fehler.hidden = false; });
   }

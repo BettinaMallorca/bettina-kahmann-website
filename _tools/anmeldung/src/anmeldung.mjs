@@ -393,10 +393,16 @@ export default async (req, context) => {
       const kd = (await ladeKarten(st)).doc;
       const gs = kd.gutscheine.find((x) => x.code === code && x.status === 'bezahlt');
       if (gs) return json({ gutschein: true, vorname: gs.fuer.split(' ')[0], typ: gs.typ, stunden: KARTEN[gs.typ].stunden, monate: KARTEN[gs.typ].monate, gueltigBis: datumDE(gs.gueltigBis) });
-      const k = kd.karten.find((x) => x.code === code);
+      let k = kd.karten.find((x) => x.code === code);
       if (!k) return json({ fehler: 'Diesen Kartencode gibt es nicht. Schau noch einmal nach oder frag mich.' }, 404);
+      // Alter Code einer abgelaufenen oder vollen Karte: die neuere Karte mit demselben Namen zeigen
+      let neuerCode = '';
+      if (karteAdmin(k).abgelaufen || rest(k) <= 0) {
+        const n = karteZumNamen(kd.karten, k.name, jetztBerlin().datum);
+        if (n && n.id !== k.id && n.gekauft >= k.gekauft) { k = n; neuerCode = n.code; }
+      }
       const a = karteAdmin(k);
-      return json({ vorname: k.name.split(' ')[0], typ: k.typ, stunden: k.stunden, rest: a.rest, gueltigBis: datumDE(k.gueltigBis), abgelaufen: a.abgelaufen, uebertrag: k.gekauft < STICHTAG_VERFALL,
+      return json({ ...(neuerCode ? { neuerCode } : {}), vorname: k.name.split(' ')[0], typ: k.typ, stunden: k.stunden, rest: a.rest, gueltigBis: datumDE(k.gueltigBis), abgelaufen: a.abgelaufen, uebertrag: k.gekauft < STICHTAG_VERFALL,
         verlauf: k.buchungen.map((b) => ({ datum: b.datum ? datumText(b.datum) : '', titel: b.titel || b.notiz || 'Korrektur', art: b.art, delta: b.delta })) });
     }
     if (url.searchParams.get('plan') === '1') {
