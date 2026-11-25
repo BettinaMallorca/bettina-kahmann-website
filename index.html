@@ -198,20 +198,23 @@
 
     /* ── STATS STRIP ── */
     .stats-strip {
-      background: var(--terra-dark);
+      background: var(--cream-dark);
       display: grid; grid-template-columns: repeat(4,1fr);
-      padding: 3rem 0;
+      gap: 2rem; padding: 3.5rem 6vw;
     }
-    .stat-item { text-align: center; padding: 0 1rem; border-right: 1px solid rgba(255,255,255,0.1); }
-    .stat-item:last-child { border-right: none; }
+    .stat-item { text-align: center; }
     .stat-num {
-      font-family: var(--fd); font-size: clamp(2.5rem,5vw,4rem);
-      color: #FAF6F1; font-weight: 400; line-height: 1;
-      display: block; margin-bottom: 0.5rem;
+      font-family: var(--fd); font-size: clamp(2.8rem,5vw,4.2rem);
+      color: var(--terra-dark); font-weight: 400; line-height: 1;
+      display: block; margin-bottom: 0.7rem;
     }
     .stat-lbl {
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em;
-      text-transform: uppercase; color: rgba(250,246,241,0.85);
+      display: block; font-size: 0.98rem; font-weight: 600;
+      color: var(--text); line-height: 1.35;
+    }
+    .stat-sub {
+      display: block; font-size: 0.86rem; color: #6b5448;
+      line-height: 1.45; margin-top: 0.25rem;
     }
 
     /* ── ANGEBOTE CARDS ── */
@@ -516,7 +519,7 @@
       .hero-left { padding: 3rem 1.5rem; }
       .hero-img { height: 55vw; max-height: 420px; }
 
-      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .stats-strip { grid-template-columns: 1fr 1fr; gap: 2.4rem 1.2rem; padding: 2.8rem 6vw; }
       .angebote-grid { grid-template-columns: 1fr 1fr; }
       .warum-grid { grid-template-columns: 1fr; gap: 3rem; }
       .about-grid { grid-template-columns: 1fr; }
@@ -534,7 +537,7 @@
     }
 
     @media (max-width: 640px) {
-      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .stats-strip { grid-template-columns: 1fr 1fr; gap: 2.4rem 1.2rem; padding: 2.8rem 6vw; }
       .angebote-grid { grid-template-columns: 1fr; }
       .guides-grid { grid-template-columns: 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
@@ -872,6 +875,31 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 <img alt="Bettina Kahmann – Yoga &amp; Nervensystem" src="/bettina-yoga-tanzhaltung-hero.jpg" width="987" height="1216"/>
 </div>
 </section>
+<!-- ══════════════════════════════════
+     KENNZAHLEN
+══════════════════════════════════ -->
+<div class="stats-strip" aria-label="Erfahrung und Qualifikation">
+<div class="stat-item">
+<span class="stat-num">7.000+</span>
+<span class="stat-lbl">Frauen begleitet</span>
+<span class="stat-sub">In Kursen, Trainings und Workshops</span>
+</div>
+<div class="stat-item">
+<span class="stat-num">30</span>
+<span class="stat-lbl">Jahre Erfahrung</span>
+<span class="stat-sub">Im Bewegungstraining</span>
+</div>
+<div class="stat-item">
+<span class="stat-num">400+</span>
+<span class="stat-lbl">Online-Videos</span>
+<span class="stat-sub">Für Bewegung und Entspannung</span>
+</div>
+<div class="stat-item">
+<span class="stat-num">§&nbsp;20</span>
+<span class="stat-lbl">Zertifizierte Präventionskurse</span>
+<span class="stat-sub">Mit Krankenkassenzuschuss</span>
+</div>
+</div>
 <!-- PK-LEISTE: bei jeder neuen Präventionskurs-Runde Termine anpassen -->
 <style id="pk-leiste-css">
 .pk-leiste{background:#993A74;color:#fff;padding:1.6rem 6vw 1.7rem;text-align:center;font-family:'DM Sans',Arial,sans-serif}
@@ -893,27 +921,6 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 <li><a href="/praeventionskurse-wedemark"><span><b>Hatha Yoga vor Ort</b><span class="pk-when">dienstags 18 Uhr, ab 19. Januar · Sport- und Tanzhaus Elze</span></span><span class="pk-arrow">→</span></a></li>
 <li><a href="/praeventionskurse-wedemark"><span><b>Yin Yoga vor Ort</b><span class="pk-when">dienstags 19:30 Uhr, ab 19. Januar · Sport- und Tanzhaus Elze</span></span><span class="pk-arrow">→</span></a></li>
 </ul>
-</div>
-<!-- ══════════════════════════════════
-     STATS
-══════════════════════════════════ -->
-<div class="stats-strip">
-<div class="stat-item">
-<span class="stat-num">7.000+</span>
-<span class="stat-lbl">Frauen begleitet</span>
-</div>
-<div class="stat-item">
-<span class="stat-num">30</span>
-<span class="stat-lbl">Jahre Erfahrung</span>
-</div>
-<div class="stat-item">
-<span class="stat-num">400+</span>
-<span class="stat-lbl">Online-Videos</span>
-</div>
-<div class="stat-item">
-<span class="stat-num">§20</span>
-<span class="stat-lbl">Präventionskurse</span>
-</div>
 </div>
 <a href="/gutschein" class="gs-teaser" style="display:block;max-width:880px;width:calc(100% - 2.5rem);margin:2.5rem auto 0;padding:1.4rem 1.6rem;background:#F0E8DE;border-radius:18px;text-decoration:none;color:#3D2B22;text-align:center">
 <span style="display:block;font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#8C492E" id="gs-teaser-eyebrow">Geschenkidee</span>
