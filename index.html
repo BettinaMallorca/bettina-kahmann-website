@@ -206,12 +206,12 @@
     .stat-item:last-child { border-right: none; }
     .stat-num {
       font-family: var(--fd); font-size: clamp(2.5rem,5vw,4rem);
-      color: rgba(250,246,241,0.18); font-weight: 400; line-height: 1;
+      color: #FAF6F1; font-weight: 400; line-height: 1;
       display: block; margin-bottom: 0.5rem;
     }
     .stat-lbl {
       font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em;
-      text-transform: uppercase; color: rgba(250,246,241,0.5);
+      text-transform: uppercase; color: rgba(250,246,241,0.85);
     }
 
     /* ── ANGEBOTE CARDS ── */
@@ -503,8 +503,8 @@
     .footer-bot p { font-size: 0.73rem; }
 
     /* ── FADE IN ── */
-    .fade { opacity: 0; transform: translateY(25px); transition: opacity 0.6s ease, transform 0.6s ease; }
-    .fade.in { opacity: 1; transform: none; }
+    /* Inhalte sind sofort sichtbar, keine Einblende-Animation mehr */
+    .fade, .fade.in { opacity: 1; transform: none; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 1100px) {
@@ -724,7 +724,7 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 #nav{top:calc(var(--amb-h) + 3px)!important}
 #mob-menu{top:calc(var(--amb-h) + 75px)!important;max-height:calc(100vh - var(--amb-h) - 75px);overflow-y:auto}
 #hero{padding-top:calc(75px + var(--amb-h))}
-@media(max-width:900px){.amb-long{display:none}.amb-short{display:inline}}
+@media(max-width:900px){.amb-long{display:none}.amb-short{display:inline}.amb-bar .amb-more{display:none}}
 @media(max-width:620px){:root{--amb-h:34px}.amb-bar{font-size:.7rem;letter-spacing:.03em;padding:0 10px}.amb-bar b{letter-spacing:.1em}.amb-bar .amb-more{letter-spacing:.05em}}
 @media(max-width:360px){.amb-bar{font-size:.64rem;letter-spacing:.02em}.amb-bar .amb-sep{margin:0 .45em}.amb-bar .amb-more{letter-spacing:.03em}}
 </style>
@@ -736,9 +736,10 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 </script>
 <style id="nav-fit">#nav .nav-links>li>a{white-space:nowrap}@media(max-width:1280px){#nav{padding:0 1.5rem!important}#nav .nav-links{gap:1.05rem!important}#nav .nav-links a{letter-spacing:.12em!important}}@media(max-width:1000px){#nav .nav-links{display:none!important}#nav .hamburger{display:flex!important}}</style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "@id": "https://bettina-kahmann.com/#business", "name": "beVital InsideOut", "url": "https://bettina-kahmann.com/", "image": "https://bettina-kahmann.com/og-image.jpg", "logo": "https://bettina-kahmann.com/LOGO.png", "description": "Yoga, Atemarbeit und Präventionskurse nach §20 SGB V mit Bettina Kahmann, in der Wedemark und online.", "telephone": "+49 5130 960543", "email": "info@bettina-kahmann.com", "address": {"@type": "PostalAddress", "streetAddress": "Auf dem großen Kampe 29", "postalCode": "30900", "addressLocality": "Wedemark", "addressCountry": "DE"}, "areaServed": ["Wedemark", "Deutschland"], "founder": {"@type": "Person", "name": "Bettina Kahmann", "url": "https://bettina-kahmann.com/ueber-mich"}, "location": {"@type": "Place", "name": "Sport- und Tanzhaus Elze", "address": {"@type": "PostalAddress", "streetAddress": "Kuckucksweg 90", "addressLocality": "Wedemark-Elze", "addressCountry": "DE"}}, "sameAs": ["https://www.instagram.com/be_vital_insideout", "https://www.youtube.com/@be_vital_insideout"]}</script>
+<style id="startseite-reihenfolge">#warum{background:var(--cream)!important}.personal-section{background:var(--cream-dark)!important}.nl-section{background:var(--cream)!important}</style>
 </head>
 <body>
-<a class="amb-bar" href="/atemanker" aria-label="Neu: ATEMANKER – Zur Ruhe kommen, wenn dein Kopf weitermacht. Start direkt nach dem Kauf. Mehr erfahren."><b>NEU</b><span class="amb-sep">·</span><span class="amb-long">ATEMANKER – Zur Ruhe kommen, wenn dein Kopf weitermacht<span class="amb-sep">·</span>Start direkt nach dem Kauf<span class="amb-sep">·</span></span><span class="amb-short">ATEMANKER<span class="amb-sep">·</span>Start sofort<span class="amb-sep">·</span></span><span class="amb-more">MEHR ERFAHREN<span class="amb-arrow">→</span></span></a>
+<a class="amb-bar" href="/atemanker" aria-label="Neu: ATEMANKER – Zur Ruhe kommen, wenn dein Kopf weitermacht. Start direkt nach dem Kauf. Mehr erfahren."><b>NEU</b><span class="amb-sep">·</span><span class="amb-long">ATEMANKER – Zur Ruhe kommen, wenn dein Kopf weitermacht<span class="amb-sep">·</span>Start direkt nach dem Kauf<span class="amb-sep">·</span></span><span class="amb-short">ATEMANKER<span class="amb-sep">·</span>Ruhe, wenn der Kopf weitermacht<span class="amb-arrow">→</span></span><span class="amb-more">MEHR ERFAHREN<span class="amb-arrow">→</span></span></a>
 <div id="prog"></div>
 <!-- NAV -->
 <nav id="nav">
@@ -841,18 +842,16 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 <div class="hero-left fade">
 <div class="hero-tag">Yoga · Atemarbeit · Nervensystem</div>
 <h1 class="hero-h1">
-      Dein Körper<br/>
-      weiß, wie sich<br/>
-<em>Ruhe anfühlt.</em>
+      Yoga gegen<br/>
+<em>Dauerstress.</em>
 </h1>
 <p class="hero-sub">
-      Ich zeige dir, wie du ihn daran erinnerst – mit Yoga,
-      Atemarbeit und gezielter Nervensystem-Regulation.
-      Vor Ort in der Wedemark und online.
+      Für dich, wenn du ständig unter Strom stehst und abends nicht mehr abschalten kannst.
+      Vor Ort in der Wedemark und live online. Viele Krankenkassen bezuschussen meine Präventionskurse.
     </p>
 <div class="hero-ctas">
-<a class="btn-pink" href="#angebote">Meine Angebote</a>
-<a class="btn-outline-terra" href="#kurse">Kursplan ansehen</a>
+<a class="btn-pink" href="#kurse">Stunde finden und buchen</a>
+<a class="btn-outline-terra" href="#angebote">Alle Angebote</a>
 </div>
 </div>
 <div class="hero-img">
@@ -954,68 +953,7 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 </div>
 </section>
 
-<section id="kostenlos-fuer-dich" class="free-section"><div class="free-inner"><div class="free-eyebrow">Gratis für dich</div><h2 class="free-title">Kleine Impulse.<br>Direkt für deinen Alltag.</h2><p class="free-intro">Drei ausgewählte kostenlose Übungen – und auf der Gratis-Seite findest du alle sechs.</p><div class="free-grid"><a class="free-card" href="/nervensystem-3-minuten"><div class="free-tag">3 Minuten</div><h3>Nervensystem</h3><p>Kurze Übung zum Ankommen und Regulieren.</p><span class="free-link">Übung ansehen →</span></a><a class="free-card" href="/reset"><div class="free-tag">5 Tage · 5 Audios</div><h3>Nervensystem-RESET</h3><p>Deine kurze tägliche RESET-Praxis.</p><span class="free-link">RESET starten →</span></a><a class="free-card" href="/yoga-ruecken"><div class="free-tag">5 Minuten</div><h3>Yoga für deinen Rücken</h3><p>Drei Positionen für zwischendurch.</p><span class="free-link">Rücken-Goodie →</span></a></div><div style="text-align:center;margin-top:2.5rem"><a class="btn-nav" href="/gratis">Alle Gratis-Inhalte ansehen →</a><p style="margin-top:0.9rem;font-size:0.83rem;color:var(--muted)">Oder direkt <a href="/rezeptheft" style="color:var(--pink);font-weight:500;text-decoration:underline;">zum kostenlosen Rezeptheft →</a></p></div></div></section>
-<!-- ══════════════════════════════════
-     WARUM
-══════════════════════════════════ -->
-<section class="section" id="warum">
-<div class="container">
-<div class="warum-grid fade">
-<div class="warum-content">
-<div class="eyebrow left" style="justify-content:flex-start;">Warum beVital InsideOut</div>
-<h2 style="font-family:var(--fd); font-size:clamp(2rem,3.5vw,3.2rem); font-weight:400; line-height:1.1; color:var(--text); margin-bottom:1.2rem;">
-          Erschöpfung ist kein<br/><em style="color:var(--pink); font-style:italic;">Charakterfehler.</em>
-</h2>
-<p class="lead" style="margin-bottom:1rem;">Du funktionierst. Du organisierst. Du hältst zusammen. Und irgendwo dabei bist du dir selbst abhanden gekommen.</p>
-<p class="lead" style="margin-bottom:1rem;">Stress, Schlafprobleme, Verspannungen – das sind keine Schwächen. Das sind Signale eines Nervensystems, das zu lange unter Dauerstrom stand.</p>
-<p class="lead" style="margin-bottom:2rem;">Genau da setze ich an. Nicht mit Wellness-Ritualen, sondern mit wirksamen Methoden, die dein Nervensystem wirklich regulieren.</p>
-<a class="btn-pink" href="#angebote">Was passt zu mir? →</a>
-</div>
-<div class="warum-quote">
-<blockquote>Ich habe nach der ersten Woche gemerkt, dass ich abends tatsächlich abschalten kann. Das kannte ich kaum noch.</blockquote>
-<div class="warum-who">Nicole – Mitglied im LIVE Yoga Studio</div>
-</div>
-</div>
-</div>
-</section>
-<!-- ══════════════════════════════════
-     ÜBER MICH
-══════════════════════════════════ -->
-<style id="personal-section-css">
-.personal-section{background:#FAF6F1}
-.personal-grid{display:grid;grid-template-columns:380px 1fr;gap:4.5rem;align-items:center}
-.personal-photo{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 16px 40px rgba(61,43,34,.10)}
-.personal-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
-.personal-mark{font-family:var(--fd);font-size:2.4rem;line-height:1;color:#C17B52;margin-bottom:.4rem;font-style:italic}
-.personal-quote{font-family:var(--fd);font-size:clamp(1.6rem,2.6vw,2.3rem);font-weight:400;line-height:1.35;color:var(--text);margin-bottom:1.5rem}
-.personal-quote em{font-style:italic;color:var(--pink)}
-.personal-byline{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);margin-bottom:1.8rem}
-.personal-text{font-size:.97rem;color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:1.6rem;max-width:480px}
-.personal-link{font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--terra-dark);text-decoration:none;border-bottom:1px solid rgba(140,73,46,.35);padding-bottom:2px;transition:color .2s ease,border-color .2s ease}
-.personal-link:hover{color:var(--pink);border-color:var(--pink)}
-@media(max-width:1100px){
-  .personal-grid{grid-template-columns:1fr;gap:3rem}
-  .personal-photo{max-width:340px;margin:0 auto}
-  .personal-content{text-align:center}
-  .personal-text{margin-left:auto;margin-right:auto}
-}
-</style>
-<section class="section personal-section" id="persoenlich">
-<div class="container">
-<div class="personal-grid fade">
-<div class="personal-photo">
-<img alt="Bettina Kahmann – Yogalehrerin bei beVital InsideOut" src="/bettina-portrait-start.jpg" width="980" height="1306"/>
-</div>
-<div class="personal-content">
-<div class="personal-mark">&bdquo;</div>
-<p class="personal-quote">Dein Körper kennt den Weg in die Entspannung.<br/><em>Du musst ihm nur die Zeit geben.</em></p>
-<div class="personal-byline">Bettina Kahmann · Yogalehrerin</div>
-<p class="personal-text">Genau darum geht es in meinen Stunden: deinem Körper wieder Raum für Ruhe, Bewegung und Wahrnehmung zu geben.</p>
-<a class="personal-link" href="/ueber-mich">Mehr über mich →</a>
-</div>
-</div>
-</div>
-</section>
+
 <!-- ══════════════════════════════════
      KURSPLAN
 ══════════════════════════════════ -->
@@ -1141,6 +1079,67 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 </div>
 </section>
 <!-- ══════════════════════════════════
+     WARUM
+══════════════════════════════════ -->
+<section class="section" id="warum">
+<div class="container">
+<div class="warum-grid fade">
+<div class="warum-content">
+<div class="eyebrow left" style="justify-content:flex-start;">Warum beVital InsideOut</div>
+<h2 style="font-family:var(--fd); font-size:clamp(2rem,3.5vw,3.2rem); font-weight:400; line-height:1.1; color:var(--text); margin-bottom:1.2rem;">
+          Erschöpfung ist kein<br/><em style="color:var(--pink); font-style:italic;">Charakterfehler.</em>
+</h2>
+<p class="lead" style="margin-bottom:1rem;">Du funktionierst. Du organisierst. Du hältst zusammen. Und irgendwo dabei bist du dir selbst abhanden gekommen.</p>
+<p class="lead" style="margin-bottom:1rem;">Stress, Schlafprobleme, Verspannungen – das sind keine Schwächen. Das sind Signale eines Nervensystems, das zu lange unter Dauerstrom stand.</p>
+<p class="lead" style="margin-bottom:2rem;">Genau da setze ich an. Nicht mit Wellness-Ritualen, sondern mit wirksamen Methoden, die dein Nervensystem wirklich regulieren.</p>
+<a class="btn-pink" href="#angebote">Was passt zu mir? →</a>
+</div>
+<div class="warum-quote">
+<blockquote>Ich habe nach der ersten Woche gemerkt, dass ich abends tatsächlich abschalten kann. Das kannte ich kaum noch.</blockquote>
+<div class="warum-who">Nicole – Mitglied im LIVE Yoga Studio</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ══════════════════════════════════
+     ÜBER MICH
+══════════════════════════════════ -->
+<style id="personal-section-css">
+.personal-section{background:#FAF6F1}
+.personal-grid{display:grid;grid-template-columns:380px 1fr;gap:4.5rem;align-items:center}
+.personal-photo{position:relative;border-radius:4px;overflow:hidden;aspect-ratio:3/4;box-shadow:0 16px 40px rgba(61,43,34,.10)}
+.personal-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.personal-mark{font-family:var(--fd);font-size:2.4rem;line-height:1;color:#C17B52;margin-bottom:.4rem;font-style:italic}
+.personal-quote{font-family:var(--fd);font-size:clamp(1.6rem,2.6vw,2.3rem);font-weight:400;line-height:1.35;color:var(--text);margin-bottom:1.5rem}
+.personal-quote em{font-style:italic;color:var(--pink)}
+.personal-byline{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);margin-bottom:1.8rem}
+.personal-text{font-size:.97rem;color:var(--muted);line-height:1.8;font-weight:300;margin-bottom:1.6rem;max-width:480px}
+.personal-link{font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--terra-dark);text-decoration:none;border-bottom:1px solid rgba(140,73,46,.35);padding-bottom:2px;transition:color .2s ease,border-color .2s ease}
+.personal-link:hover{color:var(--pink);border-color:var(--pink)}
+@media(max-width:1100px){
+  .personal-grid{grid-template-columns:1fr;gap:3rem}
+  .personal-photo{max-width:340px;margin:0 auto}
+  .personal-content{text-align:center}
+  .personal-text{margin-left:auto;margin-right:auto}
+}
+</style>
+<section class="section personal-section" id="persoenlich">
+<div class="container">
+<div class="personal-grid fade">
+<div class="personal-photo">
+<img alt="Bettina Kahmann – Yogalehrerin bei beVital InsideOut" src="/bettina-portrait-start.jpg" width="980" height="1306"/>
+</div>
+<div class="personal-content">
+<div class="personal-mark">&bdquo;</div>
+<p class="personal-quote">Dein Körper kennt den Weg in die Entspannung.<br/><em>Du musst ihm nur die Zeit geben.</em></p>
+<div class="personal-byline">Bettina Kahmann · Yogalehrerin</div>
+<p class="personal-text">Genau darum geht es in meinen Stunden: deinem Körper wieder Raum für Ruhe, Bewegung und Wahrnehmung zu geben.</p>
+<a class="personal-link" href="/ueber-mich">Mehr über mich →</a>
+</div>
+</div>
+</div>
+</section>
+<!-- ══════════════════════════════════
      TESTIMONIALS
 ══════════════════════════════════ -->
 <section id="testimonials">
@@ -1173,6 +1172,7 @@ html{scroll-padding-top:calc(var(--amb-h) + 80px)}
 </div>
 </div>
 </section>
+<section id="kostenlos-fuer-dich" class="free-section"><div class="free-inner"><div class="free-eyebrow">Gratis für dich</div><h2 class="free-title">Kleine Impulse.<br>Direkt für deinen Alltag.</h2><p class="free-intro">Drei kurze Übungen, die du heute noch zu Hause ausprobieren kannst. Alle sechs findest du auf der Gratis-Seite.</p><div class="free-grid"><a class="free-card" href="/nervensystem-3-minuten"><div class="free-tag">3 Minuten</div><h3>Nervensystem</h3><p>Kurze Übung zum Ankommen und Regulieren.</p><span class="free-link">Übung ansehen →</span></a><a class="free-card" href="/reset"><div class="free-tag">5 Tage · 5 Audios</div><h3>Nervensystem-RESET</h3><p>Deine kurze tägliche RESET-Praxis.</p><span class="free-link">RESET starten →</span></a><a class="free-card" href="/yoga-ruecken"><div class="free-tag">5 Minuten</div><h3>Yoga für deinen Rücken</h3><p>Drei Positionen für zwischendurch.</p><span class="free-link">Rücken-Goodie →</span></a></div><div style="text-align:center;margin-top:2.5rem"><a class="btn-nav" href="/gratis">Alle Gratis-Inhalte ansehen →</a><p style="margin-top:0.9rem;font-size:0.83rem;color:var(--muted)">Oder direkt <a href="/rezeptheft" style="color:var(--pink);font-weight:500;text-decoration:underline;">zum kostenlosen Rezeptheft →</a></p></div></div></section>
 <!-- ══════════════════════════════════
      GRATIS GUIDES
 ══════════════════════════════════ -->
