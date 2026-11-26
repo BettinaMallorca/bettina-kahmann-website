@@ -115,14 +115,23 @@ function geplante(kurse) {
   return out.sort(nachZeit);
 }
 // Anmeldung offen: die nächste Woche, bis Stundenbeginn
+// Genau eine Woche vorher: Die Stunde in 7 Tagen öffnet, sobald die gleiche Stunde heute begonnen hat
+// oder heute keine stattfindet. So steht jede Stunde nur einmal auf der Seite.
+function inAnmeldeWoche(t, alle) {
+  const heute = jetztBerlin().datum;
+  if (t.datum <= plusTage(heute, ANMELDE_TAGE)) return true;
+  if (t.datum !== plusTage(heute, ANMELDE_TAGE + 1)) return false;
+  const heuteT = alle.find((x) => x.id === t.id && x.datum === heute);
+  return !heuteT || begonnen(heuteT);
+}
 function naechsteTermine() {
-  const bis = plusTage(jetztBerlin().datum, ANMELDE_TAGE);
-  return geplante(STUNDEN).filter((t) => kommt(t.datum, t.start) && (t.daten || t.datum <= bis));
+  const alle = geplante(STUNDEN);
+  return alle.filter((t) => kommt(t.datum, t.start) && (t.daten || inAnmeldeWoche(t, alle)));
 }
 function spaetereTermine() {
-  const bis = plusTage(jetztBerlin().datum, ANMELDE_TAGE);
+  const alle = geplante(STUNDEN);
   const ende = plusTage(jetztBerlin().datum, 28); // weitere Termine nur für die nächsten vier Wochen zeigen
-  return geplante(STUNDEN).filter((t) => !t.daten && t.datum > bis && t.datum <= ende);
+  return alle.filter((t) => !t.daten && !inAnmeldeWoche(t, alle) && t.datum > jetztBerlin().datum && t.datum <= ende);
 }
 function vergangeneTermine(tage) {
   const von = plusTage(jetztBerlin().datum, -tage);
